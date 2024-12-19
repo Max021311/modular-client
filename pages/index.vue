@@ -1,5 +1,6 @@
 <template>
   <button
+    class="border border-gray-500"
     @click="() => value++"
   >
     1+

@@ -8,7 +8,13 @@ export default defineNuxtConfig({
       sensitive: true,
     }
   },
-  
+  css: ['~/assets/css/main.css'],
+  postcss: {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {}
+    }
+  }
   // Route rules
   // routeRules: {
   //   '/blog/**': { swr: true },
