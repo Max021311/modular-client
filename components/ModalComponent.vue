@@ -1,28 +1,37 @@
 <template>
-    <div class="modal-overlay" @click.self="closeModal">
-      <div class="modal-content">
-        <button class="close-btn" @click="closeModal">✖</button>
-        <slot></slot>
-      </div>
+  <div
+    class="modal-overlay"
+    @click.self="closeModal"
+  >
+    <div class="modal-content">
+      <button
+        class="close-btn"
+        @click="closeModal"
+      >
+        ✖
+      </button>
+      <slot />
     </div>
-  </template>
-  
-  <script lang="ts">
-  export default {
-    props: {
-      show: {
-        type: Boolean,
-        required: true,
-      },
-    },
-    methods: {
-      closeModal() {
-        this.$emit("close");
-      },
-    },
-  };
-  </script>
-  
+  </div>
+</template>
+
+<script lang="ts">
+export default {
+  props: {
+    show: {
+      type: Boolean,
+      required: true
+    }
+  },
+  emits: ['close'],
+  methods: {
+    closeModal() {
+      this.$emit('close')
+    }
+  }
+}
+</script>
+
   <style scoped>
   .modal-overlay {
     position: fixed;
@@ -55,4 +64,3 @@
     cursor: pointer;
   }
   </style>
-  

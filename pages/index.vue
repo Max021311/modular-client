@@ -6,7 +6,7 @@
     >
       1+
     </button>
-    <p>Counter: {{value}}</p>
+    <p>Counter: {{ value }}</p>
     <NuxtLink
       :to="{
         path: '/home',

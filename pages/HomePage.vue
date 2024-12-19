@@ -2,68 +2,128 @@
 <template>
   <div id="main-page">
     <!-- Encabezado -->
-     <header class="header">
+    <header class="header">
       <h1>Social Service System Plus</h1>
-      <button class="nav-btn" @click="$router.push({ name: 'Register' })">Registro</button>
-      <button class="logout-btn" @click="logout">Cerrar Sesión</button>
+      <button
+        class="nav-btn"
+        @click="$router.push({ name: 'Register' })"
+      >
+        Registro
+      </button>
+      <button
+        class="logout-btn"
+        @click="logout"
+      >
+        Cerrar Sesión
+      </button>
     </header>
-
 
     <!-- Contenido principal -->
     <main class="main">
       <!-- Listado de plazas -->
       <section class="section">
         <h2>Plaza de Servicio</h2>
-        <TableComponent :headers="plazasHeaders" :data="plazasData" />
+        <TableComponent
+          :headers="plazasHeaders"
+          :data="plazasData"
+        />
       </section>
-      
+
       <!-- Oficio de Comisión -->
-       <section class="section">
+      <section class="section">
         <div class="section-header">
           <h2>Oficio de Comisión</h2>
-          <button class="section-btn" @click="openModal('oficio')">+</button>
+          <button
+            class="section-btn"
+            @click="openModal('oficio')"
+          >
+            +
+          </button>
         </div>
-        <TableComponent :headers="oficioHeaders" :data="oficioData" :actions="true" />
+        <TableComponent
+          :headers="oficioHeaders"
+          :data="oficioData"
+          :actions="true"
+        />
       </section>
 
       <!-- Reportes parciales -->
       <section class="section">
         <div class="section-header">
           <h2>Reportes Parciales</h2>
-          <button class="section-btn" @click="openModal('bimestral')">+</button>
+          <button
+            class="section-btn"
+            @click="openModal('bimestral')"
+          >
+            +
+          </button>
         </div>
-        <TableComponent :headers="reportesHeaders" :data="reportesData" :actions="true" />
+        <TableComponent
+          :headers="reportesHeaders"
+          :data="reportesData"
+          :actions="true"
+        />
       </section>
 
       <!-- Reporte Final -->
       <section class="section">
         <div class="section-header">
           <h2>Reporte Final</h2>
-          <button class="section-btn" @click="openModal('final')">+</button>
+          <button
+            class="section-btn"
+            @click="openModal('final')"
+          >
+            +
+          </button>
         </div>
-        <TableComponent :headers="rpHeaders" :data="rpData" :actions="true" />
+        <TableComponent
+          :headers="rpHeaders"
+          :data="rpData"
+          :actions="true"
+        />
       </section>
     </main>
 
     <!-- Modal -->
-    <ModalComponent v-if="isModalVisible" :show="isModalVisible" @close="closeModal">
+    <ModalComponent
+      v-if="isModalVisible"
+      :show="isModalVisible"
+      @close="closeModal"
+    >
       <div class="form-container">
         <form @submit.prevent="submitForm">
           <div v-if="modalType === 'oficio'">
             <h3>Formulario de Oficio de Comisión</h3>
             <label>
               Fecha de Inicio:
-              <input type="date" v-model="formData.startDate" />
+              <input
+                v-model="formData.startDate"
+                type="date"
+              >
             </label>
 
             <label>
               Lugar de la Dependencia:
-              <input type="text" v-model="formData.dependencia" placeholder="Ejemplo: Unidad Administrativa" />
+              <input
+                v-model="formData.dependencia"
+                type="text"
+                placeholder="Ejemplo: Unidad Administrativa"
+              >
             </label>
 
             <div class="button-group">
-              <button type="button" @click="generatePDF">Generar PDF</button>
-              <button type="button" @click="uploadPDF">Cargar PDF</button>
+              <button
+                type="button"
+                @click="generatePDF"
+              >
+                Generar PDF
+              </button>
+              <button
+                type="button"
+                @click="uploadPDF"
+              >
+                Cargar PDF
+              </button>
             </div>
           </div>
 
@@ -72,27 +132,33 @@
             <label>
               Período reportado:
               <div class="date-range">
-                <input type="date" v-model="formData.startDate" /> -
-                <input type="date" v-model="formData.endDate" />
+                <input
+                  v-model="formData.startDate"
+                  type="date"
+                > -
+                <input
+                  v-model="formData.endDate"
+                  type="date"
+                >
               </div>
             </label>
             <label>¿Cuáles fueron las principales actividades que realizaste?</label>
-            <textarea v-model="formData.activities"></textarea>
+            <textarea v-model="formData.activities" />
 
             <label>¿Qué objetivos específicos se esperaban lograr?</label>
-            <textarea v-model="formData.objectives"></textarea>
+            <textarea v-model="formData.objectives" />
 
             <label>¿Consideras que cumpliste con los objetivos propuestos?</label>
-            <textarea v-model="formData.goalsAchieved"></textarea>
+            <textarea v-model="formData.goalsAchieved" />
 
             <label>¿Qué habilidades crees que has mejorado durante tu servicio social?</label>
-            <textarea v-model="formData.skills"></textarea>
+            <textarea v-model="formData.skills" />
 
             <label>¿Qué aspectos fueron más satisfactorios?</label>
-            <textarea v-model="formData.satisfaction"></textarea>
+            <textarea v-model="formData.satisfaction" />
 
             <label>¿Recomendarías esta institución para realizar el servicio social? ¿Por qué?</label>
-            <textarea v-model="formData.recommendation"></textarea>
+            <textarea v-model="formData.recommendation" />
           </div>
 
           <div v-if="modalType === 'final'">
@@ -100,30 +166,38 @@
             <label>
               Período del servicio:
               <div class="date-range">
-                <input type="date" v-model="formData.startDate" /> -
-                <input type="date" v-model="formData.endDate" />
+                <input
+                  v-model="formData.startDate"
+                  type="date"
+                > -
+                <input
+                  v-model="formData.endDate"
+                  type="date"
+                >
               </div>
             </label>
             <label>¿Cuáles fueron las actividades más relevantes que realizaste?</label>
-            <textarea v-model="formData.relevantActivities"></textarea>
+            <textarea v-model="formData.relevantActivities" />
 
             <label>¿Se alcanzaron los objetivos planteados al inicio de tu servicio social?</label>
-            <textarea v-model="formData.objectivesAchieved"></textarea>
+            <textarea v-model="formData.objectivesAchieved" />
 
             <label>¿Qué habilidades profesionales desarrollaste durante tu servicio social?</label>
-            <textarea v-model="formData.professionalSkills"></textarea>
+            <textarea v-model="formData.professionalSkills" />
 
             <label>¿Cuáles fueron tus logros más importantes?</label>
-            <textarea v-model="formData.keyAchievements"></textarea>
+            <textarea v-model="formData.keyAchievements" />
 
             <label>¿Qué aspectos consideras fueron los más valiosos durante tu servicio social?</label>
-            <textarea v-model="formData.valuableAspects"></textarea>
+            <textarea v-model="formData.valuableAspects" />
 
             <label>¿Qué recomendaciones harías a la institución?</label>
-            <textarea v-model="formData.recommendations"></textarea>
+            <textarea v-model="formData.recommendations" />
           </div>
 
-          <button type="submit">Enviar</button>
+          <button type="submit">
+            Enviar
+          </button>
         </form>
       </div>
     </ModalComponent>
@@ -131,95 +205,91 @@
 </template>
 
 <script lang="ts">
-import TableComponent from "./TableComponent.vue";
-import ModalComponent from "./ModalComponent.vue";
-
 export default {
-  components: { TableComponent, ModalComponent },
   data() {
     return {
       plazasHeaders: [
-        "No.",
-        "Estatus",
-        "Fecha de Inicio",
-        "Fecha de Finalización",
-        "Tiempo Reportado (Horas)",
-        "Dependencia",
-        "Programa",
-        "Detalles",
+        'No.',
+        'Estatus',
+        'Fecha de Inicio',
+        'Fecha de Finalización',
+        'Tiempo Reportado (Horas)',
+        'Dependencia',
+        'Programa',
+        'Detalles'
       ],
-      plazasData: [["789/2024A", "FINALIZADO", "04/03/2024", "06/09/2024", 480, "Unidad Administrativa", "Apoyo Administrativo", "👁️"]],
+      plazasData: [['789/2024A', 'FINALIZADO', '04/03/2024', '06/09/2024', 480, 'Unidad Administrativa', 'Apoyo Administrativo', '👁️']],
       oficioHeaders: [
-      "No.", 
-      "Fecha de Inicio", 
-      "Dependencia", 
-      "Programa", 
-      "Estatus del Oficio"
-    ],
-      oficioData: [[1, "01/02/2024", "Unidad Administrativa", "Programa A", "VALIDADO"]],
-      reportesHeaders: [
-        "No.", 
-        "Fecha de Creación", 
-        "Horas", 
-        "Bimestre Reportado", 
-        "Estatus del Reporte"
+        'No.',
+        'Fecha de Inicio',
+        'Dependencia',
+        'Programa',
+        'Estatus del Oficio'
       ],
-      reportesData: [[1, "05/05/2024", 160, "04/03/2024 - 05/05/2024", "VALIDADO"]],
+      oficioData: [[1, '01/02/2024', 'Unidad Administrativa', 'Programa A', 'VALIDADO']],
+      reportesHeaders: [
+        'No.',
+        'Fecha de Creación',
+        'Horas',
+        'Bimestre Reportado',
+        'Estatus del Reporte'
+      ],
+      reportesData: [[1, '05/05/2024', 160, '04/03/2024 - 05/05/2024', 'VALIDADO']],
       rpHeaders: [
-      "Fecha de Creación", 
-      "Período de Servicio",
-      "Horas Totales", 
-      "Estatus del Reporte"
-    ],
-      rpData: [["05/05/2024", "04/03/2024 - 06/09/2024", "480","VALIDADO"]],
+        'Fecha de Creación',
+        'Período de Servicio',
+        'Horas Totales',
+        'Estatus del Reporte'
+      ],
+      rpData: [['05/05/2024', '04/03/2024 - 06/09/2024', '480', 'VALIDADO']],
       isModalVisible: false,
-      modalType: "", // 'bimestral' o 'final'
+      modalType: '', // 'bimestral' o 'final'
       formData: {
-        startDate: "",
-        dependencia: "",
-        endDate: "",
-        activities: "",
-        objectives: "",
-        goalsAchieved: "",
-        skills: "",
-        contribution: "",
-        satisfaction: "",
-        recommendation: "",
-        relevantActivities: "",
-        objectivesAchieved: "",
-        professionalSkills: "",
-        keyAchievements: "",
-        valuableAspects: "",
-        recommendations: "",
-      },
-    };
+        startDate: '',
+        dependencia: '',
+        endDate: '',
+        activities: '',
+        objectives: '',
+        goalsAchieved: '',
+        skills: '',
+        contribution: '',
+        satisfaction: '',
+        recommendation: '',
+        relevantActivities: '',
+        objectivesAchieved: '',
+        professionalSkills: '',
+        keyAchievements: '',
+        valuableAspects: '',
+        recommendations: ''
+      }
+    }
   },
   methods: {
     logout() {
-      this.$router.push({ name: "SignIn" });
+      this.$router.push({ name: 'SignIn' })
     },
     openModal(type: string) {
-      this.modalType = type;
-      this.isModalVisible = true;
+      this.modalType = type
+      this.isModalVisible = true
     },
     closeModal() {
-      this.isModalVisible = false;
-      this.modalType = "";
+      this.isModalVisible = false
+      this.modalType = ''
     },
     submitForm() {
-      console.log("Formulario enviado:", this.formData);
-      this.closeModal();
+      console.log('Formulario enviado:', this.formData)
+      this.closeModal()
     },
     generatePDF() {
-      console.log("Generando PDF con datos:", this.formData);
+      console.log('Generando PDF con datos:', this.formData)
       // Lógica para generar PDF
     },
     uploadPDF() {
-      console.log("Cargando PDF...");
+      console.log('Cargando PDF...')
       // Lógica para cargar PDF
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style scoped>
@@ -286,7 +356,7 @@ export default {
 .main {
   flex: 1;
   padding: 20px;
-  max-width: 1200px; 
+  max-width: 1200px;
   margin: 0 auto;
 }
 

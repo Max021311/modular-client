@@ -3,41 +3,75 @@
     <thead>
       <tr>
         <!-- Generar encabezados -->
-        <th v-for="(header, index) in headers" :key="index">{{ header }}</th>
+        <th
+          v-for="(header, index) in headers"
+          :key="index"
+        >
+          {{ header }}
+        </th>
         <!-- Agregar columna de "Acciones" solo si se requieren -->
-        <th v-if="actions">Acciones</th>
+        <th v-if="actions">
+          Acciones
+        </th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(row, index) in data" :key="index">
+      <tr
+        v-for="(row, index) in data"
+        :key="index"
+      >
         <!-- Renderizar los datos de cada fila -->
-        <td v-for="(cell, i) in row" :key="i">{{ cell }}</td>
+        <td
+          v-for="(cell, i) in row"
+          :key="i"
+        >
+          {{ cell }}
+        </td>
         <!-- Renderizar los botones únicamente en la columna "Acciones" -->
         <td v-if="actions">
-          <button class="action-btn edit-btn" title="Editar">✏️</button>
-          <button class="action-btn view-btn" title="Visualizar">👁️</button>
-          <button class="action-btn download-btn" title="Descargar">⬇️</button>
-          <button class="action-btn delete-btn" title="Eliminar">🗑️</button>
+          <button
+            class="action-btn edit-btn"
+            title="Editar"
+          >
+            ✏️
+          </button>
+          <button
+            class="action-btn view-btn"
+            title="Visualizar"
+          >
+            👁️
+          </button>
+          <button
+            class="action-btn download-btn"
+            title="Descargar"
+          >
+            ⬇️
+          </button>
+          <button
+            class="action-btn delete-btn"
+            title="Eliminar"
+          >
+            🗑️
+          </button>
         </td>
       </tr>
     </tbody>
   </table>
 </template>
 
-  
-  <script lang="ts">
-  export default {
-    props: {
-      headers: Array,
-      data: Array,
-      actions: {
-        type: Boolean,
-        default: false,
-      },
-    },
-  };
-  </script>
-  
+<script lang="ts">
+export default {
+  props: {
+    headers: Array,
+    data: Array,
+    actions: {
+      type: Boolean,
+      default: false
+    }
+  }
+}
+</script>
+
   <style scoped>
   .custom-table {
     width: 100%;
@@ -46,13 +80,13 @@
     font-size: 16px;
     text-align: center;
   }
-  
+
   .custom-table th,
   .custom-table td {
     border: 1px solid #ddd;
     padding: 8px;
   }
-  
+
   .action-btn {
   background: none;
   border: none;
@@ -69,7 +103,7 @@
 }
 
 .edit-btn {
-  color: #007bff; 
+  color: #007bff;
 }
 
 .edit-btn:hover {

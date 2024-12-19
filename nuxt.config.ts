@@ -1,14 +1,15 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2024-11-01',
+  modules: ['@nuxt/eslint'],
   devtools: { enabled: true },
+  css: ['~/assets/css/main.css'],
   router: {
     options: {
       strict: true,
-      sensitive: true,
+      sensitive: true
     }
   },
-  css: ['~/assets/css/main.css'],
+  compatibilityDate: '2024-11-01',
   // Route rules
   // routeRules: {
   //   '/blog/**': { swr: true },
@@ -20,7 +21,6 @@ export default defineNuxtConfig({
       autoprefixer: {}
     }
   },
-  modules: ['@nuxt/eslint'],
   eslint: {
     config: {
       stylistic: {
