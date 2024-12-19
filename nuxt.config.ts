@@ -9,15 +9,27 @@ export default defineNuxtConfig({
     }
   },
   css: ['~/assets/css/main.css'],
-  postcss: {
-    plugins: {
-      tailwindcss: {},
-      autoprefixer: {}
-    }
-  }
   // Route rules
   // routeRules: {
   //   '/blog/**': { swr: true },
   //   '/admin/**': { ssr: false }
   // }
+  postcss: {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {}
+    }
+  },
+  modules: ['@nuxt/eslint'],
+  eslint: {
+    config: {
+      stylistic: {
+        braceStyle: '1tbs',
+        commaDangle: 'never',
+        jsx: false,
+        indent: 2,
+        semi: false
+      }
+    }
+  }
 })
