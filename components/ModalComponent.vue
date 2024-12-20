@@ -7,7 +7,7 @@
   >
     <div class="modal-box">
       <button
-        class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+        class="btn btn-xs btn-circle btn-ghost absolute right-2 top-2"
         @click="close"
       >
         ✕
@@ -28,14 +28,15 @@ const emit = defineEmits<{
 
 watchEffect(() => {
   const dialog = unref(dialogRef)
-  if (props.modelValue && dialog !== null) {
+  if (dialog === null) return
+  if (props.modelValue) {
     dialog.showModal()
-  }
+  } else (
+    dialog.close()
+  )
 })
 
 function close() {
-  const dialog = unref(dialogRef)
   emit('update:modelValue', false)
-  dialog?.close()
 }
 </script>
