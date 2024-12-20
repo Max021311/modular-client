@@ -3,9 +3,9 @@
     <div
       tabindex="0"
       role="button"
-      class="btn m-1"
+      class="btn btn-outline m-1 btn-sm"
     >
-      Theme
+      {{ themes.find(theme => theme.value === selected)?.label }}
       <svg
         width="12px"
         height="12px"
@@ -20,37 +20,18 @@
       tabindex="0"
       class="dropdown-content menu bg-base-300 rounded-box z-[1] w-52 p-2 shadow"
     >
-      <li>
+      <li
+        v-for="theme in themes"
+        :key="theme.value"
+      >
         <input
-          :checked="mode === 'default'"
+          :checked="selected === theme.value"
           type="radio"
           name="theme-dropdown"
           class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
-          aria-label="Sistema"
-          value="default"
-          @click="mode = 'default'"
-        >
-      </li>
-      <li>
-        <input
-          :checked="mode === 'winter'"
-          type="radio"
-          name="theme-dropdown"
-          class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
-          aria-label="Claro"
-          value="winter"
-          @click="mode = 'winter'"
-        >
-      </li>
-      <li>
-        <input
-          :checked="mode === 'synthwave'"
-          type="radio"
-          name="theme-dropdown"
-          class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
-          aria-label="Oscuro"
-          value="synthwave"
-          @click="mode = 'synthwave'"
+          :aria-label="theme.label"
+          :value="theme.value"
+          @click="selected = theme.value"
         >
       </li>
     </ul>
@@ -58,5 +39,14 @@
 </template>
 
 <script setup lang="ts">
-const mode = ref('default')
+if (import.meta.server) {
+  throw new Error('ThemeChanger component is not meant to be pre-rendered.')
+}
+
+const themes = [
+  { label: 'Sistema', value: 'default' },
+  { label: 'Claro', value: 'winter' },
+  { label: 'Oscuro', value: 'synthwave' }
+]
+const selected = useLocalStorage('theme', 'default')
 </script>

@@ -6,7 +6,9 @@
       </p>
     </div>
     <div class="flex gap-2">
-      <ThemeChanger />
+      <ClientOnly>
+        <ThemeChanger />
+      </ClientOnly>
       <NuxtLink
         class="btn btn-outline btn-sm"
         to="/"
