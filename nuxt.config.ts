@@ -26,6 +26,7 @@ export default defineNuxtConfig({
       stylistic: {
         braceStyle: '1tbs',
         commaDangle: 'never',
+        quoteProps: 'as-needed',
         jsx: false,
         indent: 2,
         semi: false

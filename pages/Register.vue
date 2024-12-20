@@ -1,22 +1,5 @@
 <template>
   <div id="register-page">
-    <!-- Encabezado -->
-    <header class="header">
-      <h1>Social Service System Plus</h1>
-      <button
-        class="nav-btn"
-        @click="$router.push({ name: 'HomePage' })"
-      >
-        Inicio
-      </button>
-      <button
-        class="logout-btn"
-        @click="logout"
-      >
-        Cerrar Sesión
-      </button>
-    </header>
-
     <!-- Contenido principal -->
     <main class="main">
       <!-- Fecha de Agenda -->

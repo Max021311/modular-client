@@ -1,66 +1,41 @@
 <template>
-  <div
-    class="modal-overlay"
-    @click.self="closeModal"
+  <!-- You can open the modal using ID.showModal() method -->
+  <dialog
+    ref="dialog"
+    class="modal"
+    @close="close"
   >
-    <div class="modal-content">
+    <div class="modal-box">
       <button
-        class="close-btn"
-        @click="closeModal"
+        class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+        @click="close"
       >
-        ✖
+        ✕
       </button>
       <slot />
     </div>
-  </div>
+  </dialog>
 </template>
 
-<script lang="ts">
-export default {
-  props: {
-    show: {
-      type: Boolean,
-      required: true
-    }
-  },
-  emits: ['close'],
-  methods: {
-    closeModal() {
-      this.$emit('close')
-    }
+<script setup lang="ts">
+const dialogRef = useTemplateRef('dialog')
+const props = defineProps<{
+  modelValue: boolean
+}>()
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: boolean): void
+}>()
+
+watchEffect(() => {
+  const dialog = unref(dialogRef)
+  if (props.modelValue && dialog !== null) {
+    dialog.showModal()
   }
+})
+
+function close() {
+  const dialog = unref(dialogRef)
+  emit('update:modelValue', false)
+  dialog?.close()
 }
 </script>
-
-  <style scoped>
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-  .modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    position: relative;
-    max-width: 500px;
-    width: 100%;
-  }
-  .close-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: transparent;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-  }
-  </style>
