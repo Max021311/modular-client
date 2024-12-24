@@ -1,9 +1,8 @@
-<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div id="main-page">
     <!-- Contenido principal -->
     <main class="flex flex-col gap-4 px-10">
-      <!-- Listado de plazas -->
+      <!-- Plaza de Servicio que se Muestra -->
       <Card>
         <template #title>
           Plaza de Servicio
@@ -16,6 +15,7 @@
         </template>
       </Card>
 
+      <!-- Oficio de Comisión -->
       <Card>
         <template #title>
           <div class="flex w-full justify-between items-center">
@@ -40,40 +40,52 @@
       </Card>
 
       <!-- Reportes parciales -->
-      <section class="section">
-        <div class="section-header">
-          <h2>Reportes Parciales</h2>
-          <button
-            class="section-btn"
-            @click="openModal('bimester-report')"
-          >
-            +
-          </button>
-        </div>
-        <TableComponent
-          :headers="reportesHeaders"
-          :data="reportesData"
-          :actions="true"
-        />
-      </section>
+      <card>
+        <template #title>
+          <div class="flex w-full justify-between items-center">
+            <span class="text-center">
+              Reportes Parciales
+            </span>
+            <button
+              class="btn btn-primary btn-sm btn-circle justify-center items-center"
+              @click="openModal('bimester-report')"
+            >
+              <IconPlus size="20" />
+            </button>
+          </div>
+        </template>
+        <template #content>
+          <TableComponent
+            :headers="reportesHeaders"
+            :data="reportesData"
+            :actions="true"
+          />
+        </template>
+      </card>
 
       <!-- Reporte Final -->
-      <section class="section">
-        <div class="section-header">
-          <h2>Reporte Final</h2>
-          <button
-            class="section-btn"
-            @click="openModal('final-report')"
-          >
-            +
-          </button>
-        </div>
-        <TableComponent
-          :headers="rpHeaders"
-          :data="rpData"
-          :actions="true"
-        />
-      </section>
+      <card>
+        <template #title>
+          <div class="flex w-full justify-between items-center">
+            <span class="text-center">
+              Reporte Final
+            </span>
+            <button
+              class="btn btn-primary btn-sm btn-circle justify-center items-center"
+              @click="openModal('final-report')"
+            >
+              <IconPlus size="20" />
+            </button>
+          </div>
+        </template>
+        <template #content>
+          <TableComponent
+            :headers="rpHeaders"
+            :data="rpData"
+            :actions="true"
+          />
+        </template>
+      </card>
     </main>
 
     <!-- Modal -->

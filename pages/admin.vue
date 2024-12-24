@@ -1,74 +1,57 @@
 <template>
-  <div id="admin-page">
+  <div id="admin-page" class="flex">
     <!-- Menú lateral -->
-    <aside class="sidebar">
-      <h2>Menú</h2>
+    <aside class="w-64 bg-base-200 p-4">
+      <h2 class="text-xl font-bold mb-4 text-white">
+        Menú
+      </h2>
       <section>
         <div
-          class="menu-item"
+          class="menu-item cursor-pointer flex justify-between items-center p-2 bg-base-100 rounded-lg mb-2 text-white"
           @click="toggleMenu('alumnos')"
         >
           Administrar Alumnos <span>{{ menus.alumnos ? '-' : '+' }}</span>
         </div>
-        <ul v-show="menus.alumnos">
-          <li @click="navigateTo('BuscarAlumno')">
+        <ul v-show="menus.alumnos" class="pl-4">
+          <li class="cursor-pointer p-2 hover:bg-base-300 rounded-lg" @click="navigateTo('BuscarAlumno')">
             Buscar Alumno
           </li>
-          <li @click="navigateTo('DetallesPlaza')">
+          <li class="cursor-pointer p-2 hover:bg-base-300 rounded-lg" @click="navigateTo('DetallesPlaza')">
             Ver detalles de la Plaza
           </li>
-          <li @click="navigateTo('OficioComision')">
+          <li class="cursor-pointer p-2 hover:bg-base-300 rounded-lg" @click="navigateTo('OficioComision')">
             Ver Oficio de Comisión
           </li>
-          <li @click="navigateTo('Reportes')">
+          <li class="cursor-pointer p-2 hover:bg-base-300 rounded-lg" @click="navigateTo('Reportes')">
             Ver Reportes
           </li>
-          <li @click="navigateTo('EditarAlumno')">
-            Editar Información
-          </li>
-          <li @click="navigateTo('BajaPlaza')">
-            Dar de Baja
-          </li>
         </ul>
-      </section>
-
-      <section>
         <div
-          class="menu-item"
+          class="menu-item cursor-pointer flex justify-between items-center p-2 bg-base-100 rounded-lg mb-2 text-white"
           @click="toggleMenu('programas')"
         >
           Administrar Programas <span>{{ menus.programas ? '-' : '+' }}</span>
         </div>
-        <ul v-show="menus.programas">
-          <li @click="navigateTo('BuscarPrograma')">
+        <ul v-show="menus.programas" class="pl-4">
+          <li class="cursor-pointer p-2 hover:bg-base-300 rounded-lg" @click="navigateTo('BuscarPrograma')">
             Buscar Programa
           </li>
-          <li @click="navigateTo('DetallesPrograma')">
-            Ver Detalles
+          <li class="cursor-pointer p-2 hover:bg-base-300 rounded-lg" @click="navigateTo('DetallesPrograma')">
+            Ver detalles del Programa
           </li>
-          <li @click="navigateTo('EditarPrograma')">
-            Editar Programa
+          <li class="cursor-pointer p-2 hover:bg-base-300 rounded-lg" @click="navigateTo('OficioPrograma')">
+            Ver Oficio del Programa
           </li>
-          <li @click="navigateTo('EliminarPrograma')">
-            Eliminar Programa
-          </li>
-          <li @click="navigateTo('CrearPrograma')">
-            Crear Programa
+          <li class="cursor-pointer p-2 hover:bg-base-300 rounded-lg" @click="navigateTo('ReportesPrograma')">
+            Ver Reportes del Programa
           </li>
         </ul>
       </section>
     </aside>
-
-    <!-- Contenido dinámico -->
-    <main class="content">
+    <!-- Contenido principal -->
+    <main class="flex-1 p-4">
       <header class="header">
         <h1>Panel de Administración</h1>
-        <button
-          class="logout-btn"
-          @click="logout"
-        >
-          Cerrar Sesión
-        </button>
       </header>
 
       <div class="content-view">
@@ -123,8 +106,8 @@ export default {
 }
 </script>
 
-  <style scoped>
- /* Contenedor principal */
+<style scoped>
+/* Contenedor principal */
 #admin-page {
   font-family: Arial, sans-serif;
   margin: 0;

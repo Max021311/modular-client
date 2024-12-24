@@ -1,48 +1,72 @@
 <template>
   <div id="register-page">
     <!-- Contenido principal -->
-    <main class="main">
+    <main class="flex flex-col gap-4 px-10">
       <!-- Fecha de Agenda -->
-      <section class="section">
-        <h2>Fecha de Agenda</h2>
-        <p>{{ agendaDate }}</p>
-      </section>
+      <card>
+        <template #title>
+          <div class="flex w-full justify-between items-center">
+            <span class="text-center">
+              Fecha de Agenda
+            </span>
+          </div>
+        </template>
+        <template #content>
+          <p>{{ agendaDate }}</p>
+        </template>
+      </card>
 
       <!-- Plaza Seleccionada -->
-      <section class="section">
-        <h2>Plaza Seleccionada</h2>
-        <TableComponent
-          :headers="plazaHeaders"
-          :data="plazaData"
-        />
-      </section>
+      <card>
+        <template #title>
+          <div class="flex w-full justify-between items-center">
+            <span>
+              Plaza Seleccionada
+            </span>
+          </div>
+        </template>
+        <template #content>
+          <TableComponent
+            :headers="plazaHeaders"
+            :data="plazaData"
+          />
+        </template>
+      </card>
 
       <!-- Plazas Disponibles -->
-      <section class="section">
-        <h2>Plazas Disponibles</h2>
-        <div class="filters">
-          <label>
-            Programa:
-            <input
-              v-model="filters.program"
-              type="text"
-              placeholder="Buscar programa..."
-            >
-          </label>
-          <label>
-            Turno:
-            <select v-model="filters.turno">
-              <option value="">Todos</option>
-              <option value="Matutino">Matutino</option>
-              <option value="Vespertino">Vespertino</option>
-            </select>
-          </label>
-        </div>
-        <TableComponent
-          :headers="plazasHeaders"
-          :data="filteredPlazas"
-        />
-      </section>
+      <card>
+        <template #title>
+          <div class="flex w-full justify-between items-center">
+            <span>
+              Plazas Disponibles
+            </span>
+          </div>
+        </template>
+        <template #content>
+          <div class="filters">
+            <label>
+              Programa:
+              <input
+                v-model="filters.program"
+                type="text"
+                placeholder="Buscar programa..."
+              >
+            </label>
+            <label>
+              Turno:
+              <select v-model="filters.turno">
+                <option value="">Todos</option>
+                <option value="Matutino">Matutino</option>
+                <option value="Vespertino">Vespertino</option>
+              </select>
+            </label>
+          </div>
+          <TableComponent
+            :headers="plazasHeaders"
+            :data="filteredPlazas"
+          />
+        </template>
+      </card>
     </main>
   </div>
 </template>

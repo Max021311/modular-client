@@ -41,10 +41,9 @@ export default {
   },
   methods: {
     handleSubmit() {
-      alert(`Iniciando sesión con: \nUsuario: ${this.usercode}\nContraseña: ${this.password}`)
       // Lógica de autenticación
 
-      this.$router.push('/homepage')
+      this.$router.push('/')
     }
   }
 
