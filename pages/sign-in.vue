@@ -1,33 +1,61 @@
 <template>
-  <div class="sign-in">
-    <h2>Inicia Sesión</h2>
-    <form @submit.prevent="handleSubmit">
-      <div class="form-group">
-        <label for="usercode">Código de Estudiante</label>
-        <input
-          id="usercode"
-          v-model="usercode"
-          type="text"
-          placeholder="Código"
-          required
-          pattern="^[0-9]{9,12}$"
-          title="El código debe tener entre 9 y 12 caracteres"
-        >
+  <div id="sign-in">
+    <div class="hero bg-base-200 min-h-screen">
+      <div class="hero-content flex-col">
+        <div class="card bg-base-100 w-full max-w-sm shadow-2xl">
+          <h2 class="text font-bold">
+            Inicia Sesión
+          </h2>
+          <form
+            class="card-body"
+            @submit.prevent="handleSubmit"
+          >
+            <div class="form-control">
+              <label
+                for="usercode"
+                class="label"
+              >
+                <span class="label-text">Código de Estudiante</span>
+              </label>
+              <input
+                id="usercode"
+                v-model="usercode"
+                type="text"
+                placeholder="Código"
+                class="input input-bordered"
+                required
+                pattern="^[0-9]{9,12}$"
+                title="El código debe tener entre 9 y 12 caracteres"
+              >
+            </div>
+            <div class="form-control">
+              <label
+                for="password"
+                class="label"
+              >
+                <span class="label-text">Contraseña</span>
+              </label>
+              <input
+                id="password"
+                v-model="password"
+                type="password"
+                placeholder="Contraseña"
+                class="input input-bordered"
+                required
+              >
+            </div>
+            <div class="form-control mt-6">
+              <button
+                type="submit"
+                class="btn btn-primary"
+              >
+                Iniciar Sesión
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-      <div class="form-group">
-        <label for="password">Contraseña</label>
-        <input
-          id="password"
-          v-model="password"
-          type="password"
-          placeholder="Contraseña"
-          required
-        >
-      </div>
-      <button type="submit">
-        Iniciar Sesión
-      </button>
-    </form>
+    </div>
   </div>
 </template>
 
@@ -63,33 +91,19 @@ export default {
   /* Título del formulario */
   h2 {
     font-size: 24px;
-    color: #34495e;
-    margin-bottom: 20px;
+    margin-top: 30px;
+    text-align: center;
   }
 
   /* Etiquetas del formulario */
   label {
-    display: block;
-    margin-bottom: 5px;
     font-weight: bold;
     color: #555; /* Gris oscuro */
-  }
-
-  /* Campos de entrada */
-  input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    box-sizing: border-box;
   }
 
   /* Botón */
   button {
     width: 100%;
-    background-color: #34495e;
     color: white;
     border: none;
     padding: 10px;
@@ -98,11 +112,6 @@ export default {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-  }
-
-  /* Hover en el botón */
-  button:hover {
-    background-color: #34495e;
   }
 
   /* Fondo degradado del cuerpo */

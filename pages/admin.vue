@@ -1,82 +1,95 @@
 <template>
-  <div id="admin-page" class="flex">
-    <!-- Menú lateral -->
-    <aside class="w-64 bg-base-200 p-4">
-      <h2 class="text-xl font-bold mb-4 text-white">
-        Menú
-      </h2>
-      <section>
-        <div
-          class="menu-item cursor-pointer flex justify-between items-center p-2 bg-base-100 rounded-lg mb-2 text-white"
-          @click="toggleMenu('alumnos')"
-        >
-          Administrar Alumnos <span>{{ menus.alumnos ? '-' : '+' }}</span>
-        </div>
-        <ul v-show="menus.alumnos" class="pl-4">
-          <li class="cursor-pointer p-2 hover:bg-base-300 rounded-lg" @click="navigateTo('BuscarAlumno')">
-            Buscar Alumno
-          </li>
-          <li class="cursor-pointer p-2 hover:bg-base-300 rounded-lg" @click="navigateTo('DetallesPlaza')">
-            Ver detalles de la Plaza
-          </li>
-          <li class="cursor-pointer p-2 hover:bg-base-300 rounded-lg" @click="navigateTo('OficioComision')">
-            Ver Oficio de Comisión
-          </li>
-          <li class="cursor-pointer p-2 hover:bg-base-300 rounded-lg" @click="navigateTo('Reportes')">
-            Ver Reportes
-          </li>
-        </ul>
-        <div
-          class="menu-item cursor-pointer flex justify-between items-center p-2 bg-base-100 rounded-lg mb-2 text-white"
-          @click="toggleMenu('programas')"
-        >
-          Administrar Programas <span>{{ menus.programas ? '-' : '+' }}</span>
-        </div>
-        <ul v-show="menus.programas" class="pl-4">
-          <li class="cursor-pointer p-2 hover:bg-base-300 rounded-lg" @click="navigateTo('BuscarPrograma')">
-            Buscar Programa
-          </li>
-          <li class="cursor-pointer p-2 hover:bg-base-300 rounded-lg" @click="navigateTo('DetallesPrograma')">
-            Ver detalles del Programa
-          </li>
-          <li class="cursor-pointer p-2 hover:bg-base-300 rounded-lg" @click="navigateTo('OficioPrograma')">
-            Ver Oficio del Programa
-          </li>
-          <li class="cursor-pointer p-2 hover:bg-base-300 rounded-lg" @click="navigateTo('ReportesPrograma')">
-            Ver Reportes del Programa
-          </li>
-        </ul>
-      </section>
-    </aside>
-    <!-- Contenido principal -->
-    <main class="flex-1 p-4">
-      <header class="header">
-        <h1>Panel de Administración</h1>
-      </header>
+  <div id="admin-page">
+    <!-- Drawer -->
+    <div class="drawer lg:drawer-open">
+      <input
+        id="my-drawer-2"
+        type="checkbox"
+        class="drawer-toggle"
+      >
+      <div class="drawer-content flex flex-col justify-center">
+        <!-- Page content here -->
+        <!-- Contenido principal -->
+        <main class="flex-1 p-4">
+          <div class="navbar bg-base-300">
+            <h2 class="text-xl font-bold text-base-content">
+              Panel de Administración
+            </h2>
+            <label
+              for="my-drawer-2"
+              class="btn btn-primary drawer-button lg:hidden"
+            >
+              Open drawer
+            </label>
+          </div>
 
-      <div class="content-view">
-        <div v-if="currentPage === 'BuscarAlumno'">
-          <h2>Buscar Alumno</h2>
-          <p>Contenido relacionado a la búsqueda de alumnos.</p>
-        </div>
+          <div class="content-view">
+            <div v-if="currentPage === 'BuscarAlumno'">
+              <h2>Buscar Alumno</h2>
+              <p>Contenido relacionado a la búsqueda de alumnos.</p>
+            </div>
 
-        <div v-else-if="currentPage === 'DetallesPlaza'">
-          <h2>Detalles de la Plaza</h2>
-          <p>Detalles específicos de la plaza de servicio.</p>
-        </div>
+            <div v-else-if="currentPage === 'DetallesPlaza'">
+              <h2>Detalles de la Plaza</h2>
+              <p>Detalles específicos de la plaza de servicio.</p>
+            </div>
 
-        <div v-else-if="currentPage === 'OficioComision'">
-          <h2>Oficio de Comisión</h2>
-          <p>Información del oficio de comisión.</p>
-        </div>
+            <div v-else-if="currentPage === 'OficioComision'">
+              <h2>Oficio de Comisión</h2>
+              <p>Información del oficio de comisión.</p>
+            </div>
 
-        <!-- Secciones según sea necesario -->
-        <div v-else>
-          <h2>Bienvenido al Panel de Administración</h2>
-          <p>Seleccione una opción del menú lateral.</p>
-        </div>
+            <!-- Secciones según sea necesario -->
+            <div v-else>
+              <h2>Bienvenido al Panel de Administración</h2>
+              <p>Seleccione una opción del menú lateral.</p>
+            </div>
+          </div>
+        </main>
       </div>
-    </main>
+      <div class="drawer-side">
+        <label
+          for="my-drawer-2"
+          aria-label="close sidebar"
+          class="drawer-overlay"
+        />
+        <ul class="menu bg-base-300 text-base-content min-h-full w-80 p-4">
+          <h2 class="text-xl font-bold text-base-content">
+            Menú
+          </h2>
+          <!-- Sidebar content here -->
+          <ul class="menu bg-base-300 rounded-box w-56">
+            <li>
+              <details open>
+                <summary class="font-bold text-base-content">
+                  Administrar Alumnos
+                </summary>
+                <ul>
+                  <li><a>Buscar Alumno</a></li>
+                  <li><a>Ver detalles de la Plaza</a></li>
+                  <li><a>Ver Oficio de Comisión</a></li>
+                  <li><a>Ver Reportes</a></li>
+                </ul>
+              </details>
+            </li>
+            <li>
+              <details open>
+                <summary class="font-bold text-base-content">
+                  Administrar Programas
+                </summary>
+                <ul>
+                  <li><a>Buscar Programa</a></li>
+                  <li><a>Ver detalles del Programa</a></li>
+                  <li><a>Crear Programa</a></li>
+                  <li><a>Editar Programa</a></li>
+                  <li><a>Eliminar Programa</a></li>
+                </ul>
+              </details>
+            </li>
+          </ul>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -84,23 +97,12 @@
 export default {
   data() {
     return {
-      menus: {
-        alumnos: false,
-        programas: false
-      },
       currentPage: '' // Estado para manejar la página activa
     }
   },
   methods: {
     logout() {
       this.$router.push({ name: 'SignIn' })
-    },
-    toggleMenu(menu: 'alumnos' | 'programas') {
-      this.menus[menu] = !this.menus[menu]
-    },
-    navigateTo(page: string) {
-      this.currentPage = page // Actualiza la página actual
-      console.log('Navegando a: ', page)
     }
   }
 }
@@ -119,23 +121,6 @@ export default {
   overflow: hidden; /* Evita desbordamiento vertical */
 }
 
-/* Sidebar */
-.sidebar {
-  width: 280px;
-  background-color: #2c3e50;
-  color: white;
-  padding: 20px;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  flex-shrink: 0; /* Evita que el sidebar se encoja */
-}
-
-.sidebar h2 {
-  margin-bottom: 20px;
-  font-size: 1.5rem;
-  border-bottom: 1px solid #555;
-  padding-bottom: 10px;
-}
-
 .menu-item {
   cursor: pointer;
   margin-bottom: 10px;
@@ -143,26 +128,6 @@ export default {
   background-color: #34495e;
   border-radius: 5px;
   transition: background-color 0.3s ease;
-}
-
-.menu-item:hover {
-  background-color: #1abc9c;
-}
-
-ul {
-  list-style: none;
-  padding-left: 20px;
-}
-
-ul li {
-  cursor: pointer;
-  padding: 8px 0;
-  transition: color 0.3s;
-}
-
-ul li:hover {
-  color: #1abc9c;
-  text-decoration: underline;
 }
 
 /* Contenido principal */
