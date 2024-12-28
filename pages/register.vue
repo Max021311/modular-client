@@ -12,11 +12,19 @@
           </div>
         </template>
         <template #content>
-          <p>{{ agendaDate }}</p>
+          <div class="card bg-base-300 shadow-md w-full p-4 text-center">
+            <div class="card-body">
+              <p class="text-lg font-semibold">
+                Horario de Agenda:
+              </p>
+              <p class="text-2xl font-bold text-primary">
+                {{ agendaDate }}
+              </p>
+            </div>
+          </div>
         </template>
       </card>
 
-      <!-- Plaza Seleccionada -->
       <card>
         <template #title>
           <div class="flex w-full justify-between items-center">
@@ -26,10 +34,26 @@
           </div>
         </template>
         <template #content>
-          <TableComponent
-            :headers="plazaHeaders"
-            :data="plazaData"
-          />
+          <section class="flex flex-col gap-4">
+            <!-- Tarjeta de Información -->
+            <div class="card bg-base-300 shadow-md w-full p-4">
+              <div class="card-body flex flex-col md:flex-row justify-between items-start md:items-center">
+                <!-- Detalles principales -->
+                <div class="flex-1">
+                  <p><strong>ID:</strong> 101</p>
+                  <p><strong>Campus:</strong> Campus Norte</p>
+                  <p><strong>Dependencia:</strong> Unidad Administrativa</p>
+                  <p><strong>Programa:</strong> Apoyo Administrativo</p>
+                </div>
+                <!-- Detalles adicionales -->
+                <div class="flex-1">
+                  <p><strong>Turno:</strong> Matutino</p>
+                  <p><strong>Horario:</strong> 8:00 AM - 2:00 PM</p>
+                  <p><strong>Fecha de Registro:</strong> 6/12/2024</p>
+                </div>
+              </div>
+            </div>
+          </section>
         </template>
       </card>
 
@@ -76,18 +100,6 @@ export default {
   data() {
     return {
       agendaDate: '16/12/2024', // Fecha estática que se reemplazará con datos del backend.
-      plazaHeaders: [
-        'ID.',
-        'Campus',
-        'Dependencia',
-        'Programa',
-        'Turno',
-        'Horario',
-        'Fecha de Registro'
-      ],
-      plazaData: [
-        [101, 'Campus Norte', 'Unidad Administrativa', 'Apoyo Administrativo', 'Matutino', '8:00 AM - 2:00 PM', '16/12/2024']
-      ],
       plazasHeaders: [
         'ID.',
         'Campus',
@@ -169,37 +181,4 @@ export default {
     display: flex;
     flex-direction: column;
   }
-
-  /* Botón de cerrar sesión */
-.logout-btn {
-  background-color: #ff4d4d;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.logout-btn:hover {
-  background-color: #ff0000;
-}
-
-/* Botón de Registro*/
-.nav-btn {
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-right: 10px;
-}
-
-.nav-btn:hover {
-  background-color: #45a049;
-}
   </style>

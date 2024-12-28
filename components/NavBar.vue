@@ -63,7 +63,7 @@
       </div>
       <NuxtLink
         to="/"
-        class="btn btn-ghost text-xl"
+        class="btn btn-ghost text-xl text font-bold"
       >
         Social Service System Plus
       </NuxtLink>

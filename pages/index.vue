@@ -2,44 +2,84 @@
   <div id="main-page">
     <!-- Contenido principal -->
     <main class="flex flex-col gap-4 px-10">
-      <!-- Plaza de Servicio que se Muestra -->
-      <Card>
+      <!------ Plaza de Servicio ----->
+      <card>
         <template #title>
-          Plaza de Servicio
+          <div class="flex w-full justify-between items-center">
+            <span class="text-center">
+              Plaza de Servicio
+            </span>
+            <button
+              class="btn btn-primary btn-sm"
+              @click="viewDetails()"
+            >
+              Ver Detalles
+            </button>
+          </div>
         </template>
         <template #content>
-          <TableComponent
-            :headers="plazasHeaders"
-            :data="plazasData"
-          />
+          <!-- Información de la Plaza -->
+          <section class="flex flex-col gap-4">
+            <!-- Tarjeta de Información -->
+            <div
+              class="card bg-base-300 shadow-md w-full p-4"
+            >
+              <div class="card-body flex flex-col md:flex-row justify-between items-start md:items-center">
+                <!-- Detalles principales -->
+                <div class="flex-1">
+                  <p><strong>No:</strong> 789/2024A</p>
+                  <p><strong>Estatus:</strong> FINALIZADO</p>
+                  <p><strong>Dependencia:</strong> Unidad Administrativa</p>
+                  <p><strong>Programa:</strong> Apoyo Administrativo</p>
+                </div>
+
+                <!-- Detalles adicionales -->
+                <div class="flex-1">
+                  <p><strong>Fecha de Inicio:</strong> 04/03/2024</p>
+                  <p><strong>Fecha de Finalización:</strong> 06/09/2024</p>
+                  <p><strong>Tiempo Reportado:</strong> 480 horas</p>
+                </div>
+              </div>
+            </div>
+          </section>
         </template>
-      </Card>
+      </card>
 
       <!-- Oficio de Comisión -->
-      <Card>
+      <card>
         <template #title>
           <div class="flex w-full justify-between items-center">
             <span class="text-center">
               Oficio de Comisión
             </span>
             <button
-              class="btn btn-primary btn-sm btn-circle justify-center items-center"
+              class="btn btn-primary btn-sm"
               @click="openModal('office')"
             >
-              <IconPlus size="20" />
+              Ver Detalles
             </button>
           </div>
         </template>
         <template #content>
-          <TableComponent
-            :headers="oficioHeaders"
-            :data="oficioData"
-            :actions="true"
-          />
+          <section class="flex flex-col gap-4">
+            <div class="card bg-base-300 shadow-md w-full p-4">
+              <div class="card-body flex flex-col md:flex-row justify-between items-start md:items-center">
+                <div class="flex-1">
+                  <p><strong>No:</strong> 101/02/2024</p>
+                  <p><strong>Fecha de Inicio:</strong> 04/03/2024</p>
+                  <p><strong>Dependencia:</strong> Unidad Administrativa</p>
+                </div>
+                <div class="flex-1">
+                  <p><strong>Programa:</strong> Programa A</p>
+                  <p><strong>Estatus:</strong> VALIDADO</p>
+                </div>
+              </div>
+            </div>
+          </section>
         </template>
-      </Card>
+      </card>
 
-      <!-- Reportes parciales -->
+      <!-- Reportes Parciales -->
       <card>
         <template #title>
           <div class="flex w-full justify-between items-center">
@@ -47,19 +87,29 @@
               Reportes Parciales
             </span>
             <button
-              class="btn btn-primary btn-sm btn-circle justify-center items-center"
+              class="btn btn-primary btn-sm"
               @click="openModal('bimester-report')"
             >
-              <IconPlus size="20" />
+              Agregar Reporte
             </button>
           </div>
         </template>
         <template #content>
-          <TableComponent
-            :headers="reportesHeaders"
-            :data="reportesData"
-            :actions="true"
-          />
+          <section class="flex flex-col gap-4">
+            <div class="card bg-base-300 shadow-md w-full p-4">
+              <div class="card-body flex flex-col md:flex-row justify-between items-start md:items-center">
+                <div class="flex-1">
+                  <p><strong>No:</strong> 1</p>
+                  <p><strong>Fecha de Creación:</strong> 05/05/2024</p>
+                  <p><strong>Horas:</strong> 160</p>
+                </div>
+                <div class="flex-1">
+                  <p><strong>Bimestre Reportado:</strong> 04/03/2024 - 05/05/2024</p>
+                  <p><strong>Estatus del Reporte:</strong> VALIDADO</p>
+                </div>
+              </div>
+            </div>
+          </section>
         </template>
       </card>
 
@@ -71,19 +121,28 @@
               Reporte Final
             </span>
             <button
-              class="btn btn-primary btn-sm btn-circle justify-center items-center"
+              class="btn btn-primary btn-sm"
               @click="openModal('final-report')"
             >
-              <IconPlus size="20" />
+              Ver Detalles
             </button>
           </div>
         </template>
         <template #content>
-          <TableComponent
-            :headers="rpHeaders"
-            :data="rpData"
-            :actions="true"
-          />
+          <section class="flex flex-col gap-4">
+            <div class="card bg-base-300 shadow-md w-full p-4">
+              <div class="card-body flex flex-col md:flex-row justify-between items-start md:items-center">
+                <div class="flex-1">
+                  <p><strong>Fecha de Creación:</strong> 05/05/2024</p>
+                  <p><strong>Período de Servicio:</strong> 04/03/2024 - 06/09/2024</p>
+                </div>
+                <div class="flex-1">
+                  <p><strong>Horas Totales:</strong> 480</p>
+                  <p><strong>Estatus del Reporte:</strong> VALIDADO</p>
+                </div>
+              </div>
+            </div>
+          </section>
         </template>
       </card>
     </main>
@@ -290,6 +349,10 @@ export default {
     logout() {
       this.$router.push({ name: 'SignIn' })
     },
+    viewDetails() {
+      console.log('Ver detalles de plaza:')
+      // Lógica para mostrar detalles adicionales
+    },
     openModal(section: string) {
       this.modalSection = section
       this.isModalOpen = true
@@ -341,39 +404,14 @@ export default {
   color: #ffffff;
 }
 
-/* Botón de cerrar sesión */
-.logout-btn {
-  background-color: #ff4d4d;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+.card {
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.logout-btn:hover {
-  background-color: #ff0000;
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
-
-/* Botón de Registro*/
-.nav-btn {
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-right: 10px;
-}
-
-.nav-btn:hover {
-  background-color: #45a049;
-}
-
 /* Sección */
 .section {
   margin-bottom: 30px;
