@@ -2,11 +2,11 @@
   <div id="register-page">
     <!-- Contenido principal -->
     <main class="flex flex-col gap-4 px-10">
-      <!-- Fecha de Agenda -->
+      <!----- Fecha de Agenda ----->
       <card>
         <template #title>
           <div class="flex w-full justify-between items-center">
-            <span class="text-center">
+            <span class="font-bold text-center">
               Fecha de Agenda
             </span>
           </div>
@@ -14,7 +14,7 @@
         <template #content>
           <div class="card bg-base-300 shadow-md w-full p-4 text-center">
             <div class="card-body">
-              <p class="text-lg font-semibold">
+              <p class="text-lg font-bold">
                 Horario de Agenda:
               </p>
               <p class="text-2xl font-bold text-primary">
@@ -25,10 +25,11 @@
         </template>
       </card>
 
+      <!----- Plaza Seleccionada ----->
       <card>
         <template #title>
           <div class="flex w-full justify-between items-center">
-            <span>
+            <span class="font-bold text-center">
               Plaza Seleccionada
             </span>
           </div>
@@ -57,38 +58,55 @@
         </template>
       </card>
 
-      <!-- Plazas Disponibles -->
+      <!----- Plazas Disponibles ----->
       <card>
         <template #title>
           <div class="flex w-full justify-between items-center">
-            <span>
+            <span class="font-bold text-center">
               Plazas Disponibles
             </span>
           </div>
         </template>
+
+        <!-- Contenido -->
         <template #content>
-          <div class="filters">
-            <label>
-              Programa:
-              <input
-                v-model="filters.program"
-                type="text"
-                placeholder="Buscar programa..."
-              >
-            </label>
-            <label>
-              Turno:
-              <select v-model="filters.turno">
-                <option value="">Todos</option>
-                <option value="Matutino">Matutino</option>
-                <option value="Vespertino">Vespertino</option>
-              </select>
-            </label>
-          </div>
-          <TableComponent
-            :headers="plazasHeaders"
-            :data="filteredPlazas"
-          />
+          <section class="flex flex-col gap-4">
+            <!-- Filtros -->
+            <div class="card bg-base-300 shadow-sm w-full">
+              <div class="card-body flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <label class="flex flex-col">
+                  <span class="font-medium">Programa:</span>
+                  <input
+                    v-model="filters.program"
+                    type="text"
+                    placeholder="Buscar programa..."
+                    class="input input-bordered w-full"
+                  >
+                </label>
+                <label class="flex flex-col">
+                  <span class="font-medium">Turno:</span>
+                  <select
+                    v-model="filters.turno"
+                    class="select select-bordered w-full"
+                  >
+                    <option value="">Todos</option>
+                    <option value="Matutino">Matutino</option>
+                    <option value="Vespertino">Vespertino</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+
+            <!-- Tabla -->
+            <div class="card bg-base-300 shadow-md w-full p-4">
+              <div class="card-body">
+                <TableComponent
+                  :headers="plazasHeaders"
+                  :data="filteredPlazas"
+                />
+              </div>
+            </div>
+          </section>
         </template>
       </card>
     </main>
@@ -143,25 +161,6 @@ export default {
 </script>
 
   <style scoped>
-  /* Encabezado */
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #34495e;
-    padding: 20px;
-    text-align: center;
-    border-bottom: 2px solid #ccc; /* Línea divisoria */
-    margin-bottom: 20px; /* Separación con el main */
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-  }
-
-  .header h1 {
-    font-size: 24px;
-    margin: 0;
-    color: #ffffff;
-}
-
   /* Sección */
   .section {
     margin-bottom: 30px;

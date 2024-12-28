@@ -93,15 +93,6 @@ export default {
 </script>
 
   <style scoped>
-  /* Contenedor del formulario */
-  .sign-in {
-    text-align: center;
-    background: #fff; /* Fondo blanco */
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
-  }
-
   /* Título del formulario */
   h2 {
     font-size: 24px;

@@ -115,60 +115,9 @@ export default {
   margin: 0;
   padding: 0;
   display: flex;
-  color: #333;
   background-color: #f9f9f9;
   height: 100vh;
   overflow: hidden; /* Evita desbordamiento vertical */
-}
-
-.menu-item {
-  cursor: pointer;
-  margin-bottom: 10px;
-  padding: 10px;
-  background-color: #34495e;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-}
-
-/* Contenido principal */
-.content {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-  background-color: #ecf0f1;
-  overflow-y: auto; /* Scroll si el contenido excede */
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  background-color: #34495e;
-  color: white;
-  padding: 15px 20px;
-  border-radius: 5px;
-}
-
-.header h1 {
-  font-size: 28px;
-  margin: 0;
-}
-
-.logout-btn {
-  background-color: #e74c3c;
-  border: none;
-  color: white;
-  padding: 10px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.logout-btn:hover {
-  background-color: #c0392b;
 }
 
 .content-view {
