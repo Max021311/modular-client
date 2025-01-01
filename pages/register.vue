@@ -161,23 +161,5 @@ export default {
 </script>
 
   <style scoped>
-  /* Sección */
-  .section {
-    margin-bottom: 30px;
-    background-color: #fff;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  }
 
-  .filters {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 15px;
-  }
-
-  .filters label {
-    display: flex;
-    flex-direction: column;
-  }
   </style>

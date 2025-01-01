@@ -4,8 +4,9 @@
     ref="dialog"
     class="modal"
     @close="close"
+    @click.self="close"
   >
-    <div class="modal-box">
+    <div :class="['modal-box', modalClass]">
       <button
         class="btn btn-xs btn-circle btn-ghost absolute right-2 top-2"
         @click="close"
@@ -21,6 +22,7 @@
 const dialogRef = useTemplateRef('dialog')
 const props = defineProps<{
   modelValue: boolean
+  modalClass?: string
 }>()
 const emit = defineEmits<{
   (e: 'update:modelValue', value: boolean): void

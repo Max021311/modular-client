@@ -1,6 +1,6 @@
 <template>
   <div id="main-page">
-    <!-- Contenido principal -->
+    <!----- Contenido principal ----->
     <main class="flex flex-col gap-4 px-10">
       <!------ Plaza de Servicio ----->
       <card>
@@ -11,7 +11,7 @@
             </span>
             <button
               class="btn btn-primary btn-sm"
-              @click="viewDetails()"
+              @click="openModal('service')"
             >
               Ver Detalles
             </button>
@@ -148,196 +148,216 @@
     </main>
 
     <!----- Modal ----->
-    <dialog
-      id="customModal"
-      class="modal"
+    <ModalComponent
+      v-model="isModalOpen"
+      modal-class="w-11/12 max-w-5xl"
     >
-      <div class="modal-box w-11/12 max-w-5xl">
+      <div>
         <!-- Título dinámico -->
         <h3 class="text-lg font-bold text-center">
-          <span v-if="modalSection === 'office'">Formulario de Oficio de Comisión</span>
+          <span v-if="modalSection === 'service'">Detalles de Plaza</span>
+          <span v-else-if="modalSection === 'office'">Formulario de Oficio de Comisión</span>
           <span v-else-if="modalSection === 'bimester-report'">Formulario de Reporte Bimestral</span>
           <span v-else-if="modalSection === 'final-report'">Formulario de Reporte Final</span>
         </h3>
 
         <!-- Contenido dinámico -->
         <div class="py-4">
-          <form
-            v-if="modalSection === 'office'"
-            @submit.prevent="submitForm"
-          >
-            <label class="block">
-              <span>Fecha de Inicio:</span>
-              <input
-                v-model="formData.startDate"
-                type="date"
-                class="input input-bordered w-full mt-1"
-              >
-            </label>
-            <label class="block mt-4">
-              <span>Lugar de la Dependencia:</span>
-              <input
-                v-model="formData.dependencia"
-                type="text"
-                placeholder="Ejemplo: Unidad Administrativa"
-                class="input input-bordered w-full mt-1"
-              >
-            </label>
-            <div class="flex justify-between items-center mt-4">
-              <button
-                type="button"
-                class="btn btn-outline"
-                @click="generatePDF"
-              >
-                Generar PDF
-              </button>
-              <button
-                type="button"
-                class="btn btn-outline"
-                @click="uploadPDF"
-              >
-                Cargar PDF
-              </button>
+          <div v-if="modalSection === 'service'">
+            <!-- Información de Plaza -->
+            <div class="flex flex-col gap-4">
+              <div class="card bg-base-300 shadow-md w-full p-4">
+                <div class="card-body flex flex-col md:flex-row justify-between items-start md:items-center">
+                  <!-- Información principal -->
+                  <div class="flex-1">
+                    <p><strong>Nombre de la Plaza:</strong> Plaza Administrativa</p>
+                    <p><strong>Ubicación:</strong> Unidad Administrativa</p>
+                    <p><strong>Estatus:</strong> Activo</p>
+                  </div>
+                  <div class="flex-1">
+                    <p><strong>Fecha de Inicio:</strong> 01/01/2025</p>
+                    <p><strong>Fecha de Fin:</strong> 31/12/2025</p>
+                  </div>
+                </div>
+              </div>
+              <p class="text-gray-700">
+                <!-- Información adicional, esta sección es opcional -->
+                Esta plaza está enfocada en actividades administrativas que incluyen la gestión de archivos, apoyo en eventos y coordinación de recursos internos.
+              </p>
             </div>
-            <button
-              type="submit"
-              class="btn btn-primary flex justify-center mx-auto mt-4"
-            >
-              Enviar
-            </button>
-          </form>
+          </div>
 
-          <form
-            v-else-if="modalSection === 'bimester-report'"
-            @submit.prevent="submitForm"
-          >
-            <label class="block">
-              <span>Período Reportado:</span>
-              <div class="flex gap-2 mt-1">
+          <!-- Oficio -->
+          <div class="py-4">
+            <form
+              v-if="modalSection === 'office'"
+              @submit.prevent="submitForm"
+            >
+              <label class="block">
+                <span>Fecha de Inicio:</span>
                 <input
                   v-model="formData.startDate"
                   type="date"
-                  class="input input-bordered w-full"
+                  class="input input-bordered w-full mt-1"
                 >
-                <span class="text-lg">-</span>
+              </label>
+              <label class="block mt-4">
+                <span>Lugar de la Dependencia:</span>
                 <input
-                  v-model="formData.endDate"
-                  type="date"
-                  class="input input-bordered w-full"
+                  v-model="formData.dependencia"
+                  type="text"
+                  placeholder="Ejemplo: Unidad Administrativa"
+                  class="input input-bordered w-full mt-1"
                 >
+              </label>
+              <div class="flex justify-between items-center mt-4">
+                <button
+                  type="button"
+                  class="btn btn-outline"
+                  @click="generatePDF"
+                >
+                  Generar PDF
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline"
+                  @click="uploadPDF"
+                >
+                  Cargar PDF
+                </button>
               </div>
-            </label>
-            <label class="block mt-4">
-              <span>¿Consideras que cumpliste con los objetivos propuestos?</span>
-              <textarea
-                v-model="formData.activities"
-                class="textarea textarea-bordered w-full mt-1"
-              />
-            </label>
-            <label class="block mt-4">
-              <span>¿Qué habilidades crees que has mejorado durante tu servicio social?</span>
-              <textarea
-                v-model="formData.activities"
-                class="textarea textarea-bordered w-full mt-1"
-              />
-            </label>
-            <label class="block mt-4">
-              <span>¿Qué aspectos fueron más satisfactorios de tu servicio social?</span>
-              <textarea
-                v-model="formData.activities"
-                class="textarea textarea-bordered w-full mt-1"
-              />
-            </label>
-            <label class="block mt-4">
-              <span>¿Recomendarías esta institución para realizar el servicio social? ¿Por qué?</span>
-              <textarea
-                v-model="formData.activities"
-                class="textarea textarea-bordered w-full mt-1"
-              />
-            </label>
-            <label class="block mt-4">
-              <span>¿Cuáles fueron las principales actividades que realizaste?</span>
-              <textarea
-                v-model="formData.activities"
-                class="textarea textarea-bordered w-full mt-1"
-              />
-            </label>
-            <button
-              type="submit"
-              class="btn btn-primary flex justify-center mx-auto mt-4"
-            >
-              Enviar
-            </button>
-          </form>
+              <button
+                type="submit"
+                class="btn btn-primary flex justify-center mx-auto mt-4"
+              >
+                Enviar
+              </button>
+            </form>
 
-          <form
-            v-else-if="modalSection === 'final-report'"
-            @submit.prevent="submitForm"
-          >
-            <label class="block">
-              <span>Período del Servicio:</span>
-              <div class="flex gap-2 mt-1">
-                <input
-                  v-model="formData.startDate"
-                  type="date"
-                  class="input input-bordered w-full"
-                >
-                <span class="text-lg">-</span>
-                <input
-                  v-model="formData.endDate"
-                  type="date"
-                  class="input input-bordered w-full"
-                >
-              </div>
-            </label>
-            <label class="block mt-4">
-              <span>¿Cuáles fueron las actividades más relevantes que realizaste?</span>
-              <textarea
-                v-model="formData.relevantActivities"
-                class="textarea textarea-bordered w-full mt-1"
-              />
-            </label>
-            <label class="block mt-4">
-              <span>¿Qué habilidades profesionales desarrollaste durante tu servicio social?</span>
-              <textarea
-                v-model="formData.relevantActivities"
-                class="textarea textarea-bordered w-full mt-1"
-              />
-            </label>
-            <label class="block mt-4">
-              <span>¿Cuáles fueron tus logros más importantes durante tu servicio?</span>
-              <textarea
-                v-model="formData.relevantActivities"
-                class="textarea textarea-bordered w-full mt-1"
-              />
-            </label>
-            <label class="block mt-4">
-              <span>¿Qué recomendaciones harías a la institución?</span>
-              <textarea
-                v-model="formData.relevantActivities"
-                class="textarea textarea-bordered w-full mt-1"
-              />
-            </label>
-            <button
-              type="submit"
-              class="btn btn-primary flex justify-center mx-auto mt-4"
+            <!-- Reportes -->
+            <form
+              v-else-if="modalSection === 'bimester-report'"
+              @submit.prevent="submitForm"
             >
-              Enviar
-            </button>
-          </form>
-        </div>
+              <label class="block">
+                <span>Período Reportado:</span>
+                <div class="flex gap-2 mt-1">
+                  <input
+                    v-model="formData.startDate"
+                    type="date"
+                    class="input input-bordered w-full"
+                  >
+                  <span class="text-lg">-</span>
+                  <input
+                    v-model="formData.endDate"
+                    type="date"
+                    class="input input-bordered w-full"
+                  >
+                </div>
+              </label>
+              <label class="block mt-4">
+                <span>¿Consideras que cumpliste con los objetivos propuestos?</span>
+                <textarea
+                  v-model="formData.activities"
+                  class="textarea textarea-bordered w-full mt-1"
+                />
+              </label>
+              <label class="block mt-4">
+                <span>¿Qué habilidades crees que has mejorado durante tu servicio social?</span>
+                <textarea
+                  v-model="formData.activities"
+                  class="textarea textarea-bordered w-full mt-1"
+                />
+              </label>
+              <label class="block mt-4">
+                <span>¿Qué aspectos fueron más satisfactorios de tu servicio social?</span>
+                <textarea
+                  v-model="formData.activities"
+                  class="textarea textarea-bordered w-full mt-1"
+                />
+              </label>
+              <label class="block mt-4">
+                <span>¿Recomendarías esta institución para realizar el servicio social? ¿Por qué?</span>
+                <textarea
+                  v-model="formData.activities"
+                  class="textarea textarea-bordered w-full mt-1"
+                />
+              </label>
+              <label class="block mt-4">
+                <span>¿Cuáles fueron las principales actividades que realizaste?</span>
+                <textarea
+                  v-model="formData.activities"
+                  class="textarea textarea-bordered w-full mt-1"
+                />
+              </label>
+              <button
+                type="submit"
+                class="btn btn-primary flex justify-center mx-auto mt-4"
+              >
+                Enviar
+              </button>
+            </form>
 
-        <!-- Acción para cerrar -->
-        <div class="modal-action">
-          <button
-            class="btn"
-            @click="closeModal"
-          >
-            Cerrar
-          </button>
+            <!-- Reporte Final -->
+            <form
+              v-else-if="modalSection === 'final-report'"
+              @submit.prevent="submitForm"
+            >
+              <label class="block">
+                <span>Período del Servicio:</span>
+                <div class="flex gap-2 mt-1">
+                  <input
+                    v-model="formData.startDate"
+                    type="date"
+                    class="input input-bordered w-full"
+                  >
+                  <span class="text-lg">-</span>
+                  <input
+                    v-model="formData.endDate"
+                    type="date"
+                    class="input input-bordered w-full"
+                  >
+                </div>
+              </label>
+              <label class="block mt-4">
+                <span>¿Cuáles fueron las actividades más relevantes que realizaste?</span>
+                <textarea
+                  v-model="formData.relevantActivities"
+                  class="textarea textarea-bordered w-full mt-1"
+                />
+              </label>
+              <label class="block mt-4">
+                <span>¿Qué habilidades profesionales desarrollaste durante tu servicio social?</span>
+                <textarea
+                  v-model="formData.relevantActivities"
+                  class="textarea textarea-bordered w-full mt-1"
+                />
+              </label>
+              <label class="block mt-4">
+                <span>¿Cuáles fueron tus logros más importantes durante tu servicio?</span>
+                <textarea
+                  v-model="formData.relevantActivities"
+                  class="textarea textarea-bordered w-full mt-1"
+                />
+              </label>
+              <label class="block mt-4">
+                <span>¿Qué recomendaciones harías a la institución?</span>
+                <textarea
+                  v-model="formData.relevantActivities"
+                  class="textarea textarea-bordered w-full mt-1"
+                />
+              </label>
+              <button
+                type="submit"
+                class="btn btn-primary flex justify-center mx-auto mt-4"
+              >
+                Enviar
+              </button>
+            </form>
+          </div>
         </div>
       </div>
-    </dialog>
+    </modalcomponent>
   </div>
 </template>
 
@@ -377,13 +397,10 @@ export default {
     },
     openModal(section: string) {
       this.modalSection = section
-      const modal = document.getElementById('customModal')
-      if (modal instanceof HTMLDialogElement) modal.showModal()
+      this.isModalOpen = true
     },
     closeModal() {
-      const modal = document.getElementById('customModal')
-      if (modal instanceof HTMLDialogElement) modal.close()
-      this.modalSection = '' // Limpia la sección actual
+      this.isModalOpen = false
     },
 
     submitForm() {
@@ -406,8 +423,6 @@ export default {
 /* Estilos generales */
 #main-page {
   font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
 }
 
 .card {
