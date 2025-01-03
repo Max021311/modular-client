@@ -14,6 +14,7 @@
         <template #content>
           <div class="card bg-base-300 shadow-md w-full p-4 text-center">
             <div class="card-body">
+              <p>Puedes registrar tu plaza de servicio social cuando la agenda lo permita en la fecha correspondiente.</p>
               <p class="text-lg font-bold">
                 Horario de Agenda:
               </p>
@@ -41,6 +42,7 @@
               <div class="card-body flex flex-col md:flex-row justify-between items-start md:items-center">
                 <!-- Detalles principales -->
                 <div class="flex-1">
+                  <p><strong>Esta es la plaza que selecionaste para realizar tu servicio social:</strong></p>
                   <p><strong>ID:</strong> 101</p>
                   <p><strong>Campus:</strong> Campus Norte</p>
                   <p><strong>Dependencia:</strong> Unidad Administrativa</p>

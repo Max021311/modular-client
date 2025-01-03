@@ -52,12 +52,28 @@
             <span class="text-center">
               Oficio de Comisión
             </span>
-            <button
-              class="btn btn-primary btn-sm"
-              @click="openModal('office')"
-            >
-              Ver Detalles
-            </button>
+            <div class="flex justify-end space-x-2">
+              <button
+                type="button"
+                class="btn btn-activate btn-sm"
+                @click="generatePDF"
+              >
+                Generar PDF
+              </button>
+              <button
+                type="button"
+                class="btn btn-activate btn-sm"
+                @click="uploadPDF"
+              >
+                Cargar PDF
+              </button>
+              <button
+                class="btn btn-primary btn-sm"
+                @click="openModal('office')"
+              >
+                Crear Oficio
+              </button>
+            </div>
           </div>
         </template>
         <template #content>
@@ -90,7 +106,7 @@
               class="btn btn-primary btn-sm"
               @click="openModal('bimester-report')"
             >
-              Agregar Reporte
+              Crear Reporte
             </button>
           </div>
         </template>
@@ -124,7 +140,7 @@
               class="btn btn-primary btn-sm"
               @click="openModal('final-report')"
             >
-              Agregar Reporte
+              Crear Reporte
             </button>
           </div>
         </template>
@@ -180,7 +196,7 @@
                   </div>
                 </div>
               </div>
-              <p class="text-gray-700">
+              <p>
                 <!-- Información adicional, esta sección es opcional -->
                 Esta plaza está enfocada en actividades administrativas que incluyen la gestión de archivos, apoyo en eventos y coordinación de recursos internos.
               </p>
@@ -193,8 +209,12 @@
               v-if="modalSection === 'office'"
               @submit.prevent="submitForm"
             >
+              <p>
+                Por favor, llena los siguientes campos para crear un oficio de comisión, llena con cuidado cada campo para evitar errores.
+              </p>
+
               <label class="block">
-                <span>Fecha de Inicio:</span>
+                <span class="font-bold">Fecha de Inicio:</span>
                 <input
                   v-model="formData.startDate"
                   type="date"
@@ -202,7 +222,7 @@
                 >
               </label>
               <label class="block mt-4">
-                <span>Lugar de la Dependencia:</span>
+                <span class="font-bold">Lugar de la Dependencia:</span>
                 <input
                   v-model="formData.dependencia"
                   type="text"
@@ -210,27 +230,11 @@
                   class="input input-bordered w-full mt-1"
                 >
               </label>
-              <div class="flex justify-between items-center mt-4">
-                <button
-                  type="button"
-                  class="btn btn-outline"
-                  @click="generatePDF"
-                >
-                  Generar PDF
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-outline"
-                  @click="uploadPDF"
-                >
-                  Cargar PDF
-                </button>
-              </div>
               <button
                 type="submit"
                 class="btn btn-primary flex justify-center mx-auto mt-4"
               >
-                Enviar
+                Guardar
               </button>
             </form>
 
@@ -239,15 +243,18 @@
               v-else-if="modalSection === 'bimester-report'"
               @submit.prevent="submitForm"
             >
+              <p>
+                Por favor, llena los siguientes campos para crear un nuevo reporte bimestral, llena con cuidado cada campo para evitar errores.
+              </p>
               <label class="block">
-                <span>Período Reportado:</span>
+                <span class="font-bold">Período Reportado:</span>
                 <div class="flex gap-2 mt-1">
                   <input
                     v-model="formData.startDate"
                     type="date"
                     class="input input-bordered w-full"
                   >
-                  <span class="text-lg">-</span>
+                  <span class="text-lg font-bold">-</span>
                   <input
                     v-model="formData.endDate"
                     type="date"
@@ -256,35 +263,35 @@
                 </div>
               </label>
               <label class="block mt-4">
-                <span>¿Consideras que cumpliste con los objetivos propuestos?</span>
+                <span class="font-bold">¿Consideras que cumpliste con los objetivos propuestos?</span>
                 <textarea
                   v-model="formData.activities"
                   class="textarea textarea-bordered w-full mt-1"
                 />
               </label>
               <label class="block mt-4">
-                <span>¿Qué habilidades crees que has mejorado durante tu servicio social?</span>
+                <span class="font-bold">¿Qué habilidades crees que has mejorado durante tu servicio social?</span>
                 <textarea
                   v-model="formData.activities"
                   class="textarea textarea-bordered w-full mt-1"
                 />
               </label>
               <label class="block mt-4">
-                <span>¿Qué aspectos fueron más satisfactorios de tu servicio social?</span>
+                <span class="font-bold">¿Qué aspectos fueron más satisfactorios de tu servicio social?</span>
                 <textarea
                   v-model="formData.activities"
                   class="textarea textarea-bordered w-full mt-1"
                 />
               </label>
               <label class="block mt-4">
-                <span>¿Recomendarías esta institución para realizar el servicio social? ¿Por qué?</span>
+                <span class="font-bold">¿Recomendarías esta institución para realizar el servicio social? ¿Por qué?</span>
                 <textarea
                   v-model="formData.activities"
                   class="textarea textarea-bordered w-full mt-1"
                 />
               </label>
               <label class="block mt-4">
-                <span>¿Cuáles fueron las principales actividades que realizaste?</span>
+                <span class="font-bold">¿Cuáles fueron las principales actividades que realizaste?</span>
                 <textarea
                   v-model="formData.activities"
                   class="textarea textarea-bordered w-full mt-1"
@@ -294,7 +301,7 @@
                 type="submit"
                 class="btn btn-primary flex justify-center mx-auto mt-4"
               >
-                Enviar
+                Crear
               </button>
             </form>
 
@@ -303,15 +310,18 @@
               v-else-if="modalSection === 'final-report'"
               @submit.prevent="submitForm"
             >
+              <p>
+                Por favor, llena los siguientes campos para crear el reporte final, llena con cuidado cada campo para evitar errores.
+              </p>
               <label class="block">
-                <span>Período del Servicio:</span>
+                <span class="font-bold">Período del Servicio:</span>
                 <div class="flex gap-2 mt-1">
                   <input
                     v-model="formData.startDate"
                     type="date"
                     class="input input-bordered w-full"
                   >
-                  <span class="text-lg">-</span>
+                  <span class="text-lg font-bold">-</span>
                   <input
                     v-model="formData.endDate"
                     type="date"
@@ -320,28 +330,28 @@
                 </div>
               </label>
               <label class="block mt-4">
-                <span>¿Cuáles fueron las actividades más relevantes que realizaste?</span>
+                <span class="font-bold">¿Cuáles fueron las actividades más relevantes que realizaste?</span>
                 <textarea
                   v-model="formData.relevantActivities"
                   class="textarea textarea-bordered w-full mt-1"
                 />
               </label>
               <label class="block mt-4">
-                <span>¿Qué habilidades profesionales desarrollaste durante tu servicio social?</span>
+                <span class="font-bold">¿Qué habilidades profesionales desarrollaste durante tu servicio social?</span>
                 <textarea
                   v-model="formData.relevantActivities"
                   class="textarea textarea-bordered w-full mt-1"
                 />
               </label>
               <label class="block mt-4">
-                <span>¿Cuáles fueron tus logros más importantes durante tu servicio?</span>
+                <span class="font-bold">¿Cuáles fueron tus logros más importantes durante tu servicio?</span>
                 <textarea
                   v-model="formData.relevantActivities"
                   class="textarea textarea-bordered w-full mt-1"
                 />
               </label>
               <label class="block mt-4">
-                <span>¿Qué recomendaciones harías a la institución?</span>
+                <span class="font-bold">¿Qué recomendaciones harías a la institución?</span>
                 <textarea
                   v-model="formData.relevantActivities"
                   class="textarea textarea-bordered w-full mt-1"
@@ -351,7 +361,7 @@
                 type="submit"
                 class="btn btn-primary flex justify-center mx-auto mt-4"
               >
-                Enviar
+                Crear
               </button>
             </form>
           </div>
@@ -402,7 +412,6 @@ export default {
     closeModal() {
       this.isModalOpen = false
     },
-
     submitForm() {
       console.log('Formulario enviado:', this.formData)
       this.closeModal()
