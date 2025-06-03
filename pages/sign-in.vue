@@ -9,13 +9,10 @@
             <h2 class="text-3xl font-bold text-base-content text-center mt-7">
               Iniciar Sesión
             </h2>
-            <form
-              class="card-body"
-              @submit.prevent="handleSubmit"
-            >
+            <form class="card-body" @submit.prevent="handleSubmit">
               <!----- Campo de Código ----->
               <div class="form-control">
-                <label class="input font-bold input-bordered flex items-center gap-2">
+                <label for="usercode" class="input font-bold input-bordered flex items-center gap-2">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 16 16"
@@ -40,7 +37,7 @@
               </div>
               <!----- Campo de Contraseña ----->
               <div class="form-control">
-                <label class="input font-bold input-bordered flex items-center gap-2">
+                <label for="password" class="input font-bold input-bordered flex items-center gap-2">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 16 16"
@@ -73,6 +70,15 @@
                 </button>
               </div>
             </form>
+            <div class="text-center mt-4">
+              <p>No tienes cuenta?</p>
+              <nuxt-link
+                to="/register"
+                class="link link-primary"
+              >
+                Registro
+              </nuxt-link>
+            </div>
           </div>
         </div>
       </div>
@@ -80,22 +86,30 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  data() {
-    return {
-      usercode: '',
-      password: ''
-    }
-  },
-  methods: {
-    handleSubmit() {
-      // Lógica de autenticación
+<script setup lang="ts">
+// Reactive variables for form inputs
+import { ref } from 'vue';
 
-      this.$router.push('/')
-    }
+const usercode = ref('');
+const password = ref('');
+
+// Nuxt router for navigation
+const router = useRouter();
+
+// Handle form submission
+const handleSubmit = () => {
+  console.log('handleSubmit called!');
+  console.log('Usercode:', usercode.value);
+  console.log('Password:', password.value);
+
+  // Placeholder logic: assume admin if usercode is "admin" and password is "1234"
+  if (usercode.value === 'admin' && password.value === '1234') {
+    // Redirect to admin page
+    router.push('/admin');
+  } else {
+    // Redirect to user index page
+    router.push('/');
   }
-
 }
 </script>
 

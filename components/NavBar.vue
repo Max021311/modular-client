@@ -2,7 +2,7 @@
   <div class="navbar bg-base-300">
     <!-- Inicio de la barra (Responsive dropdown) -->
     <div class="navbar-start">
-      <div class="dropdown">
+      <!-- <div class="dropdown">
         <div
           tabindex="0"
           role="button"
@@ -23,13 +23,10 @@
             />
           </svg>
         </div>
-        <ul
-          tabindex="0"
-          class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
-        >
+        <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
           <li>
             <NuxtLink
-              to="/"
+              to="/main"
               class="btn-ghost"
             >
               Inicio
@@ -56,25 +53,30 @@
               to="/sign-in"
               class="btn-ghost"
             >
-              Iniciar sesión / Cerrar sesión
+              Iniciar sesión / Registro
             </NuxtLink>
           </li>
         </ul>
-      </div>
+      </div> -->
       <NuxtLink
         to="/"
         class="btn btn-ghost text-xl text font-bold"
       >
+        <img
+          src="/logo-removebg-preview.png"
+          alt="Plus Icon"
+          class="w-9 h-9 mr-2"
+        >
         Social Service System Plus
       </NuxtLink>
     </div>
 
     <!-- Opciones del menú para pantallas grandes -->
-    <div class="navbar-center hidden lg:flex">
+     <div class="navbar-center hidden lg:flex">
       <ul class="menu menu-horizontal px-1">
         <li>
           <NuxtLink
-            to="/"
+            to="/main"
             class="btn-ghost"
           >
             Inicio
@@ -96,9 +98,19 @@
             Registro
           </NuxtLink>
         </li>
+        <li>
+          <NuxtLink
+            to="/about"
+            class="btn-ghost"
+          >
+            Acerca de
+          </NuxtLink>
+        </li>
+        
+          <ChatDialogflow />
+    
       </ul>
-    </div>
-
+    </div> 
     <!-- Botones finales: cambio de tema y autenticación -->
     <div class="navbar-end flex gap-2">
       <ClientOnly>
@@ -108,7 +120,7 @@
         to="/sign-in"
         class="btn btn-primary btn-sm"
       >
-        Iniciar sesión / Cerrar sesión
+        Iniciar sesión / Registro
       </NuxtLink>
     </div>
   </div>
