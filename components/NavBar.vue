@@ -72,7 +72,7 @@
     </div>
 
     <!-- Opciones del menú para pantallas grandes -->
-     <div class="navbar-center hidden lg:flex">
+    <div class="navbar-center hidden lg:flex">
       <ul class="menu menu-horizontal px-1">
         <li>
           <NuxtLink
@@ -106,11 +106,10 @@
             Acerca de
           </NuxtLink>
         </li>
-        
-          <ChatDialogflow />
-    
+
+        <ChatDialogflow />
       </ul>
-    </div> 
+    </div>
     <!-- Botones finales: cambio de tema y autenticación -->
     <div class="navbar-end flex gap-2">
       <ClientOnly>

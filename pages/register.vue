@@ -70,7 +70,7 @@ export default {
     register() {
       // Basic validation
       if (!this.username || !this.password) {
-        this.error = 'Please enter both username and password'
+        // this.error = 'Please enter both username and password'
         return
       }
       // For now, just simulate a successful registration and redirect
