@@ -10,7 +10,9 @@
       <!-- Pregunta 1 -->
       <card>
         <template #title>
-          <span class="font-semibold">1. ¿En qué áreas académicas te sientes más cómodo/a trabajando?</span>
+          <span class="font-semibold">
+            1. ¿En qué áreas académicas te sientes más cómodo/a trabajando?
+          </span>
         </template>
         <template #content>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -34,19 +36,28 @@
       <!-- Pregunta 2 -->
       <card>
         <template #title>
-          <span class="font-semibold">2. Califica tu nivel de habilidad en herramientas ofimáticas (Word, Excel, PowerPoint).</span>
+          <span class="font-semibold">
+            2. Califica tu nivel de habilidad en herramientas ofimáticas (Word, Excel, PowerPoint).
+          </span>
+          <span class="font-normal">
+            1: Nada - 5: Mucho
+          </span>
         </template>
         <template #content>
-          <div class="flex items-center space-x-2">
-            <span>1</span>
-            <input
-              v-model.number="form.likert2"
-              type="range"
-              min="1"
-              max="5"
-              class="range range-primary flex-1"
+          <div class="flex gap-4">
+            <label
+              v-for="n in 5"
+              :key="n"
+              class="cursor-pointer inline-flex items-center"
             >
-            <span>5</span>
+              <input
+                v-model="form.likert2"
+                type="radio"
+                :value="n"
+                class="radio radio-primary mr-2"
+              >
+              {{ n }}
+            </label>
           </div>
         </template>
       </card>
@@ -54,19 +65,28 @@
       <!-- Pregunta 3 -->
       <card>
         <template #title>
-          <span class="font-semibold">3. ¿Prefieres tareas que impliquen contacto directo con personas (e.g. atención, entrevista)?</span>
+          <span class="font-semibold">
+            3. ¿Prefieres tareas que impliquen contacto directo con personas (e.g. atención, entrevista)?
+          </span>
+          <span class="font-normal">
+            1:Nada - 5:Mucho
+          </span>
         </template>
         <template #content>
-          <div class="flex items-center space-x-2">
-            <span>1</span>
-            <input
-              v-model.number="form.likert3"
-              type="range"
-              min="1"
-              max="5"
-              class="range range-primary flex-1"
+          <div class="flex gap-4">
+            <label
+              v-for="n in 5"
+              :key="n"
+              class="cursor-pointer inline-flex items-center"
             >
-            <span>5</span>
+              <input
+                v-model="form.likert3"
+                type="radio"
+                :value="n"
+                class="radio radio-primary mr-2"
+              >
+              {{ n }}
+            </label>
           </div>
         </template>
       </card>
@@ -74,19 +94,28 @@
       <!-- Pregunta 4 -->
       <card>
         <template #title>
-          <span class="font-semibold">4. ¿Qué tan importante es para ti trabajar en proyectos que requieran análisis de datos?</span>
+          <span class="font-semibold">
+            4. ¿Qué tan importante es para ti trabajar en proyectos que requieran análisis de datos?
+          </span>
+          <span class="font-normal">
+            1:Nada - 5:Mucho
+          </span>
         </template>
         <template #content>
-          <div class="flex items-center space-x-2">
-            <span>1</span>
-            <input
-              v-model.number="form.likert4"
-              type="range"
-              min="1"
-              max="5"
-              class="range range-primary flex-1"
+          <div class="flex gap-4">
+            <label
+              v-for="n in 5"
+              :key="n"
+              class="cursor-pointer inline-flex items-center"
             >
-            <span>5</span>
+              <input
+                v-model="form.likert4"
+                type="radio"
+                :value="n"
+                class="radio radio-primary mr-2"
+              >
+              {{ n }}
+            </label>
           </div>
         </template>
       </card>
@@ -94,13 +123,19 @@
       <!-- Pregunta 5 -->
       <card>
         <template #title>
-          <span class="font-semibold">5. ¿Cuántas horas semanales puedes dedicar al servicio social?</span>
+          <span class="font-semibold">
+            5. ¿Cuántas horas semanales puedes dedicar al servicio social?
+          </span>
+          <span class="font-normal">
+            (Mínimo 1 - Máximo 40 horas)
+          </span>
         </template>
         <template #content>
           <input
             v-model.number="form.hours"
             type="number"
             min="0"
+            max="40"
             placeholder="Horas"
             class="input input-bordered w-full"
           >
@@ -110,7 +145,9 @@
       <!-- Pregunta 6 -->
       <card>
         <template #title>
-          <span class="font-semibold">6. ¿En qué horario del día prefieres realizar tus actividades?</span>
+          <span class="font-semibold">
+            6. ¿En qué horario del día prefieres realizar tus actividades?
+          </span>
         </template>
         <template #content>
           <div class="space-x-4">
@@ -145,7 +182,9 @@
       <!-- Pregunta 7 -->
       <card>
         <template #title>
-          <span class="font-semibold">7. ¿Te gustaría desarrollar habilidades de programación o sistemas de información?</span>
+          <span class="font-semibold">
+            7. ¿Te gustaría desarrollar habilidades de programación o sistemas de información?
+          </span>
         </template>
         <template #content>
           <div class="space-x-4">
@@ -172,7 +211,9 @@
       <!-- Pregunta 8 -->
       <card>
         <template #title>
-          <span class="font-semibold">8. ¿Tienes experiencia previa en voluntariado o servicio social?</span>
+          <span class="font-semibold">
+            8. ¿Tienes experiencia previa en voluntariado o servicio social?
+          </span>
         </template>
         <template #content>
           <div class="space-y-2">
@@ -207,19 +248,28 @@
       <!-- Pregunta 9 -->
       <card>
         <template #title>
-          <span class="font-semibold">9. ¿Qué tan motivado/a estás para trabajar en proyectos de responsabilidad social o comunitaria?</span>
+          <span class="font-semibold">
+            9. ¿Qué tan motivado/a estás para trabajar en proyectos de responsabilidad social o comunitaria?
+          </span>
+          <span class="font-normal">
+            1:Nada - 5:Mucho
+          </span>
         </template>
         <template #content>
-          <div class="flex items-center space-x-2">
-            <span>1</span>
-            <input
-              v-model.number="form.likert9"
-              type="range"
-              min="1"
-              max="5"
-              class="range range-primary flex-1"
+          <div class="flex gap-4">
+            <label
+              v-for="n in 5"
+              :key="n"
+              class="cursor-pointer inline-flex items-center"
             >
-            <span>5</span>
+              <input
+                v-model="form.likert9"
+                type="radio"
+                :value="n"
+                class="radio radio-primary mr-2"
+              >
+              {{ n }}
+            </label>
           </div>
         </template>
       </card>
@@ -227,19 +277,28 @@
       <!-- Pregunta 10 -->
       <card>
         <template #title>
-          <span class="font-semibold">10. Indica tu nivel de interés en actividades creativas (diseño, redacción, edición de contenidos).</span>
+          <span class="font-semibold">
+            10. Indica tu nivel de interés en actividades creativas (diseño, redacción, edición de contenidos).
+          </span>
+          <span class="font-normal">
+            1:Nada - 5:Mucho
+          </span>
         </template>
         <template #content>
-          <div class="flex items-center space-x-2">
-            <span>1</span>
-            <input
-              v-model.number="form.likert10"
-              type="range"
-              min="1"
-              max="5"
-              class="range range-primary flex-1"
+          <div class="flex gap-4">
+            <label
+              v-for="n in 5"
+              :key="n"
+              class="cursor-pointer inline-flex items-center"
             >
-            <span>5</span>
+              <input
+                v-model="form.likert10"
+                type="radio"
+                :value="n"
+                class="radio radio-primary mr-2"
+              >
+              {{ n }}
+            </label>
           </div>
         </template>
       </card>
@@ -247,7 +306,9 @@
       <!-- Pregunta 11 -->
       <card>
         <template #title>
-          <span class="font-semibold">11. ¿Qué tipo de sector te interesa más?</span>
+          <span class="font-semibold">
+            11. ¿Qué tipo de sector te interesa más?
+          </span>
         </template>
         <template #content>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -271,7 +332,9 @@
       <!-- Pregunta 12 -->
       <card>
         <template #title>
-          <span class="font-semibold">12. ¿Prefieres colaborar de manera individual o en equipo?</span>
+          <span class="font-semibold">
+            12. ¿Prefieres colaborar de manera individual o en equipo?
+          </span>
         </template>
         <template #content>
           <div class="space-x-4">
@@ -295,22 +358,31 @@
         </template>
       </card>
 
-      <!-- Pregunta 14 -->
+      <!-- Pregunta 13 -->
       <card>
         <template #title>
-          <span class="font-semibold">13. ¿Qué tan cómodo/a te sientes realizando tareas físicas o de campo (e.g. levantamiento de encuestas)?</span>
+          <span class="font-semibold">
+            13. ¿Qué tan cómodo/a te sientes realizando tareas físicas o de campo (e.g. levantamiento de encuestas)?
+          </span>
+          <span class="font-normal">
+            1:Nada - 5:Mucho
+          </span>
         </template>
         <template #content>
-          <div class="flex items-center space-x-2">
-            <span>1</span>
-            <input
-              v-model.number="form.likert13"
-              type="range"
-              min="1"
-              max="5"
-              class="range range-primary flex-1"
+          <div class="flex gap-4">
+            <label
+              v-for="n in 5"
+              :key="n"
+              class="cursor-pointer inline-flex items-center"
             >
-            <span>5</span>
+              <input
+                v-model="form.likert13"
+                type="radio"
+                :value="n"
+                class="radio radio-primary mr-2"
+              >
+              {{ n }}
+            </label>
           </div>
         </template>
       </card>
@@ -318,7 +390,9 @@
       <!-- Pregunta 14 -->
       <card>
         <template #title>
-          <span class="font-semibold">14. ¿Cuál es tu principal objetivo al hacer el servicio social?</span>
+          <span class="font-semibold">
+            14. ¿Cuál es tu principal objetivo al hacer el servicio social?
+          </span>
         </template>
         <template #content>
           <select
@@ -349,7 +423,9 @@
       <!-- Pregunta 15 -->
       <card>
         <template #title>
-          <span class="font-semibold">15. ¿Hay alguna destreza o área donde te gustaría capacitarte durante tu servicio social?</span>
+          <span class="font-semibold">
+            15. ¿Hay alguna destreza o área donde te gustaría capacitarte durante tu servicio social?
+          </span>
         </template>
         <template #content>
           <textarea

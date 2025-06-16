@@ -58,6 +58,8 @@
           </li>
         </ul>
       </div> -->
+
+      <!-- Logo y título -->
       <NuxtLink
         to="/"
         class="btn btn-ghost text-xl text font-bold"
@@ -92,6 +94,14 @@
         </li>
         <li>
           <NuxtLink
+            to="/test"
+            class="btn-ghost"
+          >
+            Formulario
+          </NuxtLink>
+        </li>
+        <li>
+          <NuxtLink
             to="/register"
             class="btn-ghost"
           >
@@ -110,6 +120,7 @@
         <ChatDialogflow />
       </ul>
     </div>
+
     <!-- Botones finales: cambio de tema y autenticación -->
     <div class="navbar-end flex gap-2">
       <ClientOnly>
