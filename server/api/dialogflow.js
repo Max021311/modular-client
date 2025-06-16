@@ -1,4 +1,5 @@
 // server/api/dialogflow.js
+/*
 import { SessionsClient } from '@google-cloud/dialogflow'
 
 const projectId = 'ssplus-assistant-srwn' // Reemplaza con tu ID del proyecto de Google Cloud
@@ -51,4 +52,4 @@ export default defineEventHandler(async (event) => {
       statusMessage: 'Error al comunicarse con Dialogflow'
     })
   }
-})
+}) */

@@ -1,10 +1,10 @@
 <template>
   <div id="sign-in">
     <!----- Contenido Principal ----->
-    <main>
+    <main class="flex justify-center items-center min-h-screen bg-base-200">
       <div class="hero min-h-screen">
         <!----- Tarjeta del Formulario ----->
-        <div class="hero-content flex-col">
+        <div class="card w-96 bg-base-100 shadow-xl">
           <div class="card bg-base-300 text-base-content w-full max-w-sm shadow-2xl">
             <h2 class="text-3xl font-bold text-base-content text-center mt-7">
               Iniciar Sesión
@@ -13,10 +13,10 @@
               class="card-body"
               @submit.prevent="handleSubmit"
             >
-              <!----- Campo de Código ----->
+              <!----- Campo de Usuario ----->
               <div class="form-control">
                 <label
-                  for="usercode"
+                  for="email"
                   class="input font-bold input-bordered flex items-center gap-2"
                 >
                   <svg
@@ -26,18 +26,19 @@
                     class="h-4 w-4 opacity-70"
                   >
                     <path
-                      d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z"
+                      d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.424.1.631 0l6.598-3.185A.755.755 0 0 1 15 4.793V4.5A1.5 1.5 0 0 0 13.5 3h-11Z"
+                    />
+                    <path
+                      d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z"
                     />
                   </svg>
                   <input
-                    id="usercode"
-                    v-model="usercode"
-                    type="text"
-                    placeholder="Código"
+                    id="email"
+                    v-model="email"
+                    type="email"
+                    placeholder="Correo electrónico"
                     class="grow"
                     required
-                    pattern="^[0-9]{9,12}$"
-                    title="El código debe tener entre 9 y 12 caracteres"
                   >
                 </label>
               </div>
@@ -79,14 +80,25 @@
                 </button>
               </div>
             </form>
+            <!----- Enlace para recuperar contraseña ----->
             <div class="text-center mt-4">
-              <p>No tienes cuenta?</p>
               <nuxt-link
-                to="/register"
+                to="/recover-password"
                 class="link link-primary"
               >
-                Registro
+                ¿Olvidaste tu contraseña?
               </nuxt-link>
+
+              <!-- Link a login -->
+              <div class="text-center mt-4">
+                <p>¿No tienes una cuenta?</p>
+                <nuxt-link
+                  to="/register"
+                  class="link link-primary"
+                >
+                  Registrarse
+                </nuxt-link>
+              </div>
             </div>
           </div>
         </div>
@@ -99,7 +111,7 @@
 // Reactive variables for form inputs
 import { ref } from 'vue'
 
-const usercode = ref('')
+const email = ref('')
 const password = ref('')
 
 // Nuxt router for navigation
@@ -108,11 +120,11 @@ const router = useRouter()
 // Handle form submission
 const handleSubmit = () => {
   console.log('handleSubmit called!')
-  console.log('Usercode:', usercode.value)
+  console.log('Email:', email.value)
   console.log('Password:', password.value)
 
   // Placeholder logic: assume admin if usercode is "admin" and password is "1234"
-  if (usercode.value === 'admin' && password.value === '1234') {
+  if (email.value === 'admin@admin' && password.value === '1234') {
     // Redirect to admin page
     router.push('/admin')
   } else {

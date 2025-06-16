@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { v4 as uuidv4 } from 'uuid' // Para generar IDs de sesión únicos
+/* mport { v4 as uuidv4 } from 'uuid' // Para generar IDs de sesión únicos
 
 export default {
   data() {
@@ -76,7 +76,7 @@ export default {
       }
     }
   }
-}
+} */
 </script>
 
   <style scoped>

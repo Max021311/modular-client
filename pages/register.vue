@@ -1,59 +1,104 @@
 <template>
   <div id="register-page">
-    <!-- Contenido principal -->
+    <!----- Contenido Principal ----->
     <main class="flex justify-center items-center min-h-screen bg-base-200">
-      <div class="card w-96 bg-base-100 shadow-xl">
-        <div class="card-body">
-          <h2 class="card-title text-center justify-center">
-            Registro
-          </h2>
-          <form @submit.prevent="register">
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text">Usuario</span>
-              </label>
-              <input
-                v-model="username"
-                type="text"
-                placeholder="Escribe tu usuario"
-                class="input input-bordered"
-              >
-            </div>
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text">Contraseña</span>
-              </label>
-              <input
-                v-model="password"
-                type="password"
-                placeholder="Escribe tu contraseña"
-                class="input input-bordered"
-              >
-            </div>
-            <div class="form-control mt-6">
-              <button
-                type="submit"
-                class="btn btn-primary"
-              >
-                Registrarse
-              </button>
-            </div>
-          </form>
-          <p
-            v-if="error"
-            class="text-error mt-4 text-center"
-          >
-            {{ error }}
-          </p>
-
-          <div class="text-center mt-4">
-            <p>¿Tienes una cuenta?</p>
-            <nuxt-link
-              to="/sign-in"
-              class="link link-primary"
+      <div class="hero min-h-screen">
+        <!----- Tarjeta del Formulario ----->
+        <div class="card w-96 bg-base-100 shadow-xl">
+          <div class="card bg-base-300 text-base-content w-full max-w-sm shadow-2xl">
+            <h2 class="text-3xl font-bold text-base-content text-center mt-7">
+              Registrarse
+            </h2>
+            <form
+              class="card-body"
+              @submit.prevent="register"
             >
-              Iniciar sesión
-            </nuxt-link>
+              <!----- Campo de Usuario ----->
+              <div class="form-control">
+                <label
+                  for="email"
+                  class="input font-bold input-bordered flex items-center gap-2"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 16 16"
+                    fill="currentColor"
+                    class="h-4 w-4 opacity-70"
+                  >
+                    <path
+                      d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.424.1.631 0l6.598-3.185A.755.755 0 0 1 15 4.793V4.5A1.5 1.5 0 0 0 13.5 3h-11Z"
+                    />
+                    <path
+                      d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z"
+                    />
+                  </svg>
+                  <input
+                    id="email"
+                    v-model="email"
+                    type="email"
+                    placeholder="Correo electrónico"
+                    class="grow"
+                    required
+                  >
+                </label>
+              </div>
+              <!----- Campo de Contraseña ----->
+              <div class="form-control">
+                <label
+                  for="password"
+                  class="input font-bold input-bordered flex items-center gap-2"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 16 16"
+                    fill="currentColor"
+                    class="h-4 w-4 opacity-70"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  <input
+                    id="password"
+                    v-model="password"
+                    type="password"
+                    placeholder="Contraseña"
+                    class="grow"
+                    required
+                  >
+                </label>
+              </div>
+              <!-- Botón Registrar -->
+              <div class="form-control mt-6">
+                <button
+                  type="submit"
+                  class="btn btn-primary w-full font-bold"
+                >
+                  Registrarse
+                </button>
+              </div>
+
+              <!-- Mensaje de error -->
+              <p
+                v-if="error"
+                class="text-error mt-4 text-center"
+              >
+                {{ error }}
+              </p>
+
+              <!-- Link a login -->
+              <div class="text-center mt-4">
+                <p>¿Tienes una cuenta?</p>
+                <nuxt-link
+                  to="/sign-in"
+                  class="link link-primary"
+                >
+                  Iniciar sesión
+                </nuxt-link>
+              </div>
+            </form>
           </div>
         </div>
       </div>
@@ -64,17 +109,17 @@
 <script lang="ts">
 export default {
   data() {
-    return { username: '', password: '', error: null }
+    return { email: '', password: '', error: null }
   },
   methods: {
     register() {
       // Basic validation
-      if (!this.username || !this.password) {
+      if (!this.email || !this.password) {
         // this.error = 'Please enter both username and password'
         return
       }
       // For now, just simulate a successful registration and redirect
-      console.log('Registering user:', this.username)
+      console.log('Registering user:', this.email)
       this.error = null // Clear any previous errors
       this.$router.push('/sign-in')
     }
@@ -84,4 +129,8 @@ export default {
 
 <style scoped>
 /* Add any specific styles here */
+/* Botón */
+  button {
+    font-size: 16px;
+  }
 </style>

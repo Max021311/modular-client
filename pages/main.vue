@@ -1,7 +1,7 @@
 <template>
   <div id="main-page">
     <!----- Contenido principal ----->
-    <main class="flex flex-col gap-4 px-10">
+    <main class="flex flex-col gap-6 px-10 py-8">
       <!------ Plaza de Servicio ----->
       <card>
         <template #title>
