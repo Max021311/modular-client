@@ -3,6 +3,26 @@
     <h1 class="text-4xl font-bold text-center mb-8">
       Cuestionario de Habilidades y Preferencias
     </h1>
+    <!-- Tarjeta introductoria del cuestionario -->
+    <card class="bg-base-200 shadow-md p-6 mb-8">
+      <template #title>
+        <div class="flex items-center space-x-3">
+          <span class="text-xl font-semibold text-primary">Cuestionario de Perfil 📝</span>
+        </div>
+      </template>
+      <template #content>
+        <p class=" text-base leading-relaxed">
+          Este cuestionario tiene como objetivo identificar tus habilidades, intereses y preferencias
+          personales para ayudarte a encontrar la vacante de servicio social que mejor se adapte a tu perfil.
+          Tus respuestas serán utilizadas por el sistema para ofrecerte recomendaciones personalizadas
+          así que es importante que respondas cada pregunta en base a tu criterio personal.
+        </p>
+        <p class="text-sm mt-4">
+          🧠 No hay respuestas correctas o incorrectas. Contesta con sinceridad para obtener mejores resultados.
+        </p>
+      </template>
+    </card>
+    <!----- Formulario de Habilidades y Preferencias ----->
     <form
       class="space-y-6"
       @submit.prevent="handleSubmit"
@@ -36,12 +56,14 @@
       <!-- Pregunta 2 -->
       <card>
         <template #title>
-          <span class="font-semibold">
-            2. Califica tu nivel de habilidad en herramientas ofimáticas (Word, Excel, PowerPoint).
-          </span>
-          <span class="font-normal">
-            1: Nada - 5: Mucho
-          </span>
+          <div class="flex flex-col">
+            <span class="font-semibold">
+              2. Califica tu nivel de habilidad en herramientas ofimáticas (Word, Excel, PowerPoint).
+            </span>
+            <span class="font-normal mt-1">
+              (Escala: 1 = Nada de habilidad, 5 = Habilidad muy alta)
+            </span>
+          </div>
         </template>
         <template #content>
           <div class="flex gap-4">
@@ -65,12 +87,14 @@
       <!-- Pregunta 3 -->
       <card>
         <template #title>
-          <span class="font-semibold">
-            3. ¿Prefieres tareas que impliquen contacto directo con personas (e.g. atención, entrevista)?
-          </span>
-          <span class="font-normal">
-            1:Nada - 5:Mucho
-          </span>
+          <div class="flex flex-col">
+            <span class="font-semibold">
+              3. ¿Prefieres tareas que impliquen contacto directo con personas (e.g. atención, entrevista)?
+            </span>
+            <span class="font-normal mt-1">
+              (Escala: 1 = Nada de preferencia, 5 = Muy preferido)
+            </span>
+          </div>
         </template>
         <template #content>
           <div class="flex gap-4">
@@ -94,12 +118,14 @@
       <!-- Pregunta 4 -->
       <card>
         <template #title>
-          <span class="font-semibold">
-            4. ¿Qué tan importante es para ti trabajar en proyectos que requieran análisis de datos?
-          </span>
-          <span class="font-normal">
-            1:Nada - 5:Mucho
-          </span>
+          <div class="flex flex-col">
+            <span class="font-semibold">
+              4. ¿Qué tan importante es para ti trabajar en proyectos que requieran análisis de datos?
+            </span>
+            <span class="font-normal mt-1">
+              (Escala: 1 = No es importante, 5 = Muy importante)
+            </span>
+          </div>
         </template>
         <template #content>
           <div class="flex gap-4">
@@ -123,12 +149,14 @@
       <!-- Pregunta 5 -->
       <card>
         <template #title>
-          <span class="font-semibold">
-            5. ¿Cuántas horas semanales puedes dedicar al servicio social?
-          </span>
-          <span class="font-normal">
-            (Mínimo 1 - Máximo 40 horas)
-          </span>
+          <div class="flex flex-col">
+            <span class="font-semibold">
+              5. ¿Cuántas horas semanales puedes dedicar al servicio social?
+            </span>
+            <span class="font-normal mt-1">
+              (Mínimo 1 - Máximo 40 horas)
+            </span>
+          </div>
         </template>
         <template #content>
           <input
@@ -248,12 +276,14 @@
       <!-- Pregunta 9 -->
       <card>
         <template #title>
-          <span class="font-semibold">
-            9. ¿Qué tan motivado/a estás para trabajar en proyectos de responsabilidad social o comunitaria?
-          </span>
-          <span class="font-normal">
-            1:Nada - 5:Mucho
-          </span>
+          <div class="flex flex-col">
+            <span class="font-semibold">
+              9. ¿Qué tan motivado/a estás para trabajar en proyectos de responsabilidad social o comunitaria?
+            </span>
+            <span class="font-normal mt-1">
+              (Escala: 1 = Nada motivado, 5 = Muy motivado)
+            </span>
+          </div>
         </template>
         <template #content>
           <div class="flex gap-4">
@@ -277,12 +307,14 @@
       <!-- Pregunta 10 -->
       <card>
         <template #title>
-          <span class="font-semibold">
-            10. Indica tu nivel de interés en actividades creativas (diseño, redacción, edición de contenidos).
-          </span>
-          <span class="font-normal">
-            1:Nada - 5:Mucho
-          </span>
+          <div class="flex flex-col">
+            <span class="font-semibold">
+              10. Indica tu nivel de interés en actividades creativas (diseño, redacción, edición de contenidos).
+            </span>
+            <span class="font-normal mt-1">
+              (Escala: 1 = Nada de interés, 5 = Muy interesado)
+            </span>
+          </div>
         </template>
         <template #content>
           <div class="flex gap-4">
@@ -361,12 +393,14 @@
       <!-- Pregunta 13 -->
       <card>
         <template #title>
-          <span class="font-semibold">
-            13. ¿Qué tan cómodo/a te sientes realizando tareas físicas o de campo (e.g. levantamiento de encuestas)?
-          </span>
-          <span class="font-normal">
-            1:Nada - 5:Mucho
-          </span>
+          <div class="flex flex-col">
+            <span class="font-semibold">
+              13. ¿Qué tan cómodo/a te sientes realizando tareas físicas o de campo (e.g. levantamiento de encuestas)?
+            </span>
+            <span class="font-normal mt-1">
+              (Escala: 1 = Nada cómodo, 5 = Muy cómodo)
+            </span>
+          </div>
         </template>
         <template #content>
           <div class="flex gap-4">
@@ -423,9 +457,14 @@
       <!-- Pregunta 15 -->
       <card>
         <template #title>
-          <span class="font-semibold">
-            15. ¿Hay alguna destreza o área donde te gustaría capacitarte durante tu servicio social?
-          </span>
+          <div class="flex flex-col">
+            <span class="font-semibold">
+              15. ¿Hay alguna destreza o área donde te gustaría capacitarte durante tu servicio social?
+            </span>
+            <span class="font-normal mt-2">
+              (Respuesta abierta)
+            </span>
+          </div>
         </template>
         <template #content>
           <textarea

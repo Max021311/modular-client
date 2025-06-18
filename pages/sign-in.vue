@@ -13,7 +13,7 @@
               class="card-body"
               @submit.prevent="handleSubmit"
             >
-              <!----- Campo de Usuario ----->
+              <!----- Campo de Correo ----->
               <div class="form-control">
                 <label
                   for="email"
@@ -70,6 +70,7 @@
                   >
                 </label>
               </div>
+
               <!----- Botón de Iniciar Sesión ----->
               <div class="form-control mt-6">
                 <button
@@ -80,15 +81,15 @@
                 </button>
               </div>
             </form>
-            <!----- Enlace para recuperar contraseña ----->
+
+            <!----- Enlace para recuperar contraseña (No es funcional) ----->
             <div class="text-center mt-4">
               <nuxt-link
                 to="/recover-password"
                 class="link link-primary"
               >
-                ¿Olvidaste tu contraseña?
+                Olvidé mi contraseña
               </nuxt-link>
-
               <!-- Link a login -->
               <div class="text-center mt-4">
                 <p>¿No tienes una cuenta?</p>

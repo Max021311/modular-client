@@ -2,12 +2,38 @@
   <div id="main-page">
     <!----- Contenido principal ----->
     <main class="flex flex-col gap-6 px-10 py-8">
+      <!-- ✨ Tarjeta de Bienvenida -->
+      <card class="card bg-base-400 rounded-lg shadow-md">
+        <template #title>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <span class="text-2xl font-semibold text-primary">
+                👋 Hola, {{ userName }}
+              </span>
+            </div>
+          </div>
+        </template>
+        <template #content>
+          <p class="font-bold ">
+            Bienvenido al panel de gestión de tu Servicio Social. Aquí podrás:
+          </p>
+          <ul class="list-disc list-inside mt-2 space-y-1">
+            <li>Revisar el estado de tu plaza y oficios de comisión.</li>
+            <li>Crear y subir reportes parciales y finales.</li>
+            <li>Obtener recomendaciones de vacantes adaptadas a tu perfil.</li>
+          </ul>
+          <p class="text-sm font-semibold mt-4">
+            Selecciona alguna de las secciones a continuación para comenzar.
+          </p>
+        </template>
+      </card>
+
       <!------ Plaza de Servicio ----->
       <card>
         <template #title>
           <div class="flex w-full justify-between items-center">
             <span class="text-center">
-              Plaza de Servicio
+              Asignación de servicio
             </span>
             <button
               class="btn btn-primary btn-sm"
@@ -29,12 +55,14 @@
                 <div class="flex-1">
                   <p><strong>No:</strong> 789/2024A</p>
                   <p><strong>Estatus:</strong> FINALIZADO</p>
-                  <p><strong>Dependencia:</strong> Unidad Administrativa</p>
-                  <p><strong>Programa:</strong> Apoyo Administrativo</p>
+                  <p><strong>Entidad Receptora:</strong> Unidad Administrativa</p>
+                  <p><strong>Proyecto:</strong> Apoyo Administrativo</p>
+                  <p><strong>Área:</strong> Administración</p>
                 </div>
 
                 <!-- Detalles adicionales -->
                 <div class="flex-1">
+                  <p><strong>Turno</strong> Matutino</p>
                   <p><strong>Fecha de Inicio:</strong> 04/03/2024</p>
                   <p><strong>Fecha de Finalización:</strong> 06/09/2024</p>
                   <p><strong>Tiempo Reportado:</strong> 480 horas</p>
@@ -83,10 +111,10 @@
                 <div class="flex-1">
                   <p><strong>No:</strong> 101/02/2024</p>
                   <p><strong>Fecha de Inicio:</strong> 04/03/2024</p>
-                  <p><strong>Dependencia:</strong> Unidad Administrativa</p>
+                  <p><strong>Entidad Receptora:</strong> Unidad Administrativa</p>
                 </div>
                 <div class="flex-1">
-                  <p><strong>Programa:</strong> Programa A</p>
+                  <p><strong>Proyecto:</strong> Programa A</p>
                   <p><strong>Estatus:</strong> VALIDADO</p>
                 </div>
               </div>
@@ -100,7 +128,7 @@
         <template #title>
           <div class="flex w-full justify-between items-center">
             <span class="text-center">
-              Reportes Parciales
+              Reportes de Avance
             </span>
             <button
               class="btn btn-primary btn-sm"
@@ -120,8 +148,8 @@
                   <p><strong>Horas:</strong> 160</p>
                 </div>
                 <div class="flex-1">
-                  <p><strong>Bimestre Reportado:</strong> 04/03/2024 - 05/05/2024</p>
-                  <p><strong>Estatus del Reporte:</strong> VALIDADO</p>
+                  <p><strong>Periodo Reportado:</strong> 04/03/2024 - 05/05/2024</p>
+                  <p><strong>Estatus:</strong> VALIDADO</p>
                 </div>
               </div>
             </div>
@@ -134,7 +162,7 @@
         <template #title>
           <div class="flex w-full justify-between items-center">
             <span class="text-center">
-              Reporte Final
+              Reporte Final de Actividades
             </span>
             <button
               class="btn btn-primary btn-sm"
@@ -154,7 +182,7 @@
                 </div>
                 <div class="flex-1">
                   <p><strong>Horas Totales:</strong> 480</p>
-                  <p><strong>Estatus del Reporte:</strong> VALIDADO</p>
+                  <p><strong>Estatus:</strong> VALIDADO</p>
                 </div>
               </div>
             </div>
@@ -171,10 +199,10 @@
       <div>
         <!-- Título dinámico -->
         <h3 class="text-lg font-bold text-center">
-          <span v-if="modalSection === 'service'">Detalles de Plaza</span>
-          <span v-else-if="modalSection === 'office'">Formulario de Oficio de Comisión</span>
-          <span v-else-if="modalSection === 'bimester-report'">Formulario de Reporte Bimestral</span>
-          <span v-else-if="modalSection === 'final-report'">Formulario de Reporte Final</span>
+          <span v-if="modalSection === 'service'">Detalles de la Asignación de Servicio</span>
+          <span v-else-if="modalSection === 'office'">Oficio de Comisión</span>
+          <span v-else-if="modalSection === 'bimester-report'">Reporte de Avance</span>
+          <span v-else-if="modalSection === 'final-report'">Reporte Final de Actividades</span>
         </h3>
 
         <!-- Contenido dinámico -->
@@ -222,7 +250,7 @@
                 >
               </label>
               <label class="block mt-4">
-                <span class="font-bold">Lugar de la Dependencia:</span>
+                <span class="font-bold">Lugar de la Entidad Receptora:</span>
                 <input
                   v-model="formData.dependencia"
                   type="text"
@@ -284,7 +312,7 @@
                 />
               </label>
               <label class="block mt-4">
-                <span class="font-bold">¿Recomendarías esta institución para realizar el servicio social? ¿Por qué?</span>
+                <span class="font-bold">¿Recomendarías esta entidad para realizar el servicio social? ¿Por qué?</span>
                 <textarea
                   v-model="formData.activities"
                   class="textarea textarea-bordered w-full mt-1"
@@ -351,7 +379,7 @@
                 />
               </label>
               <label class="block mt-4">
-                <span class="font-bold">¿Qué recomendaciones harías a la institución?</span>
+                <span class="font-bold">¿Qué recomendaciones harías a la entidad donde realizaste tu servicio social?</span>
                 <textarea
                   v-model="formData.relevantActivities"
                   class="textarea textarea-bordered w-full mt-1"
@@ -375,6 +403,7 @@
 export default {
   data() {
     return {
+      userName: 'Usuario', // Después de la autenticación, este valor se actualizará
       isModalOpen: false,
       modalSection: '',
       formData: {

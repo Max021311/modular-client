@@ -14,6 +14,34 @@
               @submit.prevent="register"
             >
               <!----- Campo de Usuario ----->
+              <div>
+                <div class="form-control">
+                  <label
+                    for="username"
+                    class="input font-bold input-bordered flex items-center gap-2"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 16 16"
+                      fill="currentColor"
+                      class="h-4 w-4 opacity-70"
+                    >
+                      <path
+                        d="M8 0a8 8 0 1 0 8 8A8 8 0 0 0 8 0Zm3.5 11.5a3.5 3.5 0 1 1-7 0v-1a3.5 3.5 0 1 1 7 0Zm-3.5-6a2.5 2.5 0 1 1-2.5 2.5A2.5 2.5 0 0 1 8.5 5.5Z"
+                      />
+                    </svg>
+                    <input
+                      id="username"
+                      v-model="email"
+                      type="text"
+                      placeholder="Nombre"
+                      class="grow"
+                      required
+                    >
+                  </label>
+                </div>
+              </div>
+              <!----- Campo de Correo ----->
               <div class="form-control">
                 <label
                   for="email"
