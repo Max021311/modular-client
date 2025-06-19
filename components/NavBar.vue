@@ -102,10 +102,10 @@
         </li>
         <li>
           <NuxtLink
-            to="/register"
+            to="/selection"
             class="btn-ghost"
           >
-            Registro
+            Selección
           </NuxtLink>
         </li>
         <li>
