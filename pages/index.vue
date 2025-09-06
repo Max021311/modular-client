@@ -26,5 +26,5 @@
 </template>
 
 <script setup>
-import ChatDialogflow from '../components/ChatDialogflow.vue';
+import ChatDialogflow from '../components/ChatDialogflow.vue'
 </script>

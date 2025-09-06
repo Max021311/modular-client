@@ -9,10 +9,16 @@
             <h2 class="text-3xl font-bold text-base-content text-center mt-7">
               Iniciar Sesión
             </h2>
-            <form class="card-body" @submit.prevent="handleSubmit">
+            <form
+              class="card-body"
+              @submit.prevent="handleSubmit"
+            >
               <!----- Campo de Código ----->
               <div class="form-control">
-                <label for="usercode" class="input font-bold input-bordered flex items-center gap-2">
+                <label
+                  for="user"
+                  class="input font-bold input-bordered flex items-center gap-2"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 16 16"
@@ -24,20 +30,21 @@
                     />
                   </svg>
                   <input
-                    id="usercode"
-                    v-model="usercode"
-                    type="text"
-                    placeholder="Código"
+                    id="user"
+                    v-model="user"
+                    type="email"
+                    placeholder="Correo"
                     class="grow"
                     required
-                    pattern="^[0-9]{9,12}$"
-                    title="El código debe tener entre 9 y 12 caracteres"
                   >
                 </label>
               </div>
               <!----- Campo de Contraseña ----->
               <div class="form-control">
-                <label for="password" class="input font-bold input-bordered flex items-center gap-2">
+                <label
+                  for="password"
+                  class="input font-bold input-bordered flex items-center gap-2"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 16 16"
@@ -87,28 +94,38 @@
 </template>
 
 <script setup lang="ts">
+import { isAxiosError } from 'axios'
+import useAxios from '~/composables/useAxios'
 // Reactive variables for form inputs
-import { ref } from 'vue';
+import { ref } from 'vue'
+import useToken from '~/composables/useToken'
 
-const usercode = ref('');
-const password = ref('');
+const { setToken } = useToken()
+const axios = useAxios()
+const user = ref('')
+const password = ref('')
 
 // Nuxt router for navigation
-const router = useRouter();
+const router = useRouter()
 
 // Handle form submission
-const handleSubmit = () => {
-  console.log('handleSubmit called!');
-  console.log('Usercode:', usercode.value);
-  console.log('Password:', password.value);
-
-  // Placeholder logic: assume admin if usercode is "admin" and password is "1234"
-  if (usercode.value === 'admin' && password.value === '1234') {
-    // Redirect to admin page
-    router.push('/admin');
-  } else {
-    // Redirect to user index page
-    router.push('/');
+const handleSubmit = async () => {
+  try {
+    const response = await axios<{ token: string }>({
+      method: 'POST',
+      url: '/user/auth',
+      data: {
+        user: user.value,
+        password: password.value
+      }
+    })
+    setToken(response.data.token)
+    // router.push('/admin')
+  } catch (error) {
+    if (isAxiosError(error)) {
+      console.error(error.response?.data)
+    }
+    console.error(error)
   }
 }
 </script>
