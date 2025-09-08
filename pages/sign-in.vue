@@ -1,9 +1,7 @@
 <template>
   <div id="sign-in">
-    <!----- Contenido Principal ----->
     <main>
       <div class="hero min-h-screen">
-        <!----- Tarjeta del Formulario ----->
         <div class="hero-content flex-col">
           <div class="card bg-base-300 text-base-content w-full max-w-sm shadow-2xl">
             <h2 class="text-3xl font-bold text-base-content text-center mt-7">
@@ -13,7 +11,26 @@
               class="card-body"
               @submit.prevent="handleSubmit"
             >
-              <!----- Campo de Código ----->
+              <div class="form-control">
+                <select
+                  v-model="type"
+                  class="select"
+                >
+                  <option
+                    disabled
+                    selected
+                    value=""
+                  >
+                    Escoge un tipo
+                  </option>
+                  <option value="user">
+                    Administrativo
+                  </option>
+                  <option value="student">
+                    Estudiante
+                  </option>
+                </select>
+              </div>
               <div class="form-control">
                 <label
                   for="user"
@@ -39,7 +56,6 @@
                   >
                 </label>
               </div>
-              <!----- Campo de Contraseña ----->
               <div class="form-control">
                 <label
                   for="password"
@@ -67,7 +83,6 @@
                   >
                 </label>
               </div>
-              <!----- Botón de Iniciar Sesión ----->
               <div class="form-control mt-6">
                 <button
                   type="submit"
@@ -95,36 +110,53 @@
 
 <script setup lang="ts">
 import { isAxiosError } from 'axios'
-import useAxios from '~/composables/useAxios'
+import { useLoginStore } from '~/stores/login'
+import { useNotificationStore } from '~/stores/notification'
 // Reactive variables for form inputs
-import { ref } from 'vue'
-import useToken from '~/composables/useToken'
 
-const { setToken } = useToken()
-const axios = useAxios()
+definePageMeta({
+  auth: 'public'
+})
+
+const route = useRoute()
+
+const loginStore = useLoginStore()
+const notification = useNotificationStore()
 const user = ref('')
 const password = ref('')
-
-// Nuxt router for navigation
-const router = useRouter()
+const type = ref('')
 
 // Handle form submission
 const handleSubmit = async () => {
   try {
-    const response = await axios<{ token: string }>({
-      method: 'POST',
-      url: '/user/auth',
-      data: {
-        user: user.value,
-        password: password.value
-      }
-    })
-    setToken(response.data.token)
-    // router.push('/admin')
-  } catch (error) {
-    if (isAxiosError(error)) {
-      console.error(error.response?.data)
+    if (type.value === 'user') {
+      await loginStore.loginAsAdministrativeUser(user.value, password.value)
+    } else {
+      await loginStore.loginAsStudentUser(user.value, password.value)
     }
+    if (route.query.redirect_to) {
+      navigateTo(route.query.redirect_to as string)
+    } else {
+      navigateTo('/')
+    }
+  } catch (error) {
+    const statusCode = isAxiosError(error) ? error.response?.status : null
+    let errorMessage = ''
+    switch (statusCode) {
+      case 401:
+        errorMessage = 'Contraseña o correo equivocado'
+        break
+      case 500:
+        errorMessage = 'Ha sucedido un problema en el servidor. Intentelo de nuevo mas tarde. Si el problema persiste contacta a soporte'
+        break
+      default:
+        errorMessage = 'Intentelo de nuevo mas tarde. Si el problema persiste contacta a soporte'
+        break
+    }
+    notification.add({
+      title: errorMessage,
+      type: 'error'
+    })
     console.error(error)
   }
 }
