@@ -65,12 +65,7 @@
 </template>
 
 <script lang="ts">
-import useIsLogin from '~/composables/useIsLogin'
-
 export default {
-  setup() {
-    useIsLogin()
-  },
   data() {
     return {
       currentPage: '' // Estado para manejar la página activa
