@@ -1,6 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   modules: ['@nuxt/eslint', '@vueuse/nuxt', '@pinia/nuxt'],
+  ssr: false,
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
   router: {
@@ -34,4 +35,3 @@ export default defineNuxtConfig({
     }
   }
 })
-
