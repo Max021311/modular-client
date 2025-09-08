@@ -141,20 +141,21 @@ const handleSubmit = async () => {
     }
   } catch (error) {
     const statusCode = isAxiosError(error) ? error.response?.status : null
-    let errorMessage = ''
+    const message = {
+      title: 'Intentelo de nuevo mas tarde',
+      description: 'Si el problema persiste contacta a soporte'
+    }
     switch (statusCode) {
       case 401:
-        errorMessage = 'Contraseña o correo equivocado'
+        message.title = 'Contraseña o correo equivocado'
         break
       case 500:
-        errorMessage = 'Ha sucedido un problema en el servidor. Intentelo de nuevo mas tarde. Si el problema persiste contacta a soporte'
-        break
-      default:
-        errorMessage = 'Intentelo de nuevo mas tarde. Si el problema persiste contacta a soporte'
+        message.title = 'Ha sucedido un problema en el servidor'
+        message.description = 'Intentelo de nuevo mas tarde. Si el problema persiste contacta a soporte'
         break
     }
     notification.add({
-      title: errorMessage,
+      ...message,
       type: 'error'
     })
     console.error(error)

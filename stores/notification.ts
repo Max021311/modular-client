@@ -1,11 +1,13 @@
 import { defineStore } from 'pinia'
 import { computed } from 'vue'
 
-export interface Notification {
+export interface InternalNotification {
+  id: number
   title: string
   description?: string
   type: 'success' | 'error' | 'warning' | 'info'
 }
+type Notification = Omit<InternalNotification, 'id'>
 
 export const TIMEOUT = 8 * 1000
 
@@ -15,7 +17,7 @@ export const TIMEOUT = 8 * 1000
  */
 const privateStore = defineStore('privateNotification', {
   state: () => ({
-    notifications: [] as Notification[],
+    notifications: [] as InternalNotification[],
     timeoutId: null as number | null
   }),
   actions: {
@@ -37,6 +39,7 @@ const privateStore = defineStore('privateNotification', {
 
 export const useNotificationStore = defineStore('notification', () => {
   const privateState = privateStore()
+  const counter = ref(0)
 
   const notifications = computed(() => privateState.notifications)
   const current = computed(
@@ -44,7 +47,11 @@ export const useNotificationStore = defineStore('notification', () => {
   )
 
   function add(notification: Notification) {
-    privateState.notifications.push(notification)
+    privateState.notifications.push({
+      id: counter.value++,
+      ...notification
+    })
+    console.log({ notifications: privateState.notifications })
     if (privateState.timeoutId === null) {
       const timeoutId = window.setTimeout(() => {
         privateState.poll()
