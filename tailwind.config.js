@@ -9,7 +9,18 @@ export default {
     './error.vue'
   ],
   theme: {
-    extend: {}
+    extend: {
+      spacing: {
+        'icon-md': '24px',
+        'icon-sm': '20px',
+        'icon-xs': '16px'
+      },
+      strokeWidth: {
+        md: '2',
+        sm: '1.67',
+        xs: '1.33'
+      }
+    }
   },
   plugins: [
     require('daisyui')
