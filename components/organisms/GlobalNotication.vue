@@ -24,7 +24,6 @@
             <div class="flex items-center gap-2">
               <component
                 :is="classes.icon"
-                size="24"
                 :class="classes.classIcon"
                 class="shrink-0"
               />
