@@ -41,7 +41,18 @@
       <ClientOnly>
         <ThemeChanger />
       </ClientOnly>
+      <button
+        v-if="loginStore.isAuthenticated"
+        class="btn btn-primary btn-sm btn-circle"
+        @click="loginStore.logout"
+      >
+        <AtomsIconOutlinedLogout
+          size="20"
+          class="*:stroke-white"
+        />
+      </button>
       <NuxtLink
+        v-else
         to="/sign-in"
         class="btn btn-primary btn-sm"
       >
@@ -52,4 +63,7 @@
 </template>
 
 <script setup lang="ts">
+import { useLoginStore } from '~/stores/login'
+
+const loginStore = useLoginStore()
 </script>
