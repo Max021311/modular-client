@@ -11,7 +11,7 @@
       >
         <AtomsIconOutlinedClose
           size="20"
-          class="*:stroke-black"
+          class="*:stroke-primary"
           @click="state.next"
         />
       </button>
