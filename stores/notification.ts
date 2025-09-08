@@ -7,8 +7,7 @@ export interface Notification {
   type: 'success' | 'error' | 'warning' | 'info'
 }
 
-// export const TIMEOUT = 8 * 1000
-export const TIMEOUT = 60 * 60 * 1000
+export const TIMEOUT = 8 * 1000
 
 /**
  * @description Pinia doesn't support private state so can be mutated directly, to avoid this it's
