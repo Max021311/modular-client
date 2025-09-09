@@ -1,10 +1,8 @@
 <template>
   <div id="sign-in">
-    <!----- Contenido Principal ----->
-    <main class="flex justify-center items-center min-h-screen bg-base-200">
+    <main>
       <div class="hero min-h-screen">
-        <!----- Tarjeta del Formulario ----->
-        <div class="card w-96 bg-base-100 shadow-xl">
+        <div class="hero-content flex-col">
           <div class="card bg-base-300 text-base-content w-full max-w-sm shadow-2xl">
             <h2 class="text-3xl font-bold text-base-content text-center mt-7">
               Iniciar Sesión
@@ -13,10 +11,29 @@
               class="card-body"
               @submit.prevent="handleSubmit"
             >
-              <!----- Campo de Usuario ----->
+              <div class="form-control">
+                <select
+                  v-model="type"
+                  class="select"
+                >
+                  <option
+                    disabled
+                    selected
+                    value=""
+                  >
+                    Escoge un tipo
+                  </option>
+                  <option value="user">
+                    Administrativo
+                  </option>
+                  <option value="student">
+                    Estudiante
+                  </option>
+                </select>
+              </div>
               <div class="form-control">
                 <label
-                  for="email"
+                  for="user"
                   class="input font-bold input-bordered flex items-center gap-2"
                 >
                   <svg
@@ -33,16 +50,15 @@
                     />
                   </svg>
                   <input
-                    id="email"
-                    v-model="email"
+                    id="user"
+                    v-model="user"
                     type="email"
-                    placeholder="Correo electrónico"
+                    placeholder="Correo"
                     class="grow"
                     required
                   >
                 </label>
               </div>
-              <!----- Campo de Contraseña ----->
               <div class="form-control">
                 <label
                   for="password"
@@ -70,7 +86,6 @@
                   >
                 </label>
               </div>
-              <!----- Botón de Iniciar Sesión ----->
               <div class="form-control mt-6">
                 <button
                   type="submit"
@@ -80,7 +95,6 @@
                 </button>
               </div>
             </form>
-            <!----- Enlace para recuperar contraseña ----->
             <div class="text-center mt-4">
               <nuxt-link
                 to="/recover-password"
@@ -108,35 +122,54 @@
 </template>
 
 <script setup lang="ts">
-// Reactive variables for form inputs
-import { ref } from 'vue'
+import { isAxiosError } from 'axios'
+import { useLoginStore } from '~/stores/login'
+import { useNotificationStore } from '~/stores/notification'
 
-const email = ref('')
+definePageMeta({
+  auth: 'public'
+})
+
+const route = useRoute()
+
+const loginStore = useLoginStore()
+const notification = useNotificationStore()
+const user = ref('')
 const password = ref('')
+const type = ref('')
 
-// Nuxt router for navigation
-const router = useRouter()
-
-// Handle form submission
-const handleSubmit = () => {
-  console.log('handleSubmit called!')
-  console.log('Email:', email.value)
-  console.log('Password:', password.value)
-
-  // Placeholder logic: assume admin if usercode is "admin" and password is "1234"
-  if (email.value === 'admin@admin' && password.value === '1234') {
-    // Redirect to admin page
-    router.push('/admin')
-  } else {
-    // Redirect to user index page
-    router.push('/')
+const handleSubmit = async () => {
+  try {
+    if (type.value === 'user') {
+      await loginStore.loginAsAdministrativeUser(user.value, password.value)
+    } else {
+      await loginStore.loginAsStudentUser(user.value, password.value)
+    }
+    if (route.query.redirect_to) {
+      navigateTo(route.query.redirect_to as string)
+    } else {
+      navigateTo('/')
+    }
+  } catch (error) {
+    const statusCode = isAxiosError(error) ? error.response?.status : null
+    const message = {
+      title: 'Intentelo de nuevo mas tarde',
+      description: 'Si el problema persiste contacta a soporte'
+    }
+    switch (statusCode) {
+      case 401:
+        message.title = 'Contraseña o correo equivocado'
+        break
+      case 500:
+        message.title = 'Ha sucedido un problema en el servidor'
+        message.description = 'Intentelo de nuevo mas tarde. Si el problema persiste contacta a soporte'
+        break
+    }
+    notification.add({
+      ...message,
+      type: 'error'
+    })
+    console.error(error)
   }
 }
 </script>
-
-  <style scoped>
-  /* Botón */
-  button {
-    font-size: 16px;
-  }
-  </style>

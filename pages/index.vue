@@ -24,8 +24,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import ChatDialogflow from '../components/ChatDialogflow.vue'
-</script>
