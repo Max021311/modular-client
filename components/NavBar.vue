@@ -18,38 +18,28 @@
     <!-- Opciones del menú para pantallas grandes -->
     <div class="navbar-center hidden lg:flex">
       <ul class="menu menu-horizontal px-1">
-        <li>
+        <!-- Links for user scope (administrativo) -->
+        <li v-if="scope === 'user'">
           <NuxtLink
-            to="/main"
+            to="/administrativo"
             class="btn-ghost"
           >
             Inicio
           </NuxtLink>
         </li>
-        <li>
-          <NuxtLink
-            to="/admin"
-            class="btn-ghost"
-          >
-            Admin
-          </NuxtLink>
-        </li>
-        <li>
-          <NuxtLink
-            to="/test"
-            class="btn-ghost"
-          >
-            Formulario
-          </NuxtLink>
-        </li>
-        <li>
-          <NuxtLink
-            to="/register"
-            class="btn-ghost"
-          >
-            Registro
-          </NuxtLink>
-        </li>
+
+        <!-- Links for student scope (alumno) -->
+        <template v-if="scope === 'student'">
+          <li>
+            <NuxtLink
+              to="/alumno"
+              class="btn-ghost"
+            >
+              Alumno
+            </NuxtLink>
+          </li>
+        </template>
+
         <li>
           <NuxtLink
             to="/about"
@@ -58,7 +48,6 @@
             Acerca de
           </NuxtLink>
         </li>
-
         <ChatDialogflow />
       </ul>
     </div>
@@ -68,7 +57,7 @@
         <ThemeChanger />
       </ClientOnly>
       <button
-        v-if="loginStore.isAuthenticated"
+        v-if="isAuthenticated"
         class="btn btn-primary btn-sm btn-circle"
         @click="loginStore.logout"
       >
@@ -82,7 +71,7 @@
         to="/sign-in"
         class="btn btn-primary btn-sm"
       >
-        Iniciar sesión / Registro
+        Iniciar sesión
       </NuxtLink>
     </div>
   </div>
@@ -92,4 +81,6 @@
 import { useLoginStore } from '~/stores/login'
 
 const loginStore = useLoginStore()
+const isAuthenticated = computed(() => loginStore.isAuthenticated)
+const scope = computed(() => loginStore.userInfo?.scope)
 </script>
