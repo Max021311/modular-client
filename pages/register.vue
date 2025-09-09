@@ -1,39 +1,22 @@
 <template>
-  <div id="sign-in">
-    <main>
+  <div id="register-page">
+    <!----- Contenido Principal ----->
+    <main class="flex justify-center items-center min-h-screen bg-base-200">
       <div class="hero min-h-screen">
-        <div class="hero-content flex-col">
+        <!----- Tarjeta del Formulario ----->
+        <div class="card w-96 bg-base-100 shadow-xl">
           <div class="card bg-base-300 text-base-content w-full max-w-sm shadow-2xl">
             <h2 class="text-3xl font-bold text-base-content text-center mt-7">
-              Iniciar Sesión
+              Registrarse
             </h2>
             <form
               class="card-body"
-              @submit.prevent="handleSubmit"
+              @submit.prevent="register"
             >
-              <div class="form-control">
-                <select
-                  v-model="type"
-                  class="select"
-                >
-                  <option
-                    disabled
-                    selected
-                    value=""
-                  >
-                    Escoge un tipo
-                  </option>
-                  <option value="user">
-                    Administrativo
-                  </option>
-                  <option value="student">
-                    Estudiante
-                  </option>
-                </select>
-              </div>
+              <!----- Campo de Usuario ----->
               <div class="form-control">
                 <label
-                  for="user"
+                  for="email"
                   class="input font-bold input-bordered flex items-center gap-2"
                 >
                   <svg
@@ -50,15 +33,16 @@
                     />
                   </svg>
                   <input
-                    id="user"
-                    v-model="user"
+                    id="email"
+                    v-model="email"
                     type="email"
-                    placeholder="Correo"
+                    placeholder="Correo electrónico"
                     class="grow"
                     required
                   >
                 </label>
               </div>
+              <!----- Campo de Contraseña ----->
               <div class="form-control">
                 <label
                   for="password"
@@ -86,34 +70,35 @@
                   >
                 </label>
               </div>
+              <!-- Botón Registrar -->
               <div class="form-control mt-6">
                 <button
                   type="submit"
                   class="btn btn-primary w-full font-bold"
                 >
-                  Iniciar Sesión
+                  Registrarse
                 </button>
               </div>
-            </form>
-            <div class="text-center mt-4">
-              <nuxt-link
-                to="/recover-password"
-                class="link link-primary"
+
+              <!-- Mensaje de error -->
+              <p
+                v-if="error"
+                class="text-error mt-4 text-center"
               >
-                ¿Olvidaste tu contraseña?
-              </nuxt-link>
+                {{ error }}
+              </p>
 
               <!-- Link a login -->
               <div class="text-center mt-4">
-                <p>¿No tienes una cuenta?</p>
+                <p>¿Tienes una cuenta?</p>
                 <nuxt-link
-                  to="/register"
+                  to="/sign-in"
                   class="link link-primary"
                 >
-                  Registrarse
+                  Iniciar sesión
                 </nuxt-link>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       </div>
@@ -121,55 +106,31 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { isAxiosError } from 'axios'
-import { useLoginStore } from '~/stores/login'
-import { useNotificationStore } from '~/stores/notification'
-
-definePageMeta({
-  auth: 'public'
-})
-
-const route = useRoute()
-
-const loginStore = useLoginStore()
-const notification = useNotificationStore()
-const user = ref('')
-const password = ref('')
-const type = ref('')
-
-const handleSubmit = async () => {
-  try {
-    if (type.value === 'user') {
-      await loginStore.loginAsAdministrativeUser(user.value, password.value)
-    } else {
-      await loginStore.loginAsStudentUser(user.value, password.value)
+<script lang="ts">
+export default {
+  data() {
+    return { email: '', password: '', error: null }
+  },
+  methods: {
+    register() {
+      // Basic validation
+      if (!this.email || !this.password) {
+        // this.error = 'Please enter both username and password'
+        return
+      }
+      // For now, just simulate a successful registration and redirect
+      console.log('Registering user:', this.email)
+      this.error = null // Clear any previous errors
+      this.$router.push('/sign-in')
     }
-    if (route.query.redirect_to) {
-      navigateTo(route.query.redirect_to as string)
-    } else {
-      navigateTo('/')
-    }
-  } catch (error) {
-    const statusCode = isAxiosError(error) ? error.response?.status : null
-    const message = {
-      title: 'Intentelo de nuevo mas tarde',
-      description: 'Si el problema persiste contacta a soporte'
-    }
-    switch (statusCode) {
-      case 401:
-        message.title = 'Contraseña o correo equivocado'
-        break
-      case 500:
-        message.title = 'Ha sucedido un problema en el servidor'
-        message.description = 'Intentelo de nuevo mas tarde. Si el problema persiste contacta a soporte'
-        break
-    }
-    notification.add({
-      ...message,
-      type: 'error'
-    })
-    console.error(error)
   }
 }
 </script>
+
+<style scoped>
+/* Add any specific styles here */
+/* Botón */
+  button {
+    font-size: 16px;
+  }
+</style>

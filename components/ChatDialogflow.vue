@@ -59,8 +59,8 @@
         <input
           v-model="input"
           type="text"
-          placeholder="Escribe tu mensaje..."
           class="flex-1 border border-gray-300 rounded-full px-4 py-2 mr-2 focus:outline-none focus:border-blue-500"
+          placeholder="Escribe tu mensaje..."
           @keydown.enter="sendMessage"
         >
         <button

@@ -1,9 +1,9 @@
-// server/api/dialogflow.js
 import { SessionsClient } from '@google-cloud/dialogflow'
 
 const projectId = 'ssplus-assistant-srwn' // Reemplaza con tu ID del proyecto de Google Cloud
 const privateKey = (process.env.DIALOGFLOW_CLIENT_EMAIL ?? '').replace(/\\n/g, '\n') // Desde las variables de entorno
 const clientEmail = process.env.DIALOGFLOW_CLIENT_EMAIL ?? '' // Desde las variables de entorno
+
 const languageCode = 'es' // O el idioma que estés utilizando
 
 // Inicializa el cliente de Dialogflow

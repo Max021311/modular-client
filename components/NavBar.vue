@@ -34,6 +34,32 @@
             Admin
           </NuxtLink>
         </li>
+        <li>
+          <NuxtLink
+            to="/test"
+            class="btn-ghost"
+          >
+            Formulario
+          </NuxtLink>
+        </li>
+        <li>
+          <NuxtLink
+            to="/register"
+            class="btn-ghost"
+          >
+            Registro
+          </NuxtLink>
+        </li>
+        <li>
+          <NuxtLink
+            to="/about"
+            class="btn-ghost"
+          >
+            Acerca de
+          </NuxtLink>
+        </li>
+
+        <ChatDialogflow />
       </ul>
     </div>
     <!-- Botones finales: cambio de tema y autenticación -->
