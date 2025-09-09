@@ -30,12 +30,12 @@
                   :key="item.key"
                   @click="navigateTo(item.key)"
                 >
-                  <a
+                  <NuxtLink
                     class="block py-1 rounded hover:bg-base-200"
                     :class="{ 'bg-primary text-primary-content': currentPage === item.key }"
                   >
                     {{ item.label }}
-                  </a>
+                  </NuxtLink>
                 </li>
               </ul>
             </div>
