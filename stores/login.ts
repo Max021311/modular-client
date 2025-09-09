@@ -17,22 +17,34 @@ export interface UserTokenPayload extends JwtPayload {
   scope: 'user'
 }
 
-type TokenPayloads = UserTokenPayload
+export interface StudentTokenPayload extends JwtPayload {
+  id: number
+  name: string
+  code: string
+  password: string
+  careerId: number
+  email: string
+  telephone: string
+  createdAt: Date
+  updatedAt: Date
+  scope: 'student'
+}
+
+type TokenPayloads = UserTokenPayload | StudentTokenPayload
 
 export const useLoginStore = defineStore('login', () => {
   const config = useRuntimeConfig()
   const jwt = useLocalStorage<string | null>('token', null)
-
   const userInfo: Ref<null | TokenPayloads> = ref(null)
 
-  function setUser(user: TokenPayloads) {
-    userInfo.value = user
-  }
+  watch(jwt, (value) => {
+    if (value) {
+      const user = jwtDecode<TokenPayloads>(value)
+      userInfo.value = user
+    }
+  }, { immediate: true })
 
   function setJWT(value: string) {
-    console.trace('setJWT')
-    const user = jwtDecode<TokenPayloads>(value)
-    setUser(user)
     jwt.value = value
   }
 
@@ -54,13 +66,13 @@ export const useLoginStore = defineStore('login', () => {
     setJWT(response.data.token)
   }
 
-  async function loginAsStudentUser(user: string, password: string) {
+  async function loginAsStudentUser(email: string, password: string) {
     const response = await Axios<{ token: string }>({
       method: 'POST',
       baseURL: config.public.serverHost,
-      url: '/student/auth',
+      url: '/students/auth',
       data: {
-        user,
+        email,
         password
       }
     })
@@ -73,7 +85,6 @@ export const useLoginStore = defineStore('login', () => {
     token: jwt,
     userInfo,
     logout,
-    setUser,
     setJWT,
     isAuthenticated,
     loginAsAdministrativeUser,
