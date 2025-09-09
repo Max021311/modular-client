@@ -126,14 +126,7 @@
 </template>
 
 <script lang="ts">
-import { definePageMeta } from '#imports'
-
 export default {
-  setup() {
-    definePageMeta({
-      auth: 'user'
-    })
-  },
   data() {
     return {
       currentPage: '',
