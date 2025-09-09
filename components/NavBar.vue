@@ -24,7 +24,7 @@
             to="/administrativo"
             class="btn-ghost"
           >
-            Inicio
+            Administrativo
           </NuxtLink>
         </li>
 
