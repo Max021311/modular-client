@@ -372,7 +372,14 @@
 </template>
 
 <script lang="ts">
+import { definePageMeta } from '#imports'
+
 export default {
+  setup() {
+    definePageMeta({
+      auth: 'student'
+    })
+  },
   data() {
     return {
       isModalOpen: false,
