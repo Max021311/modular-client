@@ -126,10 +126,6 @@ import { isAxiosError } from 'axios'
 import { useLoginStore } from '~/stores/login'
 import { useNotificationStore } from '~/stores/notification'
 
-definePageMeta({
-  auth: 'public'
-})
-
 const route = useRoute()
 
 const loginStore = useLoginStore()
