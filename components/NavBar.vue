@@ -27,6 +27,14 @@
             Administrativo
           </NuxtLink>
         </li>
+        <li v-if="scope === 'user'">
+          <NuxtLink
+            to="/administrativo/alumnos"
+            class="btn-ghost"
+          >
+            Alumnos
+          </NuxtLink>
+        </li>
 
         <!-- Links for student scope (alumno) -->
         <template v-if="scope === 'student'">
