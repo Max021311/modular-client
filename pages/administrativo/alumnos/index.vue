@@ -4,6 +4,22 @@
       Lista de alumnos
     </h1>
 
+    <!-- Search Input -->
+    <fieldset class="">
+      <legend class="text-sm font-medium mb-2">
+        Buscar alumnos
+      </legend>
+      <input
+        :value="search"
+        type="text"
+        placeholder="Buscar por nombre, código, email..."
+        class="input input-bordered w-full"
+        @input="handleSearch"
+      >
+    </fieldset>
+
+    <div class="divider divider-vertical my-2" />
+
     <!-- DaisyUI Table -->
     <div class="overflow-x-auto">
       <table class="table w-full">
@@ -113,6 +129,7 @@
 </template>
 
 <script setup lang="ts">
+import { useDebounceFn } from '@vueuse/core'
 import { formatDate } from '~/common/dates'
 import { useFetchStudents } from '~/composables/useFetchStudents'
 
@@ -120,7 +137,7 @@ const route = useRoute()
 const router = useRouter()
 
 const page = computed(() => parseInt(route.query.page as string ?? '1', 10))
-const search = computed(() => route.query.search as string ?? undefined)
+const search = computed(() => route.query.search as string || undefined)
 const limit = computed(() => parseInt(route.query.limit as string ?? '30', 10))
 const offset = computed(() => (page.value - 1) * limit.value)
 const order = computed(() => route.query.order as string ?? '-Students.createdAt')
@@ -133,6 +150,20 @@ const toggleOrder = () => {
 const handlePage = (page: number) => {
   router.push({ query: { ...route.query, page } })
 }
+
+const handleSearch = useDebounceFn((event: Event) => {
+  if (event.target instanceof HTMLInputElement) {
+    const value = event.target.value
+    console.log({ value })
+    router.push({
+      query: {
+        ...route.query,
+        search: value || undefined,
+        page: 1 // Reset to first page when searching
+      }
+    })
+  }
+}, 500)
 
 const { data, error } = useFetchStudents({
   search,
