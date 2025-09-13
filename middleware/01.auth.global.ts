@@ -26,7 +26,6 @@ export default defineNuxtRouteMiddleware((to) => {
   })
 
   if (loginStore.isAuthenticated && loginStore.userInfo) {
-    console.log([to.path, authPath])
     if (to.path === authPath) {
       return navigateTo(userScopeToPathPrefix[loginStore.userInfo.scope])
     } else if (requiredScope === 'public') {
