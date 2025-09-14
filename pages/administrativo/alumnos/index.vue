@@ -4,7 +4,9 @@
       Lista de alumnos
     </h1>
 
-    <div class="flex gap-2">
+    <div
+      class="flex gap-2"
+    >
       <input
         id="search"
         :value="search"
@@ -15,6 +17,7 @@
       >
       <button
         class="btn btn-primary grow-0 shrink-0"
+        :disabled="!permissions.includes(PERMISSIONS.INVITE_STUDENT)"
         @click="openModal"
       >
         Invitar alumno
@@ -32,18 +35,14 @@
         <h2 class="text-lg font-semibold mb-2">
           Invitar alumno
         </h2>
-        <label class="form-control w-full">
-          <div class="label">
-            <span class="label-text">Correo electrónico</span>
-          </div>
-          <input
-            v-model="inviteEmail"
-            type="email"
-            placeholder="alumno@ejemplo.com"
-            class="input input-bordered w-full"
-            required
-          >
-        </label>
+        <AtomsInputText
+          id="invite-email"
+          v-model="inviteEmail"
+          label="Correo electrónico"
+          type="email"
+          placeholder="alumno@ejemplo.com"
+          required
+        />
         <button
           type="submit"
           class="btn btn-primary w-full"
@@ -173,13 +172,22 @@ import { formatDate } from '~/common/dates'
 import { useFetchStudents } from '~/composables/useFetchStudents'
 import { useInviteStudent } from '~/composables/useInviteStudent'
 import { useNotificationStore } from '~/stores/notification'
+import { useLoginStore } from '~/stores/login'
+import { PERMISSIONS } from '~/common/constants/permissions'
 
 const route = useRoute()
 const router = useRouter()
+const loginStore = useLoginStore()
 const notificationStore = useNotificationStore()
 
 const modal = ref(false)
 const inviteEmail = ref('')
+const permissions = computed(() => {
+  if (loginStore.userInfo?.scope === 'user') {
+    return loginStore.userInfo.permissions
+  }
+  return []
+})
 const page = computed(() => parseInt(route.query.page as string ?? '1', 10))
 const search = computed(() => route.query.search as string || undefined)
 const limit = computed(() => parseInt(route.query.limit as string ?? '30', 10))
