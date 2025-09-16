@@ -26,9 +26,9 @@
         <!-- Student Information and Actions Section -->
         <div class="card bg-base-100 shadow-xl">
           <div class="card-body">
-            <div class="grid grid-cols-1 lg:grid-cols-4">
+            <div class="">
               <!-- Personal Information -->
-              <div class="lg:col-span-2">
+              <div class="">
                 <h2 class="card-title text-2xl text-primary mb-4">
                   <AtomsIconOutlinedInfo />
                   Información Personal
@@ -92,13 +92,13 @@
                 </div>
               </div>
 
-              <div class="divider lg:idden lg:divider-horizontal" />
+              <div class="divider" />
               <!-- Action Buttons -->
-              <div class="lg:col-span-1 flex flex-col">
-                <h3 class="card-title text-lg text-primary mb-4 lg:self-center">
+              <div class="">
+                <h3 class="card-title text-lg text-primary mb-4">
                   Acciones
                 </h3>
-                <div class="flex flex-row flex-wrap lg:flex-col justify-around lg:items-center gap-3">
+                <div class="flex flex-row flex-wrap justify-around gap-3">
                   <button
                     type="button"
                     class="btn btn-primary btn-md btn-wide lg:btn-md"
@@ -108,6 +108,7 @@
                   </button>
                   <button
                     type="button"
+                    disabled
                     class="btn btn-outline btn-error btn-md btn-wide lg:btn-md"
                   >
                     <AtomsIconOutlinedError />
