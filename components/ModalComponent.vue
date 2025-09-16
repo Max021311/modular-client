@@ -8,10 +8,12 @@
   >
     <div :class="['modal-box', modalClass]">
       <button
-        class="btn btn-xs btn-circle btn-ghost absolute right-2 top-2"
+        class="btn btn-xs btn-circle btn-ghost absolute right-2 top-2 items-center justify-center"
         @click="close"
       >
-        ✕
+        <AtomsIconOutlinedClose
+          class="*:stroke-current"
+        />
       </button>
       <slot />
     </div>

@@ -4,23 +4,61 @@
       Lista de alumnos
     </h1>
 
-    <!-- Search Input -->
-    <fieldset class="">
-      <legend class="text-sm font-medium mb-2">
-        Buscar alumnos
-      </legend>
+    <div
+      class="flex gap-2"
+    >
       <input
+        id="search"
         :value="search"
         type="text"
         placeholder="Buscar por nombre, código, email..."
         class="input input-bordered w-full"
         @input="handleSearch"
       >
-    </fieldset>
+      <button
+        class="btn btn-primary grow-0 shrink-0"
+        :disabled="!permissions.includes(PERMISSIONS.INVITE_STUDENT)"
+        @click="openModal"
+      >
+        Invitar alumno
+      </button>
+    </div>
+
+    <ModalComponent
+      v-model="modal"
+      modal-class="w-fit"
+    >
+      <form
+        class="flex flex-col gap-4 w-80"
+        @submit.prevent="inviteStudent"
+      >
+        <h2 class="text-lg font-semibold mb-2">
+          Invitar alumno
+        </h2>
+        <AtomsInputText
+          id="invite-email"
+          v-model="inviteEmail"
+          label="Correo electrónico"
+          type="email"
+          placeholder="alumno@ejemplo.com"
+          required
+        />
+        <button
+          type="submit"
+          class="btn btn-primary w-full"
+          :disabled="invitePending"
+        >
+          <span
+            v-if="invitePending"
+            class="loading loading-spinner loading-sm"
+          />
+          {{ invitePending ? 'Enviando...' : 'Enviar invitación' }}
+        </button>
+      </form>
+    </ModalComponent>
 
     <div class="divider divider-vertical my-2" />
 
-    <!-- DaisyUI Table -->
     <div class="overflow-x-auto">
       <table class="table w-full">
         <thead>
@@ -132,10 +170,24 @@
 import { useDebounceFn } from '@vueuse/core'
 import { formatDate } from '~/common/dates'
 import { useFetchStudents } from '~/composables/useFetchStudents'
+import { useInviteStudent } from '~/composables/useInviteStudent'
+import { useNotificationStore } from '~/stores/notification'
+import { useLoginStore } from '~/stores/login'
+import { PERMISSIONS } from '~/common/constants/permissions'
 
 const route = useRoute()
 const router = useRouter()
+const loginStore = useLoginStore()
+const notificationStore = useNotificationStore()
 
+const modal = ref(false)
+const inviteEmail = ref('')
+const permissions = computed(() => {
+  if (loginStore.userInfo?.scope === 'user') {
+    return loginStore.userInfo.permissions
+  }
+  return []
+})
 const page = computed(() => parseInt(route.query.page as string ?? '1', 10))
 const search = computed(() => route.query.search as string || undefined)
 const limit = computed(() => parseInt(route.query.limit as string ?? '30', 10))
@@ -164,6 +216,53 @@ const handleSearch = useDebounceFn((event: Event) => {
     })
   }
 }, 500)
+
+const openModal = () => {
+  modal.value = true
+}
+
+// Invite student composable
+const { error: inviteError, pending: invitePending, mutate: inviteStudentMutate } = useInviteStudent()
+
+const inviteStudent = async () => {
+  if (!inviteEmail.value) return
+
+  try {
+    await inviteStudentMutate({ email: inviteEmail.value })
+
+    if (!inviteError.value) {
+      notificationStore.add({
+        type: 'success',
+        title: 'Invitación enviada',
+        description: `Se ha enviado una invitación a ${inviteEmail.value}`
+      })
+
+      // Close modal and reset form
+      modal.value = false
+      inviteEmail.value = ''
+    }
+  } catch {
+    // Error is already handled by the composable
+  }
+}
+
+watch(inviteError, (newError) => {
+  if (newError && 'statusCode' in newError && newError.statusCode === 409) {
+    notificationStore.add({
+      type: 'error',
+      title: 'Error al enviar invitación',
+      description: 'El correo electrónico ya esta registrado'
+    })
+    return
+  }
+  if (newError) {
+    notificationStore.add({
+      type: 'error',
+      title: 'Error al enviar invitación',
+      description: 'Ocurrió un error al enviar la invitación'
+    })
+  }
+})
 
 const { data, error } = useFetchStudents({
   search,

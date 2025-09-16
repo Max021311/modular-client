@@ -13,5 +13,5 @@ export type StudentWithCareer = Student & {
   career?: Career
 }
 
-export type CreateStudent = Omit<Student, 'id', 'createdAt', 'updatedAt'>
+export type CreateStudent = Omit<Student, 'id' | 'createdAt' | 'updatedAt' | 'email'> & { password: string }
 export type UpdateStudent = Partial<Omit<Student, 'id' | 'createdAt' | 'updatedAt'>>
