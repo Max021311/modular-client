@@ -44,6 +44,14 @@
               Departamentos
             </NuxtLink>
           </li>
+          <li>
+            <NuxtLink
+              to="/administrativo/ciclos"
+              class="btn-ghost"
+            >
+              Ciclos
+            </NuxtLink>
+          </li>
         </template>
 
         <!-- Links for student scope (alumno) -->
