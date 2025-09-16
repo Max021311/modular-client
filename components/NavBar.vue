@@ -19,22 +19,32 @@
     <div class="navbar-center hidden lg:flex">
       <ul class="menu menu-horizontal px-1">
         <!-- Links for user scope (administrativo) -->
-        <li v-if="scope === 'user'">
-          <NuxtLink
-            to="/administrativo"
-            class="btn-ghost"
-          >
-            Administrativo
-          </NuxtLink>
-        </li>
-        <li v-if="scope === 'user'">
-          <NuxtLink
-            to="/administrativo/alumnos"
-            class="btn-ghost"
-          >
-            Alumnos
-          </NuxtLink>
-        </li>
+        <template v-if="scope === 'user'">
+          <li>
+            <NuxtLink
+              to="/administrativo"
+              class="btn-ghost"
+            >
+              Administrativo
+            </NuxtLink>
+          </li>
+          <li>
+            <NuxtLink
+              to="/administrativo/alumnos"
+              class="btn-ghost"
+            >
+              Alumnos
+            </NuxtLink>
+          </li>
+          <li>
+            <NuxtLink
+              to="/administrativo/departamentos"
+              class="btn-ghost"
+            >
+              Departamentos
+            </NuxtLink>
+          </li>
+        </template>
 
         <!-- Links for student scope (alumno) -->
         <template v-if="scope === 'student'">
