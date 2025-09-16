@@ -11,7 +11,7 @@
         id="search"
         :value="search"
         type="text"
-        placeholder="Buscar por nombre, código, email..."
+        placeholder="Buscar por nombre, código, correo y teléfono..."
         class="input input-bordered w-full"
         @input="handleSearch"
       >
@@ -73,7 +73,7 @@
               Carrera
             </th>
             <th class="text-left">
-              Email
+              Correo
             </th>
             <th class="text-left">
               Teléfono
