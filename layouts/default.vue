@@ -1,11 +1,11 @@
 <template>
-  <div class="max-h-screen">
+  <div class="min-h-screen flex flex-col">
     <OrganismsGlobalNotication />
     <ChatDialogflow />
     <NavBar class="sticky top-0 z-50" />
-    <div class="mt-0">
+    <main class="flex-grow mt-0">
       <slot />
-    </div>
+    </main>
     <Footer />
   </div>
 </template>

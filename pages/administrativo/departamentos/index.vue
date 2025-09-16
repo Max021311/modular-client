@@ -1,7 +1,7 @@
 <template>
   <div class="container mx-auto p-4">
     <h1 class="text-2xl font-bold mb-4">
-      Lista de alumnos
+      Lista de departamentos
     </h1>
 
     <div
@@ -11,16 +11,16 @@
         id="search"
         :value="search"
         type="text"
-        placeholder="Buscar por nombre, código, correo y teléfono..."
+        placeholder="Buscar por nombre, teléfono, correo y jefe del departamento..."
         class="input input-bordered w-full"
         @input="handleSearch"
       >
       <button
         class="btn btn-primary grow-0 shrink-0"
-        :disabled="!permissions.includes(PERMISSIONS.INVITE_STUDENT)"
+        :disabled="!permissions.includes(PERMISSIONS.EDIT_DEPARTMENT)"
         @click="openModal"
       >
-        Invitar alumno
+        Crear departamento
       </button>
     </div>
 
@@ -28,33 +28,11 @@
       v-model="modal"
       modal-class="w-fit"
     >
-      <form
-        class="flex flex-col gap-4 w-80"
-        @submit.prevent="inviteStudent"
-      >
-        <h2 class="text-lg font-semibold mb-2">
-          Invitar alumno
-        </h2>
-        <AtomsInputText
-          id="invite-email"
-          v-model="inviteEmail"
-          label="Correo electrónico"
-          type="email"
-          placeholder="alumno@ejemplo.com"
-          required
-        />
-        <button
-          type="submit"
-          class="btn btn-primary w-full"
-          :disabled="invitePending"
-        >
-          <span
-            v-if="invitePending"
-            class="loading loading-spinner loading-sm"
-          />
-          {{ invitePending ? 'Enviando...' : 'Enviar invitación' }}
-        </button>
-      </form>
+      <OrganismsDepartmentForm
+        v-model="departmentForm"
+        :pending="addPending"
+        @submit="createDepartment"
+      />
     </ModalComponent>
 
     <div class="divider divider-vertical my-2" />
@@ -67,16 +45,16 @@
               Nombre
             </th>
             <th class="text-left">
-              Código
+              Dirección
             </th>
             <th class="text-left">
-              Carrera
+              Teléfono
             </th>
             <th class="text-left">
               Correo
             </th>
             <th class="text-left">
-              Teléfono
+              Jefe del Departamento
             </th>
             <th class="text-right">
               <div class="flex items-center justify-end gap-1">
@@ -86,7 +64,7 @@
                   class="btn btn-ghost btn-xs btn-circle"
                   @click="toggleOrder"
                 >
-                  <AtomsIconMicroChevronDown v-if="order === '-Students.createdAt'" />
+                  <AtomsIconMicroChevronDown v-if="order === '-Departments.createdAt'" />
                   <AtomsIconMicroChevronUp v-else />
                 </button>
               </div>
@@ -98,34 +76,34 @@
         </thead>
         <tbody>
           <tr
-            v-for="student in students"
-            :key="student.id"
+            v-for="department in departments"
+            :key="department.id"
             class="hover:bg-base-300 table-row"
             role="link"
             tabindex="0"
-            :title="`Ir al alumno ${student.name}`"
-            @click="router.push(`/administrativo/alumnos/${student.id}`)"
+            :title="`Ver detalles del departamento ${department.name}`"
+            @click="router.push(`/administrativo/departamentos/${department.id}`)"
           >
             <td class="text-left">
-              {{ student.name }}
+              {{ department.name }}
             </td>
             <td class="text-left">
-              {{ student.code }}
+              {{ department.address }}
             </td>
             <td class="text-left">
-              {{ student.career?.slug || '' }}
+              {{ department.phone }}
             </td>
             <td class="text-left">
-              {{ student.email }}
+              {{ department.email }}
             </td>
             <td class="text-left">
-              {{ student.telephone }}
+              {{ department.chiefName }}
             </td>
             <td class="text-right">
-              {{ formatDate(new Date(student.createdAt)) }}
+              {{ formatDate(new Date(department.createdAt)) }}
             </td>
             <td class="text-right">
-              {{ formatDate(new Date(student.updatedAt)) }}
+              {{ formatDate(new Date(department.updatedAt)) }}
             </td>
           </tr>
         </tbody>
@@ -155,7 +133,7 @@
 
       <!-- Empty state -->
       <div
-        v-if="students.length === 0"
+        v-if="departments.length === 0"
         class="text-center py-8"
       >
         <p class="text-gray-500">
@@ -169,11 +147,12 @@
 <script setup lang="ts">
 import { useDebounceFn } from '@vueuse/core'
 import { formatDate } from '~/common/dates'
-import { useFetchStudents } from '~/composables/useFetchStudents'
-import { useInviteStudent } from '~/composables/useInviteStudent'
+import { useFetchDepartments } from '~/composables/useFetchDepartments'
+import { useAddDepartment } from '~/composables/useAddDepartment'
 import { useNotificationStore } from '~/stores/notification'
 import { useLoginStore } from '~/stores/login'
 import { PERMISSIONS } from '~/common/constants/permissions'
+import type { CreateDepartment } from '~/types/api/department'
 
 const route = useRoute()
 const router = useRouter()
@@ -181,32 +160,43 @@ const loginStore = useLoginStore()
 const notificationStore = useNotificationStore()
 
 const modal = ref(false)
-const inviteEmail = ref('')
+
+// Department form data
+const departmentForm = ref<CreateDepartment>({
+  name: '',
+  address: '',
+  phone: '',
+  email: '',
+  chiefName: ''
+})
+
+const { error: addError, pending: addPending, mutate: addDepartmentMutate } = useAddDepartment()
+
 const permissions = computed(() => {
   if (loginStore.userInfo?.scope === 'user') {
     return loginStore.userInfo.permissions
   }
   return []
 })
+
 const page = computed(() => parseInt(route.query.page as string ?? '1', 10))
 const search = computed(() => route.query.search as string || undefined)
 const limit = computed(() => parseInt(route.query.limit as string ?? '30', 10))
 const offset = computed(() => (page.value - 1) * limit.value)
-const order = computed(() => route.query.order as string ?? '-Students.createdAt')
+const order = computed(() => route.query.order as string ?? '-Departments.createdAt')
 
 const toggleOrder = () => {
-  const newOrder = order.value === '-Students.createdAt' ? 'Students.createdAt' : '-Students.createdAt'
+  const newOrder = order.value === '-Departments.createdAt' ? 'Departments.createdAt' : '-Departments.createdAt'
   router.push({ query: { ...route.query, order: newOrder } })
 }
 
-const handlePage = (page: number) => {
-  router.push({ query: { ...route.query, page } })
+const handlePage = (newPage: number) => {
+  router.push({ query: { ...route.query, page: newPage } })
 }
 
 const handleSearch = useDebounceFn((event: Event) => {
   if (event.target instanceof HTMLInputElement) {
     const value = event.target.value
-    console.log({ value })
     router.push({
       query: {
         ...route.query,
@@ -221,63 +211,67 @@ const openModal = () => {
   modal.value = true
 }
 
-// Invite student composable
-const { error: inviteError, pending: invitePending, mutate: inviteStudentMutate } = useInviteStudent()
-
-const inviteStudent = async () => {
-  if (!inviteEmail.value) return
-
-  try {
-    await inviteStudentMutate({ email: inviteEmail.value })
-
-    if (!inviteError.value) {
-      notificationStore.add({
-        type: 'success',
-        title: 'Invitación enviada',
-        description: `Se ha enviado una invitación a ${inviteEmail.value}`
-      })
-
-      // Close modal and reset form
-      modal.value = false
-      inviteEmail.value = ''
-    }
-  } catch {
-    // Error is already handled by the composable
+const resetForm = () => {
+  departmentForm.value = {
+    name: '',
+    address: '',
+    phone: '',
+    email: '',
+    chiefName: ''
   }
 }
 
-watch(inviteError, (newError) => {
+const createDepartment = async (formData: CreateDepartment) => {
+  await addDepartmentMutate(formData, loginStore.token!)
+
+  if (!addError.value) {
+    notificationStore.add({
+      type: 'success',
+      title: 'Departamento creado',
+      description: `El departamento ${formData.name} ha sido creado exitosamente`
+    })
+
+    modal.value = false
+    resetForm()
+  }
+}
+
+// Watch for errors from the add department composable
+watch(addError, (newError) => {
   if (newError && 'statusCode' in newError && newError.statusCode === 409) {
     notificationStore.add({
       type: 'error',
-      title: 'Error al enviar invitación',
-      description: 'El correo electrónico ya esta registrado'
+      title: 'Error al crear departamento',
+      description: 'Ya existe un departamento con estos datos'
     })
     return
   }
   if (newError) {
     notificationStore.add({
       type: 'error',
-      title: 'Error al enviar invitación',
-      description: 'Ocurrió un error al enviar la invitación'
+      title: 'Error al crear departamento',
+      description: 'Ocurrió un error al crear el departamento'
     })
   }
 })
 
-const { data, error } = useFetchStudents({
+// Use the fetch departments composable
+const { data: _data, departments, total: _total, pages, error } = useFetchDepartments({
   search,
   limit,
   offset,
-  order,
-  includeCareer: true
+  order
 })
 
-const pages = computed(() => Math.ceil((data.value?.total ?? 0) / limit.value))
-
+// Watch for errors from the composable
 watch(error, (newError) => {
-  console.log({ ...newError })
-  console.error(newError)
+  if (newError) {
+    console.error('Error fetching departments:', newError)
+    notificationStore.add({
+      type: 'error',
+      title: 'Error al cargar departamentos',
+      description: 'Ocurrió un error al cargar la lista de departamentos'
+    })
+  }
 })
-
-const students = computed(() => data.value?.records ?? [])
 </script>
