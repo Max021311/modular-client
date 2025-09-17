@@ -1,20 +1,18 @@
 <template>
-  <div class="container mx-auto p-4">
-    <h1 class="text-2xl font-bold mb-4">
-      Lista de departamentos
-    </h1>
-
-    <div
-      class="flex gap-2"
-    >
-      <input
-        id="search"
-        :value="search"
-        type="text"
-        placeholder="Buscar por nombre, teléfono, correo y jefe del departamento..."
-        class="input input-bordered w-full"
-        @input="handleSearch"
-      >
+  <TemplatesListLayout
+    class="container mx-auto p-4"
+    title="Lista de departamentos"
+    :search-value="search"
+    search-placeholder="Buscar por nombre, teléfono, correo y jefe del departamento..."
+    search-id="search"
+    :current-page="page"
+    :total-pages="pages"
+    :show-pagination="departments.length > 0"
+    @search-input="handleSearch"
+    @previous-page="handlePage(page - 1)"
+    @next-page="handlePage(page + 1)"
+  >
+    <template #actions>
       <button
         class="btn btn-primary grow-0 shrink-0"
         :disabled="!permissions.includes(PERMISSIONS.EDIT_DEPARTMENT)"
@@ -22,131 +20,34 @@
       >
         Crear departamento
       </button>
-    </div>
+    </template>
 
-    <ModalComponent
-      v-model="modal"
-      modal-class="w-fit"
-    >
-      <OrganismsDepartmentForm
-        v-model="departmentForm"
-        :pending="addPending"
-        @submit="createDepartment"
+    <template #modal>
+      <ModalComponent
+        v-model="modal"
+        modal-class="w-fit"
+      >
+        <OrganismsDepartmentForm
+          v-model="departmentForm"
+          :pending="addPending"
+          @submit="createDepartment"
+        />
+      </ModalComponent>
+    </template>
+
+    <template #content>
+      <OrganismsDepartmentsTable
+        :departments="departments"
+        :order="order"
+        @update:order="handleOrderUpdate"
+        @row-click="handleDepartmentRowClick"
       />
-    </ModalComponent>
-
-    <div class="divider divider-vertical my-2" />
-
-    <div class="overflow-x-auto">
-      <table class="table w-full">
-        <thead>
-          <tr>
-            <th class="text-left">
-              Nombre
-            </th>
-            <th class="text-left">
-              Dirección
-            </th>
-            <th class="text-left">
-              Teléfono
-            </th>
-            <th class="text-left">
-              Correo
-            </th>
-            <th class="text-left">
-              Jefe del Departamento
-            </th>
-            <th class="text-right">
-              <div class="flex items-center justify-end gap-1">
-                Fecha de Creación
-                <button
-                  type="button"
-                  class="btn btn-ghost btn-xs btn-circle"
-                  @click="toggleOrder"
-                >
-                  <AtomsIconMicroChevronDown v-if="order === '-Departments.createdAt'" />
-                  <AtomsIconMicroChevronUp v-else />
-                </button>
-              </div>
-            </th>
-            <th class="text-right">
-              Última Actualización
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="department in departments"
-            :key="department.id"
-            class="hover:bg-base-300 table-row"
-            role="link"
-            tabindex="0"
-            :title="`Ver detalles del departamento ${department.name}`"
-            @click="router.push(`/administrativo/departamentos/${department.id}`)"
-          >
-            <td class="text-left">
-              {{ department.name }}
-            </td>
-            <td class="text-left">
-              {{ department.address }}
-            </td>
-            <td class="text-left">
-              {{ department.phone }}
-            </td>
-            <td class="text-left">
-              {{ department.email }}
-            </td>
-            <td class="text-left">
-              {{ department.chiefName }}
-            </td>
-            <td class="text-right">
-              {{ formatDate(new Date(department.createdAt)) }}
-            </td>
-            <td class="text-right">
-              {{ formatDate(new Date(department.updatedAt)) }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div
-        class="join flex justify-center mt-4"
-      >
-        <button
-          :disabled="page <= 1 || page > pages"
-          class="join-item btn"
-          @click="handlePage(page - 1)"
-        >
-          «
-        </button>
-        <button class="join-item btn">
-          Página {{ page }}
-        </button>
-        <button
-          :disabled="page >= pages || page < 1"
-          class="join-item btn"
-          @click="handlePage(page + 1)"
-        >
-          »
-        </button>
-      </div>
-
-      <!-- Empty state -->
-      <div
-        v-if="departments.length === 0"
-        class="text-center py-8"
-      >
-        <p class="text-gray-500">
-          No se encontraron resultados.
-        </p>
-      </div>
-    </div>
-  </div>
+    </template>
+  </TemplatesListLayout>
 </template>
 
 <script setup lang="ts">
 import { useDebounceFn } from '@vueuse/core'
-import { formatDate } from '~/common/dates'
 import { useFetchDepartments } from '~/composables/useFetchDepartments'
 import { useAddDepartment } from '~/composables/useAddDepartment'
 import { useNotificationStore } from '~/stores/notification'
@@ -185,13 +86,16 @@ const limit = computed(() => parseInt(route.query.limit as string ?? '30', 10))
 const offset = computed(() => (page.value - 1) * limit.value)
 const order = computed(() => route.query.order as string ?? '-Departments.createdAt')
 
-const toggleOrder = () => {
-  const newOrder = order.value === '-Departments.createdAt' ? 'Departments.createdAt' : '-Departments.createdAt'
+const handleOrderUpdate = (newOrder: string) => {
   router.push({ query: { ...route.query, order: newOrder } })
 }
 
 const handlePage = (newPage: number) => {
   router.push({ query: { ...route.query, page: newPage } })
+}
+
+const handleDepartmentRowClick = (departmentId: number) => {
+  router.push(`/administrativo/departamentos/${departmentId}`)
 }
 
 const handleSearch = useDebounceFn((event: Event) => {
