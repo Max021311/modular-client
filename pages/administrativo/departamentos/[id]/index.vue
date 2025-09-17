@@ -1,6 +1,15 @@
 <template>
-  <div class="min-h-screen bg-base-200">
-    <div class="container mx-auto px-6 py-8 max-w-6xl">
+  <div class="space-y-6 my-6">
+    <div class="container mx-auto px-4">
+      <NuxtLink
+        to="/administrativo/departamentos"
+        class="btn btn-outline btn-square btn-sm flex justify-center items-center"
+      >
+        <AtomsIconOutlinedChevronLeft />
+      </NuxtLink>
+    </div>
+
+    <div class="container mx-auto px-4">
       <div
         v-if="pending"
         class="flex justify-center items-center py-12"
@@ -12,14 +21,6 @@
         v-else-if="data"
         class="space-y-6"
       >
-        <div class="flex justify-start pt-4">
-          <NuxtLink
-            to="/administrativo/departamentos"
-            class="btn btn-outline btn-square btn-sm flex justify-center items-center"
-          >
-            <AtomsIconOutlinedChevronLeft />
-          </NuxtLink>
-        </div>
         <!-- Department Information and Actions Section -->
         <div class="card bg-base-100 shadow-xl">
           <div class="card-body">
@@ -181,6 +182,81 @@
       </div>
     </div>
 
+    <!-- Vacancies Section -->
+    <div class="container mx-auto px-4">
+      <div class="card bg-base-100 shadow-xl">
+        <div class="card-body">
+          <h2 class="card-title text-2xl text-primary mb-4">
+            Vacantes del Departamento
+          </h2>
+
+          <!-- Search and Create Section -->
+          <div class="flex gap-2 mb-4">
+            <input
+              id="vacancy-search"
+              :value="vacancySearch"
+              type="text"
+              placeholder="Buscar vacantes por nombre, descripción..."
+              class="input input-bordered w-full"
+              @input="handleVacancySearch"
+            >
+            <button
+              class="btn btn-primary grow-0 shrink-0"
+              :disabled="!permissions.includes(PERMISSIONS.EDIT_DEPARTMENT)"
+              @click="openVacancyModal"
+            >
+              Crear vacante
+            </button>
+          </div>
+
+          <div class="divider divider-vertical my-2" />
+
+          <!-- Loading State -->
+          <div
+            v-if="vacancyPending"
+            class="flex justify-center py-12"
+          >
+            <span class="loading loading-spinner loading-lg text-primary" />
+          </div>
+
+          <!-- Vacancies Table -->
+          <OrganismsVacanciesTable
+            v-else
+            :vacancies="vacancies"
+            :order="vacancyOrder"
+            :show-department="false"
+            :empty-message="'No se encontraron vacantes para este departamento.'"
+            @update:order="handleVacancyOrderUpdate"
+            @row-click="handleVacancyRowClick"
+          />
+
+          <!-- Pagination Controls -->
+          <div
+            v-if="!vacancyPending && vacancies.length > 0"
+            class="join flex justify-center mt-4"
+          >
+            <button
+              :disabled="vacancyPage <= 1 || vacancyPage > vacancyPages"
+              class="join-item btn"
+              @click="handleVacancyPageUpdate(vacancyPage - 1)"
+            >
+              «
+            </button>
+            <button class="join-item btn">
+              Página {{ vacancyPage }}
+            </button>
+            <button
+              :disabled="vacancyPage >= vacancyPages || vacancyPage < 1"
+              class="join-item btn"
+              @click="handleVacancyPageUpdate(vacancyPage + 1)"
+            >
+              »
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Edit Modal -->
     <ModalComponent
       v-model="editModal"
@@ -199,20 +275,55 @@
 </template>
 
 <script setup lang="ts">
+import { useDebounceFn } from '@vueuse/core'
 import { useFetchDepartment } from '~/composables/useFetchDepartment'
 import { useEditDepartment } from '~/composables/useEditDepartment'
+import { useFetchVacancies } from '~/composables/useFetchVacancies'
 import { formatDateTime } from '~/common/dates'
 import { useNotificationStore } from '~/stores/notification'
 import { useLoginStore } from '~/stores/login'
+import { PERMISSIONS } from '~/common/constants/permissions'
 import type { UpdateDepartment } from '~/types/api/department'
 
 const route = useRoute()
+const router = useRouter()
 const id = computed(() => route.params.id as string)
 const notificationStore = useNotificationStore()
 const loginStore = useLoginStore()
 
 const { data, error, pending } = useFetchDepartment({
   id
+})
+
+// Permissions
+const permissions = computed(() => {
+  if (loginStore.userInfo?.scope === 'user') {
+    return loginStore.userInfo.permissions
+  }
+  return []
+})
+
+// Vacancy-related computed properties
+const vacancyPage = computed(() => parseInt(route.query.vacancyPage as string ?? '1', 10))
+const vacancySearch = computed(() => route.query.vacancySearch as string || undefined)
+const vacancyLimit = computed(() => parseInt(route.query.vacancyLimit as string ?? '10', 10))
+const vacancyOffset = computed(() => (vacancyPage.value - 1) * vacancyLimit.value)
+const vacancyOrder = computed(() => route.query.vacancyOrder as string ?? '-Vacancies.createdAt')
+
+// Fetch vacancies for this department
+const {
+  vacancies,
+  pages: vacancyPages,
+  pending: vacancyPending,
+  error: vacancyError
+} = useFetchVacancies({
+  search: vacancySearch,
+  limit: vacancyLimit,
+  offset: vacancyOffset,
+  order: vacancyOrder,
+  departmentId: computed(() => parseInt(id.value, 10)),
+  includeCycle: true,
+  includeDepartment: false
 })
 
 const editModal = ref(false)
@@ -253,6 +364,42 @@ const handleEditSubmit = async (formData: UpdateDepartment) => {
   }
 }
 
+// Vacancy handlers for component events
+const handleVacancySearchUpdate = (value: string | undefined) => {
+  router.push({
+    query: {
+      ...route.query,
+      vacancySearch: value,
+      vacancyPage: 1 // Reset to first page when searching
+    }
+  })
+}
+
+const handleVacancySearch = useDebounceFn((event: Event) => {
+  if (event.target instanceof HTMLInputElement) {
+    const value = event.target.value
+    handleVacancySearchUpdate(value || undefined)
+  }
+}, 500)
+
+const handleVacancyPageUpdate = (newPage: number) => {
+  router.push({ query: { ...route.query, vacancyPage: newPage } })
+}
+
+const handleVacancyOrderUpdate = (newOrder: string) => {
+  router.push({ query: { ...route.query, vacancyOrder: newOrder } })
+}
+
+const handleVacancyRowClick = (vacancyId: number) => {
+  // Navigate to vacancy detail page - this route might need to be created
+  router.push(`/administrativo/vacantes/${vacancyId}`)
+}
+
+const openVacancyModal = () => {
+  // Handle opening vacancy creation modal - implementation depends on your modal system
+  console.log('Open vacancy creation modal for department:', id.value)
+}
+
 watch(editError, (newError) => {
   if (newError && 'statusCode' in newError && newError.statusCode === 409) {
     notificationStore.add({
@@ -267,6 +414,18 @@ watch(editError, (newError) => {
       type: 'error',
       title: 'Error al actualizar departamento',
       description: 'Ocurrió un error al actualizar el departamento'
+    })
+  }
+})
+
+// Watch for vacancy errors
+watch(vacancyError, (newError) => {
+  if (newError) {
+    console.error('Error fetching vacancies:', newError)
+    notificationStore.add({
+      type: 'error',
+      title: 'Error al cargar vacantes',
+      description: 'Ocurrió un error al cargar las vacantes del departamento'
     })
   }
 })
