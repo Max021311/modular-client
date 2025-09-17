@@ -186,73 +186,49 @@
     <div class="container mx-auto px-4">
       <div class="card bg-base-100 shadow-xl">
         <div class="card-body">
-          <h2 class="card-title text-2xl text-primary mb-4">
-            Vacantes del Departamento
-          </h2>
-
-          <!-- Search and Create Section -->
-          <div class="flex gap-2 mb-4">
-            <input
-              id="vacancy-search"
-              :value="vacancySearch"
-              type="text"
-              placeholder="Buscar vacantes por nombre, descripción..."
-              class="input input-bordered w-full"
-              @input="handleVacancySearch"
-            >
-            <button
-              class="btn btn-primary grow-0 shrink-0"
-              :disabled="!permissions.includes(PERMISSIONS.EDIT_DEPARTMENT)"
-              @click="openVacancyModal"
-            >
-              Crear vacante
-            </button>
-          </div>
-
-          <div class="divider divider-vertical my-2" />
-
-          <!-- Loading State -->
-          <div
-            v-if="vacancyPending"
-            class="flex justify-center py-12"
+          <TemplatesListLayout
+            title="Vacantes del Departamento"
+            :search-value="vacancySearch"
+            search-placeholder="Buscar vacantes por nombre, descripción..."
+            search-id="vacancy-search"
+            :current-page="vacancyPage"
+            :total-pages="vacancyPages"
+            :show-pagination="!vacancyPending && vacancies.length > 0"
+            @search-input="handleVacancySearch"
+            @previous-page="handleVacancyPageUpdate(vacancyPage - 1)"
+            @next-page="handleVacancyPageUpdate(vacancyPage + 1)"
           >
-            <span class="loading loading-spinner loading-lg text-primary" />
-          </div>
+            <template #actions>
+              <button
+                class="btn btn-primary grow-0 shrink-0"
+                :disabled="!permissions.includes(PERMISSIONS.EDIT_DEPARTMENT)"
+                @click="openVacancyModal"
+              >
+                Crear vacante
+              </button>
+            </template>
 
-          <!-- Vacancies Table -->
-          <OrganismsVacanciesTable
-            v-else
-            :vacancies="vacancies"
-            :order="vacancyOrder"
-            :show-department="false"
-            :empty-message="'No se encontraron vacantes para este departamento.'"
-            @update:order="handleVacancyOrderUpdate"
-            @row-click="handleVacancyRowClick"
-          />
+            <template #content>
+              <!-- Loading State -->
+              <div
+                v-if="vacancyPending"
+                class="flex justify-center py-12"
+              >
+                <span class="loading loading-spinner loading-lg text-primary" />
+              </div>
 
-          <!-- Pagination Controls -->
-          <div
-            v-if="!vacancyPending && vacancies.length > 0"
-            class="join flex justify-center mt-4"
-          >
-            <button
-              :disabled="vacancyPage <= 1 || vacancyPage > vacancyPages"
-              class="join-item btn"
-              @click="handleVacancyPageUpdate(vacancyPage - 1)"
-            >
-              «
-            </button>
-            <button class="join-item btn">
-              Página {{ vacancyPage }}
-            </button>
-            <button
-              :disabled="vacancyPage >= vacancyPages || vacancyPage < 1"
-              class="join-item btn"
-              @click="handleVacancyPageUpdate(vacancyPage + 1)"
-            >
-              »
-            </button>
-          </div>
+              <!-- Vacancies Table -->
+              <OrganismsVacanciesTable
+                v-else
+                :vacancies="vacancies"
+                :order="vacancyOrder"
+                :show-department="false"
+                :empty-message="'No se encontraron vacantes para este departamento.'"
+                @update:order="handleVacancyOrderUpdate"
+                @row-click="handleVacancyRowClick"
+              />
+            </template>
+          </TemplatesListLayout>
         </div>
       </div>
     </div>
