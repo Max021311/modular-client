@@ -14,6 +14,7 @@ interface UseFetchVacanciesParams {
   includeDepartment?: MaybeRef<boolean>
   departmentId?: MaybeRef<number | undefined>
   cycleId?: MaybeRef<number | undefined>
+  studentId?: MaybeRef<number | undefined>
 }
 
 interface FetchVacanciesResponse {
@@ -35,7 +36,8 @@ export const useFetchVacancies = (params: UseFetchVacanciesParams = {}) => {
     includeCycle = false,
     includeDepartment = false,
     departmentId = undefined,
-    cycleId = undefined
+    cycleId = undefined,
+    studentId = undefined
   } = params
 
   const query = computed(() => ({
@@ -46,7 +48,8 @@ export const useFetchVacancies = (params: UseFetchVacanciesParams = {}) => {
     includeCycle: unref(includeCycle),
     includeDepartment: unref(includeDepartment),
     departmentId: unref(departmentId),
-    cycleId: unref(cycleId)
+    cycleId: unref(cycleId),
+    studentId: unref(studentId)
   }))
 
   const { data, status, error, refresh, pending } = useFetch<FetchVacanciesResponse, H3Error<FastifyError>>('/vacancies', {
