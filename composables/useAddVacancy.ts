@@ -9,11 +9,12 @@ import { useFetchVacanciesKey } from '~/composables/useFetchVacancies'
 export const useAddVacancy = () => {
   const axios = useAxios()
 
+  const loginStore = useLoginStore()
   const error: Ref<Error | FastifyError | null> = ref(null)
   const pending = ref(false)
   const data: Ref<Vacancy | null> = ref(null)
 
-  const mutate = async (payload: CreateVacancy, token: string): Promise<void> => {
+  const mutate = async (payload: CreateVacancy): Promise<void> => {
     try {
       pending.value = true
       error.value = null
@@ -21,7 +22,7 @@ export const useAddVacancy = () => {
 
       const response = await axios.post<Vacancy>('/vacancies', payload, {
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${loginStore.token}`
         }
       })
 
