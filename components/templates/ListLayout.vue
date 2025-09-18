@@ -1,20 +1,15 @@
 <template>
-  <div>
+  <div class="space-y-4">
     <!-- Header Section -->
-    <h1 class="text-2xl font-bold mb-4">
+    <h1
+      v-if="title && title.length > 0"
+      class="text-2xl font-bold"
+    >
       {{ title }}
     </h1>
 
-    <!-- Search and Actions Section -->
+    <!-- Actions Section (Search + Buttons) -->
     <div class="flex gap-2">
-      <input
-        :id="searchId"
-        :value="searchValue"
-        type="text"
-        :placeholder="searchPlaceholder"
-        class="input input-bordered w-full"
-        @input="handleSearchInput"
-      >
       <slot name="actions" />
     </div>
 
@@ -22,7 +17,10 @@
     <slot name="modal" />
 
     <!-- Divider -->
-    <div class="divider divider-vertical my-2" />
+    <div
+      v-if="showDivider"
+      class="divider divider-vertical"
+    />
 
     <!-- Main Content (Table) -->
     <slot name="content" />
@@ -30,7 +28,7 @@
     <!-- Pagination Section -->
     <div
       v-if="showPagination"
-      class="join flex justify-center mt-4"
+      class="join flex justify-center"
     >
       <button
         :disabled="currentPage <= 1 || currentPage > totalPages"
@@ -55,33 +53,24 @@
 
 <script setup lang="ts">
 interface ListLayoutProps {
-  title: string
-  searchValue?: string
-  searchPlaceholder?: string
-  searchId?: string
+  title?: string
   currentPage: number
   totalPages: number
   showPagination?: boolean
+  showDivider?: boolean
 }
 
 interface ListLayoutEmits {
-  'search-input': [event: Event]
   'previous-page': []
   'next-page': []
 }
 
 withDefaults(defineProps<ListLayoutProps>(), {
-  searchValue: undefined,
-  searchPlaceholder: 'Buscar...',
-  searchId: 'search',
-  showPagination: true
+  showPagination: true,
+  showDivider: true
 })
 
 const emit = defineEmits<ListLayoutEmits>()
-
-const handleSearchInput = (event: Event) => {
-  emit('search-input', event)
-}
 
 const handlePreviousPage = () => {
   emit('previous-page')
