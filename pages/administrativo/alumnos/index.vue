@@ -2,17 +2,21 @@
   <TemplatesListLayout
     class="container mx-auto p-4"
     title="Lista de alumnos"
-    :search-value="search"
-    search-placeholder="Buscar por nombre, código, correo y teléfono..."
-    search-id="search"
     :current-page="page"
     :total-pages="pages"
     :show-pagination="students.length > 0"
-    @search-input="handleSearch"
     @previous-page="handlePage(page - 1)"
     @next-page="handlePage(page + 1)"
   >
     <template #actions>
+      <input
+        id="search"
+        :value="search"
+        type="text"
+        placeholder="Buscar por nombre, código, correo y teléfono..."
+        class="input input-bordered w-full"
+        @input="handleSearch"
+      >
       <button
         class="btn btn-primary grow-0 shrink-0"
         :disabled="!permissions.includes(PERMISSIONS.INVITE_STUDENT)"
