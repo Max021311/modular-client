@@ -2,17 +2,21 @@
   <TemplatesListLayout
     class="container mx-auto p-4"
     title="Lista de departamentos"
-    :search-value="search"
-    search-placeholder="Buscar por nombre, teléfono, correo y jefe del departamento..."
-    search-id="search"
     :current-page="page"
     :total-pages="pages"
     :show-pagination="departments.length > 0"
-    @search-input="handleSearch"
     @previous-page="handlePage(page - 1)"
     @next-page="handlePage(page + 1)"
   >
     <template #actions>
+      <input
+        id="search"
+        :value="search"
+        type="text"
+        placeholder="Buscar por nombre, teléfono, correo y jefe del departamento..."
+        class="input input-bordered w-full"
+        @input="handleSearch"
+      >
       <button
         class="btn btn-primary grow-0 shrink-0"
         :disabled="!permissions.includes(PERMISSIONS.EDIT_DEPARTMENT)"
