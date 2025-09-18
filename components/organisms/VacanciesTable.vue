@@ -57,7 +57,7 @@
           </td>
           <td class="text-left">
             <div
-              class="max-w-xs text-wrap"
+              class="max-w-xs whitespace-wrap"
               :title="vacancy.description"
             >
               {{ vacancy.description }}
