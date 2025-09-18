@@ -19,6 +19,6 @@ interface VacancyWithRelations extends Vacancy {
 }
 
 export type CreateVacancy = Omit<Vacancy, 'id' | 'createdAt' | 'updatedAt'>
-export type UpdateVacancy = Omit<Vacancy, 'id' | 'createdAt' | 'updatedAt'>
+export type UpdateVacancy = Omit<Vacancy, 'id' | 'createdAt' | 'updatedAt' | 'departmentId' | 'cycleId'>
 
 export type { Vacancy, VacancyWithRelations }
