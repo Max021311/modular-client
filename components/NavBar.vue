@@ -17,7 +17,7 @@
 
     <!-- Opciones del menú para pantallas grandes -->
     <div class="navbar-center hidden lg:flex">
-      <ul class="menu menu-horizontal px-1">
+      <ul class="menu menu-horizontal space-x-1">
         <!-- Links for user scope (administrativo) -->
         <template v-if="scope === 'user'">
           <li>
@@ -46,6 +46,14 @@
           </li>
           <li>
             <NuxtLink
+              to="/administrativo/plazas"
+              class="btn-ghost"
+            >
+              Plazas
+            </NuxtLink>
+          </li>
+          <li>
+            <NuxtLink
               to="/administrativo/ciclos"
               class="btn-ghost"
             >
@@ -66,14 +74,14 @@
           </li>
         </template>
 
-        <li>
+        <!-- <li>
           <NuxtLink
             to="/about"
             class="btn-ghost"
           >
             Acerca de
           </NuxtLink>
-        </li>
+        </li> -->
         <ChatDialogflow />
       </ul>
     </div>
