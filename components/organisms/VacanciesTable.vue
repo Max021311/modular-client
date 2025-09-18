@@ -49,7 +49,7 @@
           class="hover:bg-base-300 table-row cursor-pointer"
           role="link"
           tabindex="0"
-          :title="`Ver detalles de la vacante ${vacancy.name}`"
+          :title="`Ver detalles de la plaza ${vacancy.name}`"
           @click="handleRowClick(vacancy.id)"
         >
           <td class="text-left">

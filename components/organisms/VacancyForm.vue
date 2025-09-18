@@ -9,9 +9,9 @@
     <AtomsInputText
       id="vacancy-name"
       v-model="form.name"
-      label="Nombre de la vacante"
+      label="Nombre de la plaza"
       type="text"
-      placeholder="Nombre de la vacante"
+      placeholder="Nombre de la plaza"
       :disabled="pending"
       required
     />
@@ -19,7 +19,7 @@
       id="vacancy-description"
       v-model="form.description"
       label="Descripción"
-      placeholder="Descripción de la vacante"
+      placeholder="Descripción de la plaza"
       :rows="3"
       :disabled="pending"
       required
@@ -131,8 +131,8 @@ interface Emits {
 
 const props = withDefaults(defineProps<Props>(), {
   pending: false,
-  title: 'Crear vacante',
-  submitText: 'Crear vacante',
+  title: 'Crear plaza',
+  submitText: 'Crear plaza',
   loadingText: 'Creando...',
   showStatusField: false,
   showDepartmentField: true,

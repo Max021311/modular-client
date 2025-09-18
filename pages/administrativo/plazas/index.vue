@@ -1,7 +1,7 @@
 <template>
   <TemplatesListLayout
     class="container mx-auto p-4"
-    title="Lista de vacantes"
+    title="Lista de plazas"
     :current-page="page"
     :total-pages="pages"
     :show-pagination="vacancies.length > 0"
@@ -87,8 +87,8 @@ watch(error, (newError) => {
     console.error('Error fetching vacancies:', newError)
     notificationStore.add({
       type: 'error',
-      title: 'Error al cargar vacantes',
-      description: 'Ocurrió un error al cargar las vacantes'
+      title: 'Error al cargar plazas',
+      description: 'Ocurrió un error al cargar las plazas'
     })
   }
 })
@@ -96,11 +96,11 @@ watch(error, (newError) => {
 const vacancies = computed(() => data.value?.records ?? [])
 
 useHead({
-  title: 'Lista de Vacantes - Administración',
+  title: 'Lista de plazas - Administración',
   meta: [
     {
       name: 'description',
-      content: 'Gestión y administración de vacantes disponibles en el sistema'
+      content: 'Gestión y administración de plazas disponibles en el sistema'
     }
   ]
 })

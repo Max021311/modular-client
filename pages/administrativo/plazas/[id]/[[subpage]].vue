@@ -179,7 +179,7 @@
           Plaza no encontrada
         </h2>
         <p class="text-base-content/60 mb-6">
-          No se pudo encontrar la información de la vacante con ID {{ id }}.
+          No se pudo encontrar la información de la plaza con ID {{ id }}.
         </p>
         <NuxtLink
           to="/administrativo/departamentos"
@@ -204,7 +204,7 @@
               Error al cargar la información
             </h3>
             <div class="text-xs">
-              {{ error?.data?.message || 'No se pudo obtener la información de la vacante' }}
+              {{ error?.data?.message || 'No se pudo obtener la información de la plaza' }}
             </div>
           </div>
         </div>
@@ -276,7 +276,7 @@
                 v-else
                 :students="students"
                 order=""
-                :empty-message="'No hay estudiantes asignados a esta vacante.'"
+                :empty-message="'No hay estudiantes asignados a esta plaza.'"
                 @update:order="() => {}"
                 @row-click="handleStudentRowClick"
               />
@@ -295,7 +295,7 @@
         <OrganismsVacancyForm
           v-model="editForm"
           :pending="editPending"
-          title="Editar vacante"
+          title="Editar plaza"
           submit-text="Guardar cambios"
           loading-text="Guardando..."
           show-status-field
@@ -309,7 +309,7 @@
         >
           <AtomsIconOutlinedError class="w-4 h-4" />
           <span class="text-sm">
-            {{ typeof editError === 'string' ? editError : editError.message || 'Error al actualizar la vacante' }}
+            {{ typeof editError === 'string' ? editError : editError.message || 'Error al actualizar la plaza' }}
           </span>
         </div>
 
@@ -439,7 +439,7 @@ const handleEditSubmit = async (formData: UpdateVacancy) => {
     notificationStore.add({
       type: 'success',
       title: 'Plaza actualizada',
-      description: 'La información de la vacante ha sido actualizada correctamente'
+      description: 'La información de la plaza ha sido actualizada correctamente'
     })
 
     // Close modal and refresh data
@@ -450,7 +450,7 @@ const handleEditSubmit = async (formData: UpdateVacancy) => {
     notificationStore.add({
       type: 'error',
       title: 'Error al actualizar',
-      description: 'No se pudo actualizar la información de la vacante'
+      description: 'No se pudo actualizar la información de la plaza'
     })
   }
 }
@@ -466,7 +466,7 @@ watch(studentsError, (newError) => {
     notificationStore.add({
       type: 'error',
       title: 'Error al cargar estudiantes',
-      description: 'Ocurrió un error al cargar los estudiantes de la vacante'
+      description: 'Ocurrió un error al cargar los estudiantes de la plaza'
     })
   }
 })
@@ -478,8 +478,8 @@ useHead({
       name: 'description',
       content: computed(() =>
         data.value
-          ? `Información completa de la vacante ${data.value.name} - ${data.value.slots} plazas disponibles`
-          : 'Información de la vacante'
+          ? `Información completa de la plaza ${data.value.name} - ${data.value.slots} plazas disponibles`
+          : 'Información de la plaza'
       )
     }
   ]

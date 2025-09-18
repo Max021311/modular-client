@@ -35,7 +35,7 @@
             de trámites de Servicio Social.
           </p>
           <p class="text-lg mb-4">
-            Automáticamente genera oficios y reportes, recomienda vacantes basadas en habilidades y preferencias,
+            Automáticamente genera oficios y reportes, recomienda plazas basadas en habilidades y preferencias,
             y cuenta con un asistente virtual que guía en cada paso del proceso.
           </p>
         </template>
@@ -56,7 +56,7 @@
           </p>
           <ul class="list-disc list-inside space-y-2">
             <li>Automatización de oficios y reportes con plantillas dinámicas.</li>
-            <li>Recomendación inteligente de vacantes basada en minería de datos.</li>
+            <li>Recomendación inteligente de plazas basada en minería de datos.</li>
             <li>Chatbot IA integrado para resolver dudas y guiar a los usuarios.</li>
             <li>Interfaz intuitiva y segura, con roles de Alumno y Administrativo.</li>
           </ul>

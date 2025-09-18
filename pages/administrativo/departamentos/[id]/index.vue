@@ -187,7 +187,7 @@
       <div class="card bg-base-100 shadow-xl">
         <div class="card-body">
           <TemplatesListLayout
-            title="Vacantes del Departamento"
+            title="Plazas del departamento"
             :current-page="vacancyPage"
             :total-pages="vacancyPages"
             :show-pagination="!vacancyPending && vacancies.length > 0"
@@ -199,7 +199,7 @@
                 id="vacancy-search"
                 :value="vacancySearch"
                 type="text"
-                placeholder="Buscar vacantes por nombre, descripción..."
+                placeholder="Buscar plaza por nombre, descripción..."
                 class="input input-bordered w-full"
                 @input="handleVacancySearch"
               >
@@ -208,7 +208,7 @@
                 :disabled="!permissions.includes(PERMISSIONS.EDIT_DEPARTMENT)"
                 @click="openVacancyModal"
               >
-                Crear vacante
+                Crear plaza
               </button>
             </template>
 
@@ -227,7 +227,7 @@
                 :vacancies="vacancies"
                 :order="vacancyOrder"
                 :show-department="false"
-                :empty-message="'No se encontraron vacantes para este departamento.'"
+                :empty-message="'No se encontraron plazas para este departamento.'"
                 @update:order="handleVacancyOrderUpdate"
                 @row-click="handleVacancyRowClick"
               />
@@ -260,8 +260,8 @@
       <OrganismsVacancyForm
         v-model="vacancyForm"
         :pending="createVacancyPending"
-        title="Crear vacante"
-        submit-text="Crear vacante"
+        title="Crear plaza"
+        submit-text="Crear plaza"
         loading-text="Creando..."
         :show-department-field="false"
         :show-status-field="true"
@@ -438,8 +438,8 @@ const handleVacancySubmit = async (formData: CreateVacancy) => {
   if (!createVacancyError.value) {
     notificationStore.add({
       type: 'success',
-      title: 'Vacante creada',
-      description: `La vacante ${formData.name} ha sido creada exitosamente`
+      title: 'Plaza creada',
+      description: `La plaza ${formData.name} ha sido creada exitosamente`
     })
 
     // Close modal and reset form
@@ -479,8 +479,8 @@ watch(vacancyError, (newError) => {
     console.error('Error fetching vacancies:', newError)
     notificationStore.add({
       type: 'error',
-      title: 'Error al cargar vacantes',
-      description: 'Ocurrió un error al cargar las vacantes del departamento'
+      title: 'Error al cargar plazas',
+      description: 'Ocurrió un error al cargar las plazas del departamento'
     })
   }
 })
@@ -490,16 +490,16 @@ watch(createVacancyError, (newError) => {
   if (newError && 'statusCode' in newError && newError.statusCode === 409) {
     notificationStore.add({
       type: 'error',
-      title: 'Error al crear vacante',
-      description: 'Ya existe una vacante con estos datos'
+      title: 'Error al crear plaza',
+      description: 'Ya existe una plaza con estos datos'
     })
     return
   }
   if (newError) {
     notificationStore.add({
       type: 'error',
-      title: 'Error al crear vacante',
-      description: 'Ocurrió un error al crear la vacante'
+      title: 'Error al crear plaza',
+      description: 'Ocurrió un error al crear la plaza'
     })
   }
 })

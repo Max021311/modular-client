@@ -158,7 +158,7 @@
                 :class="{ 'tab-active': currentTab === 'vacancies' }"
                 :to="`/administrativo/alumnos/${id}`"
               >
-                Vacantes
+                Plazas
               </NuxtLink>
               <NuxtLink
                 role="tab"
@@ -199,7 +199,7 @@
                   id="vacancy-search"
                   :value="vacancySearch"
                   type="text"
-                  placeholder="Buscar vacantes por nombre, descripción..."
+                  placeholder="Buscar plazas por nombre, descripción..."
                   class="input input-bordered w-full"
                   @input="handleVacancySearch"
                 >
@@ -208,7 +208,7 @@
                   @click="openAssociateVacancyModal"
                 >
                   <IconPlus class="w-4 h-4" />
-                  Asociar vacante
+                  Asociar plaza
                 </button>
               </template>
 
@@ -227,7 +227,7 @@
                   :vacancies="vacancies"
                   :order="vacancyOrder"
                   :show-department="true"
-                  :empty-message="'No se encontraron vacantes para este estudiante.'"
+                  :empty-message="'No se encontraron plazas para este estudiante.'"
                   @update:order="handleVacancyOrderUpdate"
                   @row-click="handleVacancyRowClick"
                 />
@@ -325,7 +325,7 @@
     >
       <div class="flex flex-col gap-4 w-80">
         <h2 class="text-lg font-semibold mb-2">
-          Asociar vacante al estudiante
+          Asociar plaza al estudiante
         </h2>
 
         <form
@@ -335,12 +335,12 @@
           <!-- Vacancy ID Field -->
           <div class="form-control">
             <label class="label">
-              <span class="label-text">ID de la vacante <span class="text-red-500">*</span></span>
+              <span class="label-text">ID de la plaza<span class="text-red-500">*</span></span>
             </label>
             <AtomsInputText
               v-model="associateForm.vacancyId"
               type="number"
-              placeholder="Ingrese el ID de la vacante"
+              placeholder="Ingrese el ID de la plaza"
               min="1"
               :disabled="associatePending"
               required
@@ -366,7 +366,7 @@
                 v-if="associatePending"
                 class="loading loading-spinner loading-sm"
               />
-              {{ associatePending ? 'Asociando...' : 'Asociar vacante' }}
+              {{ associatePending ? 'Asociando...' : 'Asociar plaza' }}
             </button>
           </div>
         </form>
@@ -388,7 +388,7 @@ function pathToPage(page: string) {
   switch (page) {
     case '':
     case '/':
-    case 'vacantes':
+    case 'plazas':
       return 'vacancies'
     case 'reportes-trimestrales':
       return 'quarter-reports'
@@ -516,7 +516,7 @@ const handleAssociateSubmit = async () => {
     console.error('Error associating vacancy:', error)
 
     // Check for specific error messages
-    let errorMessage = 'No se pudo asociar la vacante al estudiante'
+    let errorMessage = 'No se pudo asociar la plaza al estudiante'
 
     if (associateError.value && 'statusCode' in associateError.value) {
       if (associateError.value.statusCode === 400 && associateError.value.message === 'Vacancy has no available slots') {
@@ -546,7 +546,7 @@ function handleAssociateError(error: Error | FastifyError) {
     'Cannot associate to inactive vacancy': 'No se puedo asociar a una plaza inactiva'
   }
 
-  const errorMessage = 'message' in error ? errors[error.message as keyof typeof errors] : 'No se pudo asociar la vacante al estudiante'
+  const errorMessage = 'message' in error ? errors[error.message as keyof typeof errors] : 'No se pudo asociar la plaza al estudiante'
 
   notificationStore.add({
     type: 'error',
@@ -565,8 +565,8 @@ watch(vacancyError, (newError) => {
     console.error('Error fetching vacancies:', newError)
     notificationStore.add({
       type: 'error',
-      title: 'Error al cargar vacantes',
-      description: 'Ocurrió un error al cargar las vacantes del estudiante'
+      title: 'Error al cargar plazas',
+      description: 'Ocurrió un error al cargar las plazas del estudiante'
     })
   }
 })
