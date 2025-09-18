@@ -188,17 +188,21 @@
         <div class="card-body">
           <TemplatesListLayout
             title="Vacantes del Departamento"
-            :search-value="vacancySearch"
-            search-placeholder="Buscar vacantes por nombre, descripción..."
-            search-id="vacancy-search"
             :current-page="vacancyPage"
             :total-pages="vacancyPages"
             :show-pagination="!vacancyPending && vacancies.length > 0"
-            @search-input="handleVacancySearch"
             @previous-page="handleVacancyPageUpdate(vacancyPage - 1)"
             @next-page="handleVacancyPageUpdate(vacancyPage + 1)"
           >
             <template #actions>
+              <input
+                id="vacancy-search"
+                :value="vacancySearch"
+                type="text"
+                placeholder="Buscar vacantes por nombre, descripción..."
+                class="input input-bordered w-full"
+                @input="handleVacancySearch"
+              >
               <button
                 class="btn btn-primary grow-0 shrink-0"
                 :disabled="!permissions.includes(PERMISSIONS.EDIT_DEPARTMENT)"
@@ -247,6 +251,25 @@
         @submit="handleEditSubmit"
       />
     </ModalComponent>
+
+    <!-- Add Vacancy Modal -->
+    <ModalComponent
+      v-model="vacancyModal"
+      modal-class="w-fit"
+    >
+      <OrganismsVacancyForm
+        v-model="vacancyForm"
+        :pending="createVacancyPending"
+        title="Crear vacante"
+        submit-text="Crear vacante"
+        loading-text="Creando..."
+        :show-department-field="false"
+        :show-status-field="true"
+        :cycles="cycles"
+        :cycles-pending="cyclesPending"
+        @submit="handleVacancySubmit"
+      />
+    </ModalComponent>
   </div>
 </template>
 
@@ -255,11 +278,14 @@ import { useDebounceFn } from '@vueuse/core'
 import { useFetchDepartment } from '~/composables/useFetchDepartment'
 import { useEditDepartment } from '~/composables/useEditDepartment'
 import { useFetchVacancies } from '~/composables/useFetchVacancies'
+import { useAddVacancy } from '~/composables/useAddVacancy'
+import { useFetchCycles } from '~/composables/useFetchCycles'
 import { formatDateTime } from '~/common/dates'
 import { useNotificationStore } from '~/stores/notification'
 import { useLoginStore } from '~/stores/login'
 import { PERMISSIONS } from '~/common/constants/permissions'
 import type { UpdateDepartment } from '~/types/api/department'
+import type { CreateVacancy } from '~/types/api/vacancy'
 
 const route = useRoute()
 const router = useRouter()
@@ -311,7 +337,29 @@ const editForm = ref<UpdateDepartment>({
   chiefName: ''
 })
 
+// Vacancy creation
+const vacancyModal = ref(false)
+
+// Fetch cycles to get default cycle
+const { cycles, pending: cyclesPending } = useFetchCycles({ order: '-Cycles.createdAt', limit: 50 })
+
+// Get default cycle (current cycle or first available)
+const defaultCycleId = computed(() => {
+  const currentCycle = cycles.value.find(cycle => cycle.isCurrent)
+  return currentCycle?.id ?? cycles.value[0]?.id ?? 1
+})
+
+const vacancyForm = ref<CreateVacancy>({
+  name: '',
+  description: '',
+  slots: 1,
+  departmentId: parseInt(id.value, 10),
+  cycleId: defaultCycleId.value,
+  disabled: false
+})
+
 const { error: editError, pending: editPending, mutate: editDepartmentMutate } = useEditDepartment()
+const { error: createVacancyError, pending: createVacancyPending, mutate: addVacancyMutate } = useAddVacancy()
 
 const openEditModal = () => {
   if (data.value) {
@@ -368,12 +416,43 @@ const handleVacancyOrderUpdate = (newOrder: string) => {
 
 const handleVacancyRowClick = (vacancyId: number) => {
   // Navigate to vacancy detail page - this route might need to be created
-  router.push(`/administrativo/vacantes/${vacancyId}`)
+  router.push(`/administrativo/plazas/${vacancyId}`)
 }
 
 const openVacancyModal = () => {
-  // Handle opening vacancy creation modal - implementation depends on your modal system
-  console.log('Open vacancy creation modal for department:', id.value)
+  // Reset form with current defaults
+  vacancyForm.value = {
+    name: '',
+    description: '',
+    slots: 1,
+    departmentId: parseInt(id.value, 10),
+    cycleId: defaultCycleId.value,
+    disabled: false
+  }
+  vacancyModal.value = true
+}
+
+const handleVacancySubmit = async (formData: CreateVacancy) => {
+  await addVacancyMutate(formData)
+
+  if (!createVacancyError.value) {
+    notificationStore.add({
+      type: 'success',
+      title: 'Vacante creada',
+      description: `La vacante ${formData.name} ha sido creada exitosamente`
+    })
+
+    // Close modal and reset form
+    vacancyModal.value = false
+    vacancyForm.value = {
+      name: '',
+      description: '',
+      slots: 1,
+      departmentId: parseInt(id.value, 10),
+      cycleId: defaultCycleId.value,
+      disabled: false
+    }
+  }
 }
 
 watch(editError, (newError) => {
@@ -394,7 +473,7 @@ watch(editError, (newError) => {
   }
 })
 
-// Watch for vacancy errors
+// Watch for vacancy fetch errors
 watch(vacancyError, (newError) => {
   if (newError) {
     console.error('Error fetching vacancies:', newError)
@@ -402,6 +481,25 @@ watch(vacancyError, (newError) => {
       type: 'error',
       title: 'Error al cargar vacantes',
       description: 'Ocurrió un error al cargar las vacantes del departamento'
+    })
+  }
+})
+
+// Watch for vacancy creation errors
+watch(createVacancyError, (newError) => {
+  if (newError && 'statusCode' in newError && newError.statusCode === 409) {
+    notificationStore.add({
+      type: 'error',
+      title: 'Error al crear vacante',
+      description: 'Ya existe una vacante con estos datos'
+    })
+    return
+  }
+  if (newError) {
+    notificationStore.add({
+      type: 'error',
+      title: 'Error al crear vacante',
+      description: 'Ocurrió un error al crear la vacante'
     })
   }
 })
