@@ -299,6 +299,8 @@
           submit-text="Guardar cambios"
           loading-text="Guardando..."
           show-status-field
+          :show-cycle-field="false"
+          :show-department-field="false"
           @submit="handleEditSubmit"
         />
 
