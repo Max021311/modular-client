@@ -23,7 +23,7 @@
       >{{ placeholder }}</option>
       <option
         v-for="option in options"
-        :key="option.value"
+        :key="typeof option.value === 'boolean' ? option.value.toString() : option.value"
         :value="option.value"
       >
         {{ option.label }}
