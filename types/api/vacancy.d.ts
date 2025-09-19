@@ -9,8 +9,8 @@ interface Vacancy {
   departmentId: number
   cycleId: number
   disabled: boolean
-  createdAt: Date
-  updatedAt: Date
+  createdAt: string // ISO string
+  updatedAt: string // ISO string
 }
 
 interface VacancyWithRelations extends Vacancy {

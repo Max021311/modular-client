@@ -5,8 +5,8 @@ export interface Department {
   phone: string
   email: string
   chiefName: string
-  createdAt: Date
-  updatedAt: Date
+  createdAt: string // ISO string
+  updatedAt: string // ISO string
   searchVector: string
 }
 

@@ -1,3 +1,5 @@
+import type { Career } from './career.d'
+
 export interface Student {
   id: number
   name: string
@@ -5,8 +7,8 @@ export interface Student {
   careerId: number
   email: string
   telephone: string
-  createdAt: string
-  updatedAt: string
+  createdAt: string // ISO string
+  updatedAt: string // ISO string
 }
 
 export type StudentWithCareer = Student & {
