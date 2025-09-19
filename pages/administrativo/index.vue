@@ -125,67 +125,70 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  data() {
-    return {
-      currentPage: '',
-      sections: [
-        {
-          key: 'alumnos',
-          label: 'Administrar Alumnos',
-          open: false,
-          items: [
-            { key: 'BuscarAlumno', label: 'Buscar Alumno' },
-            { key: 'DetallesPlaza', label: 'Detalles de Plaza' },
-            { key: 'OficioComision', label: 'Oficio de Comisión' },
-            { key: 'VerReportes', label: 'Ver Reportes' }
-          ]
-        },
-        {
-          key: 'programas',
-          label: 'Administrar Programas',
-          open: false,
-          items: [
-            { key: 'BuscarPrograma', label: 'Buscar Programa' },
-            { key: 'DetallesPrograma', label: 'Detalles de Programa' },
-            { key: 'CrearPrograma', label: 'Crear Programa' },
-            { key: 'EditarPrograma', label: 'Editar Programa' },
-            { key: 'EliminarPrograma', label: 'Eliminar Programa' }
-          ]
-        },
-        {
-          key: 'estadistica',
-          label: 'Estadística',
-          open: false,
-          items: [
-            { key: 'CrearReporte', label: 'Crear un Nuevo Reporte' },
-            { key: 'BuscarReporte', label: 'Buscar un Reporte' },
-            { key: 'EditarReporte', label: 'Editar un Reporte' },
-            { key: 'VisualizarReporte', label: 'Visualizar Reporte' }
-          ]
-        }
-      ]
-    }
+<script setup lang="ts">
+interface MenuItem {
+  key: string
+  label: string
+}
+
+interface Section {
+  key: string
+  label: string
+  open: boolean
+  items: MenuItem[]
+}
+
+const currentPage = ref('')
+
+const sections = ref<Section[]>([
+  {
+    key: 'alumnos',
+    label: 'Administrar Alumnos',
+    open: false,
+    items: [
+      { key: 'BuscarAlumno', label: 'Buscar Alumno' },
+      { key: 'DetallesPlaza', label: 'Detalles de Plaza' },
+      { key: 'OficioComision', label: 'Oficio de Comisión' },
+      { key: 'VerReportes', label: 'Ver Reportes' }
+    ]
   },
-  computed: {
-    currentPageComponent() {
-      // Mapea currentPage a un componente, o devuelve un placeholder
-      return 'WelcomeComponent'
-    }
+  {
+    key: 'programas',
+    label: 'Administrar Programas',
+    open: false,
+    items: [
+      { key: 'BuscarPrograma', label: 'Buscar Programa' },
+      { key: 'DetallesPrograma', label: 'Detalles de Programa' },
+      { key: 'CrearPrograma', label: 'Crear Programa' },
+      { key: 'EditarPrograma', label: 'Editar Programa' },
+      { key: 'EliminarPrograma', label: 'Eliminar Programa' }
+    ]
   },
-  methods: {
-    logout() {
-      this.$router.push({ name: 'SignIn' })
-    },
-    navigateTo(page: string) {
-      this.currentPage = page
-    },
-    closeDrawer() {
-      const drawer = document.getElementById('admin-drawer') as HTMLInputElement
-      if (drawer) drawer.checked = false
-    }
+  {
+    key: 'estadistica',
+    label: 'Estadística',
+    open: false,
+    items: [
+      { key: 'CrearReporte', label: 'Crear un Nuevo Reporte' },
+      { key: 'BuscarReporte', label: 'Buscar un Reporte' },
+      { key: 'EditarReporte', label: 'Editar un Reporte' },
+      { key: 'VisualizarReporte', label: 'Visualizar Reporte' }
+    ]
   }
+])
+
+const currentPageComponent = computed(() => {
+  // Mapea currentPage a un componente, o devuelve un placeholder
+  return 'WelcomeComponent'
+})
+
+const navigateTo = (page: string) => {
+  currentPage.value = page
+}
+
+const closeDrawer = () => {
+  const drawer = document.getElementById('admin-drawer') as HTMLInputElement
+  if (drawer) drawer.checked = false
 }
 </script>
 
