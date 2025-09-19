@@ -85,10 +85,10 @@
 
 <script setup lang="ts">
 import { formatDate } from '~/common/dates'
-import type { Student } from '~/types/api/student'
+import type { StudentWithCareer } from '~/types/api/student'
 
 interface StudentsTableProps {
-  students: Student[]
+  students: StudentWithCareer[]
   order?: string
   emptyMessage?: string
 }
