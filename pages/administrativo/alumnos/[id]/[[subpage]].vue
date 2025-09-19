@@ -259,16 +259,60 @@
             </div>
 
             <!-- Comission Offices Tab Content -->
-            <div
+            <TemplatesListLayout
               v-else-if="currentTab === 'comission-offices'"
               class="mt-2"
+              :current-page="comissionPage"
+              :total-pages="comissionPages"
+              :show-pagination="!comissionPending && comissionOffices.length > 0"
+              @previous-page="handleComissionPageUpdate(comissionPage - 1)"
+              @next-page="handleComissionPageUpdate(comissionPage + 1)"
             >
-              <div class="text-center py-12">
-                <p class="text-base-content/60">
-                  Funcionalidad de oficios de comisión del estudiante pendiente de implementar
-                </p>
-              </div>
-            </div>
+              <template #actions>
+                <select
+                  id="comission-status-filter"
+                  :value="comissionStatus"
+                  class="select select-bordered w-full max-w-xs"
+                  @change="handleComissionStatusChange"
+                >
+                  <option value="">
+                    Todos los estados
+                  </option>
+                  <option value="PENDING">
+                    Pendiente
+                  </option>
+                  <option value="APPROVED">
+                    Aprobado
+                  </option>
+                  <option value="REJECTED">
+                    Rechazado
+                  </option>
+                </select>
+              </template>
+
+              <template #content>
+                <!-- Loading State -->
+                <div
+                  v-if="comissionPending"
+                  class="flex justify-center py-12"
+                >
+                  <span class="loading loading-spinner loading-lg text-primary" />
+                </div>
+
+                <!-- Comission Offices Table -->
+                <OrganismsComissionOfficesTable
+                  v-else
+                  :comission-offices="comissionOffices"
+                  :order="comissionOrder"
+                  :show-student="false"
+                  :empty-message="'No se encontraron oficios de comisión para este estudiante.'"
+                  @update:order="handleComissionOrderUpdate"
+                  @row-click="handleComissionRowClick"
+                  @row-approve="handleComissionApprove"
+                  @row-reject="handleComissionReject"
+                />
+              </template>
+            </TemplatesListLayout>
           </div>
         </div>
       </div>
@@ -379,7 +423,9 @@
 import { useDebounceFn } from '@vueuse/core'
 import { useFetchStudent } from '~/composables/useFetchStudent'
 import { useFetchVacancies } from '~/composables/useFetchVacancies'
+import { useFetchComissionOffices } from '~/composables/useFetchComissionOffices'
 import { useAssociateVacancy } from '~/composables/useAssociateVacancy'
+import { usePatchComissionOffice } from '~/composables/usePatchComissionOffice'
 import { formatDateTime } from '~/common/dates'
 import { useNotificationStore } from '~/stores/notification'
 import type { FastifyError } from '~/types/api/error.d'
@@ -430,6 +476,13 @@ const vacancyLimit = computed(() => parseInt(route.query.vacancyLimit as string 
 const vacancyOffset = computed(() => (vacancyPage.value - 1) * vacancyLimit.value)
 const vacancyOrder = computed(() => route.query.vacancyOrder as string ?? '-Vacancies.createdAt')
 
+// Commission Office-related computed properties
+const comissionPage = computed(() => parseInt(route.query.comissionPage as string ?? '1', 10))
+const comissionStatus = computed(() => route.query.comissionStatus as string || undefined)
+const comissionLimit = computed(() => parseInt(route.query.comissionLimit as string ?? '10', 10))
+const comissionOffset = computed(() => (comissionPage.value - 1) * comissionLimit.value)
+const comissionOrder = computed(() => route.query.comissionOrder as string ?? '-ComissionOffices.createdAt')
+
 const { data, error, pending } = useFetchStudent({
   id,
   includeCareer: true
@@ -448,6 +501,23 @@ const {
   studentId: computed(() => parseInt(id.value, 10)),
   includeCycle: true,
   includeDepartment: true
+})
+
+// Fetch commission offices for this student
+const {
+  comissionOffices,
+  pages: comissionPages,
+  pending: comissionPending,
+  error: comissionError
+} = useFetchComissionOffices({
+  limit: comissionLimit,
+  offset: comissionOffset,
+  order: comissionOrder,
+  includeCycle: true,
+  includeVacancy: true,
+  includeStudent: false,
+  studentId: computed(() => parseInt(id.value, 10)),
+  status: computed(() => comissionStatus.value as 'APPROVED' | 'REJECTED' | 'PENDING' | undefined)
 })
 
 // Vacancy handlers for component events
@@ -480,8 +550,45 @@ const handleVacancyRowClick = (vacancyId: number) => {
   router.push(`/administrativo/plazas/${vacancyId}`)
 }
 
+// Commission Office handlers for component events
+const handleComissionPageUpdate = (newPage: number) => {
+  router.push({ query: { ...route.query, comissionPage: newPage } })
+}
+
+const handleComissionOrderUpdate = (newOrder: string) => {
+  router.push({ query: { ...route.query, comissionOrder: newOrder } })
+}
+
+const handleComissionStatusChange = (event: Event) => {
+  if (event.target instanceof HTMLSelectElement) {
+    const value = event.target.value
+    router.push({
+      query: {
+        ...route.query,
+        comissionStatus: value || undefined,
+        comissionPage: 1 // Reset to first page when filtering
+      }
+    })
+  }
+}
+
+const handleComissionRowClick = (comissionOfficeId: number, ctrlPressed: boolean) => {
+  console.log('Open comission office file:', comissionOfficeId, 'Ctrl pressed:', ctrlPressed)
+}
+
+const handleComissionApprove = async (comissionOfficeId: number) => {
+  await patchComissionOffice(comissionOfficeId, { status: 'APPROVED' })
+}
+
+const handleComissionReject = async (comissionOfficeId: number) => {
+  await patchComissionOffice(comissionOfficeId, { status: 'REJECTED' })
+}
+
 // Associate vacancy functionality
 const { mutate: associateVacancy, pending: associatePending, error: associateError } = useAssociateVacancy()
+
+// Patch commission office functionality
+const { mutate: patchComissionOffice } = usePatchComissionOffice()
 
 const associateModal = ref(false)
 const associateForm = ref({
@@ -567,6 +674,18 @@ watch(vacancyError, (newError) => {
       type: 'error',
       title: 'Error al cargar plazas',
       description: 'Ocurrió un error al cargar las plazas del estudiante'
+    })
+  }
+})
+
+// Watch for commission office errors
+watch(comissionError, (newError) => {
+  if (newError) {
+    console.error('Error fetching commission offices:', newError)
+    notificationStore.add({
+      type: 'error',
+      title: 'Error al cargar oficios de comisión',
+      description: 'Ocurrió un error al cargar los oficios de comisión del estudiante'
     })
   }
 })
