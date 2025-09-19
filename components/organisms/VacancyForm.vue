@@ -35,7 +35,7 @@
       required
     />
     <div
-      v-if="showDepartmentField"
+      v-if="showDepartmentField && 'departmentId' in form"
       class="form-control"
     >
       <label
@@ -53,7 +53,7 @@
       />
     </div>
     <div
-      v-if="showCycleField"
+      v-if="showCycleField && 'cycleId' in form"
       class="form-control"
     >
       <label
@@ -104,13 +104,13 @@
   </form>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends CreateVacancy | UpdateVacancy">
 import type { CreateVacancy, UpdateVacancy } from '~/types/api/vacancy'
 import type { Department } from '~/types/api/department'
 import type { Cycle } from '~/types/api/cycle'
 
 interface Props {
-  modelValue: CreateVacancy | UpdateVacancy
+  modelValue: T
   pending?: boolean
   title?: string
   submitText?: string
@@ -126,7 +126,7 @@ interface Props {
 
 interface Emits {
   'update:modelValue': [value: CreateVacancy | UpdateVacancy]
-  submit: [value: CreateVacancy | UpdateVacancy]
+  submit: [value: T]
 }
 
 const props = withDefaults(defineProps<Props>(), {
