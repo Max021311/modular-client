@@ -10,7 +10,7 @@
             v-if="showStudent"
             class="text-left"
           >
-            Estudiante
+            Alumno
           </th>
           <th
             v-if="showVacancy"
@@ -70,18 +70,28 @@
             v-if="showStudent"
             class="text-left"
           >
-            {{ comissionOffice.student?.name || 'N/A' }}
+            <NuxtLink
+              v-if="comissionOffice.student"
+              :to="`/administrativo/alumnos/${comissionOffice.student.id}`"
+              class="link link-hover"
+            >
+              {{ comissionOffice.student.name }}
+            </NuxtLink>
+            <span v-else>N/A</span>
           </td>
           <td
             v-if="showVacancy"
             class="text-left"
           >
-            <div
-              class="max-w-xs whitespace-wrap"
-              :title="comissionOffice.vacancy?.name"
+            <NuxtLink
+              v-if="comissionOffice.vacancy"
+              :to="`/administrativo/plazas/${comissionOffice.vacancy.id}`"
+              class="link link-hover max-w-xs whitespace-wrap"
+              :title="comissionOffice.vacancy.name"
             >
-              {{ comissionOffice.vacancy?.name || 'N/A' }}
-            </div>
+              {{ comissionOffice.vacancy.name }}
+            </NuxtLink>
+            <span v-else>N/A</span>
           </td>
           <td
             v-if="showCycle"
@@ -131,14 +141,6 @@
               >
                 <AtomsIconMicroXMark />
               </button>
-              <button
-                type="button"
-                class="btn btn-ghost btn-xs btn-circle text-error hover:bg-error hover:text-error-content"
-                :title="`Eliminar oficio de comisión ${comissionOffice.id}`"
-                @click="handleDeleteClick(comissionOffice.id, $event)"
-              >
-                <AtomsIconMicroTrash />
-              </button>
             </div>
           </td>
         </tr>
@@ -155,44 +157,6 @@
       </p>
     </div>
   </div>
-
-  <!-- Delete Confirmation Modal -->
-  <ModalComponent
-    v-model="deleteModal"
-    modal-class="w-fit"
-  >
-    <div class="flex flex-col gap-4 w-80">
-      <h2 class="text-lg font-semibold mb-2 text-error">
-        Confirmar eliminación
-      </h2>
-      <div class="flex items-center gap-3 p-4 bg-error/10 rounded-lg">
-        <AtomsIconOutlinedError class="w-6 h-6 text-error flex-shrink-0" />
-        <p class="text-sm">
-          ¿Está seguro de que desea eliminar el oficio de comisión <strong>#{{ selectedComissionOfficeId }}</strong>?
-        </p>
-      </div>
-      <p class="text-xs text-base-content/60">
-        Esta acción no se puede deshacer.
-      </p>
-      <div class="flex gap-2 justify-end">
-        <button
-          type="button"
-          class="btn btn-ghost"
-          @click="cancelDelete"
-        >
-          Cancelar
-        </button>
-        <button
-          type="button"
-          class="btn btn-error"
-          @click="confirmDelete"
-        >
-          <AtomsIconMicroTrash />
-          Eliminar
-        </button>
-      </div>
-    </div>
-  </ModalComponent>
 
   <!-- Approve Confirmation Modal -->
   <ModalComponent
@@ -287,7 +251,6 @@ interface ComissionOfficesTableProps {
 interface ComissionOfficesTableEmits {
   'update:order': [value: string]
   'row-click': [id: number, ctrlPressed: boolean]
-  'row-delete': [id: number]
   'row-approve': [id: number]
   'row-reject': [id: number]
 }
@@ -302,8 +265,6 @@ const props = withDefaults(defineProps<ComissionOfficesTableProps>(), {
 
 const emit = defineEmits<ComissionOfficesTableEmits>()
 
-// Modal states
-const deleteModal = ref(false)
 const approveModal = ref(false)
 const rejectModal = ref(false)
 const selectedComissionOfficeId = ref<number | null>(null)
@@ -319,12 +280,6 @@ const handleRowClick = (id: number, event: MouseEvent) => {
   emit('row-click', id, ctrlPressed)
 }
 
-const handleDeleteClick = (id: number, event: MouseEvent) => {
-  event.stopPropagation()
-  selectedComissionOfficeId.value = id
-  deleteModal.value = true
-}
-
 const handleApproveClick = (id: number, event: MouseEvent) => {
   event.stopPropagation()
   selectedComissionOfficeId.value = id
@@ -335,21 +290,6 @@ const handleRejectClick = (id: number, event: MouseEvent) => {
   event.stopPropagation()
   selectedComissionOfficeId.value = id
   rejectModal.value = true
-}
-
-const cancelDelete = () => {
-  console.log('cancelDelete', selectedComissionOfficeId.value)
-  deleteModal.value = false
-  selectedComissionOfficeId.value = null
-}
-
-const confirmDelete = () => {
-  console.log('confirmDelete', selectedComissionOfficeId.value)
-  if (selectedComissionOfficeId.value !== null) {
-    emit('row-delete', selectedComissionOfficeId.value)
-    deleteModal.value = false
-    selectedComissionOfficeId.value = null
-  }
 }
 
 const cancelApprove = () => {
