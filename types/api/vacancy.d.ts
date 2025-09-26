@@ -11,6 +11,7 @@ interface Vacancy {
   disabled: boolean
   createdAt: string // ISO string
   updatedAt: string // ISO string
+  deletedAt: string | null // ISO string or null when active
 }
 
 interface VacancyWithRelations extends Vacancy {
@@ -19,6 +20,6 @@ interface VacancyWithRelations extends Vacancy {
 }
 
 export type CreateVacancy = Omit<Vacancy, 'id' | 'createdAt' | 'updatedAt'>
-export type UpdateVacancy = Omit<Vacancy, 'id' | 'createdAt' | 'updatedAt' | 'departmentId' | 'cycleId'>
+export type UpdateVacancy = Omit<Vacancy, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt' | 'departmentId' | 'cycleId'>
 
 export type { Vacancy, VacancyWithRelations }
