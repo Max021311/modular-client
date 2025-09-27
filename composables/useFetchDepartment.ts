@@ -12,7 +12,7 @@ interface UseFetchDepartmentParams {
 const keyPrefix = 'department-'
 
 export function getDepartmentKey(id: string | number) {
-  return `${keyPrefix}-${id}`
+  return `${keyPrefix}${id}`
 }
 
 export const useFetchDepartment = (params: UseFetchDepartmentParams) => {
@@ -28,7 +28,7 @@ export const useFetchDepartment = (params: UseFetchDepartmentParams) => {
     headers: {
       Authorization: `Bearer ${loginStore.token}`
     },
-    key: () => `department-${departmentId.value}`
+    key: () => `${keyPrefix}${departmentId.value}`
   })
 
   const department = computed(() => data.value ?? null)

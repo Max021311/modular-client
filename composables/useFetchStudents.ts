@@ -18,6 +18,8 @@ interface FetchStudentsResponse {
   records: StudentWithCareer[]
 }
 
+export const key = 'students-list'
+
 export const useFetchStudents = (params: UseFetchStudentsParams = {}) => {
   const config = useRuntimeConfig()
   const loginStore = useLoginStore()
@@ -44,7 +46,7 @@ export const useFetchStudents = (params: UseFetchStudentsParams = {}) => {
       Authorization: `Bearer ${loginStore.token}`
     },
     query,
-    key: 'students-list'
+    key
   })
 
   const students = computed(() => data.value?.records ?? [])
