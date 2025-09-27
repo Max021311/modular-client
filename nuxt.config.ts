@@ -11,6 +11,10 @@ export default defineNuxtConfig({
     }
   },
   runtimeConfig: {
+    dialogflow: {
+      privateKey: '',
+      clientEmail: ''
+    },
     public: {
       serverHost: ''
     }

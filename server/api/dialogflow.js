@@ -1,23 +1,22 @@
 import { SessionsClient } from '@google-cloud/dialogflow'
 
 const projectId = 'ssplus-assistant-srwn' // Reemplaza con tu ID del proyecto de Google Cloud
-const privateKey = (process.env.DIALOGFLOW_CLIENT_EMAIL ?? '').replace(/\\n/g, '\n') // Desde las variables de entorno
-const clientEmail = process.env.DIALOGFLOW_CLIENT_EMAIL ?? '' // Desde las variables de entorno
-
 const languageCode = 'es' // O el idioma que estés utilizando
 
 // Inicializa el cliente de Dialogflow
-const sessionClient = new SessionsClient({
-  credentials: {
-    private_key: privateKey,
-    client_email: clientEmail
-  }
-})
 
 export default defineEventHandler(async (event) => {
+  const config = useRuntimeConfig()
   const body = await readBody(event)
   const text = body.text
   const sessionId = body.sessionId // Deberías generar un ID de sesión único por usuario
+
+  const sessionClient = new SessionsClient({
+    credentials: {
+      private_key: config.dialogflow.privateKey.replace(/\\n/g, '\n'),
+      client_email: config.dialogflow.clientEmail
+    }
+  })
 
   // Crea la ruta de la sesión
   const sessionPath = sessionClient.projectAgentSessionPath(projectId, sessionId)
