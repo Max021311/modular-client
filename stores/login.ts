@@ -70,7 +70,7 @@ export const useLoginStore = defineStore('login', () => {
     const response = await Axios<{ token: string }>({
       method: 'POST',
       baseURL: config.public.serverHost,
-      url: '/students/auth',
+      url: '/api/student/auth',
       data: {
         email,
         password

@@ -11,10 +11,10 @@ interface UseFetchVacancyParams {
   includeDepartment?: MaybeRef<boolean>
 }
 
-const keyPrefix = 'vacancy-'
+export const keyPrefix = 'vacancy-'
 
 export function getVacancyKey(id: string | number) {
-  return `${keyPrefix}-${id}`
+  return `${keyPrefix}${id}`
 }
 
 export const useFetchVacancy = (params: UseFetchVacancyParams) => {
@@ -40,7 +40,7 @@ export const useFetchVacancy = (params: UseFetchVacancyParams) => {
       Authorization: `Bearer ${loginStore.token}`
     },
     query,
-    key: () => `vacancy-${vacancyId.value}`
+    key: () => `${keyPrefix}${vacancyId.value}`
   })
 
   const vacancy = computed(() => data.value ?? null)

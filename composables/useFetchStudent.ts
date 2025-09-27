@@ -10,6 +10,8 @@ interface UseFetchStudentParams {
   includeCareer?: MaybeRef<boolean>
 }
 
+export const keyPrefix = 'student-'
+
 export const useFetchStudent = (params: UseFetchStudentParams) => {
   const config = useRuntimeConfig()
   const loginStore = useLoginStore()
@@ -29,7 +31,7 @@ export const useFetchStudent = (params: UseFetchStudentParams) => {
       Authorization: `Bearer ${loginStore.token}`
     },
     query,
-    key: computed(() => `student-${unref(id)}`)
+    key: computed(() => `${keyPrefix}${unref(id)}`)
   })
 
   const student = computed(() => data.value)

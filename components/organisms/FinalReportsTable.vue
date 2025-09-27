@@ -25,7 +25,7 @@
             Ciclo
           </th>
           <th class="text-left">
-            Fecha de Inicio
+            Horas
           </th>
           <th class="text-center">
             Estado
@@ -38,7 +38,7 @@
                 class="btn btn-ghost btn-xs btn-circle"
                 @click="toggleOrder"
               >
-                <AtomsIconMicroChevronDown v-if="order === '-ComissionOffices.createdAt'" />
+                <AtomsIconMicroChevronDown v-if="order === '-FinalReports.createdAt'" />
                 <AtomsIconMicroChevronUp v-else />
               </button>
             </div>
@@ -53,17 +53,17 @@
       </thead>
       <tbody>
         <tr
-          v-for="comissionOffice in comissionOffices"
-          :key="comissionOffice.id"
+          v-for="finalReport in finalReports"
+          :key="finalReport.id"
           class="hover:bg-base-300 table-row cursor-pointer"
           role="link"
           tabindex="0"
-          :title="`Ver detalles del oficio de comisión ${comissionOffice.id}`"
-          @click="handleRowClick(comissionOffice.id, $event)"
+          :title="`Ver detalles del reporte final ${finalReport.id}`"
+          @click="handleRowClick(finalReport.id, $event)"
         >
           <td class="text-left">
             <div class="badge badge-outline">
-              {{ comissionOffice.id }}
+              {{ finalReport.id }}
             </div>
           </td>
           <td
@@ -71,11 +71,11 @@
             class="text-left"
           >
             <NuxtLink
-              v-if="comissionOffice.student"
-              :to="`/administrativo/alumnos/${comissionOffice.student.id}`"
+              v-if="finalReport.student"
+              :to="`/administrativo/alumnos/${finalReport.student.id}`"
               class="link link-hover"
             >
-              {{ comissionOffice.student.name }}
+              {{ finalReport.student.name }}
             </NuxtLink>
             <span v-else>N/A</span>
           </td>
@@ -84,12 +84,12 @@
             class="text-left"
           >
             <NuxtLink
-              v-if="comissionOffice.vacancy"
-              :to="`/administrativo/plazas/${comissionOffice.vacancy.id}`"
+              v-if="finalReport.vacancy"
+              :to="`/administrativo/plazas/${finalReport.vacancy.id}`"
               class="link link-hover max-w-xs whitespace-wrap"
-              :title="comissionOffice.vacancy.name"
+              :title="finalReport.vacancy.name"
             >
-              {{ comissionOffice.vacancy.name }}
+              {{ finalReport.vacancy.name }}
             </NuxtLink>
             <span v-else>N/A</span>
           </td>
@@ -99,45 +99,47 @@
           >
             <div
               class="badge"
-              :class="{ 'badge-primary': comissionOffice.cycle?.isCurrent }"
+              :class="{ 'badge-primary': finalReport.cycle?.isCurrent }"
             >
-              {{ comissionOffice.cycle?.slug || 'N/A' }}
+              {{ finalReport.cycle?.slug || 'N/A' }}
             </div>
           </td>
           <td class="text-left">
-            {{ formatDate(new Date(comissionOffice.beginDate)) }}
+            <div class="badge badge-info">
+              {{ finalReport.hours }}h
+            </div>
           </td>
           <td class="text-center">
             <div
               class="badge"
-              :class="getStatusBadgeClass(comissionOffice.status)"
+              :class="getStatusBadgeClass(finalReport.status)"
             >
-              {{ getStatusLabel(comissionOffice.status) }}
+              {{ getStatusLabel(finalReport.status) }}
             </div>
           </td>
           <td class="text-right">
-            {{ formatDate(new Date(comissionOffice.createdAt)) }}
+            {{ formatDate(new Date(finalReport.createdAt)) }}
           </td>
           <td class="text-right">
-            {{ formatDate(new Date(comissionOffice.updatedAt)) }}
+            {{ formatDate(new Date(finalReport.updatedAt)) }}
           </td>
           <td class="text-center">
             <div class="flex gap-1 justify-center">
               <button
                 type="button"
                 class="btn btn-outline btn-xs btn-circle text-success hover:bg-success hover:text-success-content"
-                :disabled="comissionOffice.status !== 'PENDING'"
-                :title="`Aprobar oficio de comisión ${comissionOffice.id}`"
-                @click="handleApproveClick(comissionOffice.id, $event)"
+                :disabled="finalReport.status !== 'PENDING'"
+                :title="`Aprobar reporte final ${finalReport.id}`"
+                @click="handleApproveClick(finalReport.id, $event)"
               >
                 <AtomsIconMicroCheck />
               </button>
               <button
                 type="button"
                 class="btn btn-outline btn-xs btn-circle text-warning hover:bg-warning hover:text-warning-content"
-                :disabled="comissionOffice.status !== 'PENDING'"
-                :title="`Rechazar oficio de comisión ${comissionOffice.id}`"
-                @click="handleRejectClick(comissionOffice.id, $event)"
+                :disabled="finalReport.status !== 'PENDING'"
+                :title="`Rechazar reporte final ${finalReport.id}`"
+                @click="handleRejectClick(finalReport.id, $event)"
               >
                 <AtomsIconMicroXMark />
               </button>
@@ -149,11 +151,11 @@
 
     <!-- Empty state -->
     <div
-      v-if="comissionOffices.length === 0"
+      v-if="finalReports.length === 0"
       class="text-center py-8"
     >
       <p class="text-gray-500">
-        {{ emptyMessage || 'No se encontraron oficios de comisión.' }}
+        {{ emptyMessage || 'No se encontraron reportes finales.' }}
       </p>
     </div>
   </div>
@@ -170,11 +172,11 @@
       <div class="flex items-center gap-3 p-4 bg-success/10 rounded-lg">
         <AtomsIconMicroCheck class="w-6 h-6 text-success flex-shrink-0" />
         <p class="text-sm">
-          ¿Está seguro de que desea aprobar el oficio de comisión <strong>#{{ selectedComissionOfficeId }}</strong>?
+          ¿Está seguro de que desea aprobar el reporte final <strong>#{{ selectedFinalReportId }}</strong>?
         </p>
       </div>
       <p class="text-xs text-base-content/60">
-        Esta acción cambiará el estado del oficio a "Aprobado".
+        Esta acción cambiará el estado del reporte a "Aprobado".
       </p>
       <div class="flex gap-2 justify-end">
         <button
@@ -208,11 +210,11 @@
       <div class="flex items-center gap-3 p-4 bg-warning/10 rounded-lg">
         <AtomsIconMicroXMark class="w-6 h-6 text-warning flex-shrink-0" />
         <p class="text-sm">
-          ¿Está seguro de que desea rechazar el oficio de comisión <strong>#{{ selectedComissionOfficeId }}</strong>?
+          ¿Está seguro de que desea rechazar el reporte final <strong>#{{ selectedFinalReportId }}</strong>?
         </p>
       </div>
       <p class="text-xs text-base-content/60">
-        Esta acción cambiará el estado del oficio a "Rechazado".
+        Esta acción cambiará el estado del reporte a "Rechazado".
       </p>
       <div class="flex gap-2 justify-end">
         <button
@@ -237,10 +239,10 @@
 
 <script setup lang="ts">
 import { formatDate } from '~/common/dates'
-import type { ComissionOfficeWithRelations } from '~/types/api/comission-office'
+import type { FinalReportWithRelations } from '~/types/api/final-reports'
 
-interface ComissionOfficesTableProps {
-  comissionOffices: ComissionOfficeWithRelations[]
+interface FinalReportsTableProps {
+  finalReports: FinalReportWithRelations[]
   order?: string
   emptyMessage?: string
   showStudent?: boolean
@@ -248,29 +250,29 @@ interface ComissionOfficesTableProps {
   showCycle?: boolean
 }
 
-interface ComissionOfficesTableEmits {
+interface FinalReportsTableEmits {
   'update:order': [value: string]
   'row-click': [id: number, ctrlPressed: boolean]
   'row-approve': [id: number]
   'row-reject': [id: number]
 }
 
-const props = withDefaults(defineProps<ComissionOfficesTableProps>(), {
-  order: '-ComissionOffices.createdAt',
+const props = withDefaults(defineProps<FinalReportsTableProps>(), {
+  order: '-FinalReports.createdAt',
   emptyMessage: undefined,
   showStudent: true,
   showVacancy: true,
   showCycle: true
 })
 
-const emit = defineEmits<ComissionOfficesTableEmits>()
+const emit = defineEmits<FinalReportsTableEmits>()
 
 const approveModal = ref(false)
 const rejectModal = ref(false)
-const selectedComissionOfficeId = ref<number | null>(null)
+const selectedFinalReportId = ref<number | null>(null)
 
 const toggleOrder = () => {
-  const newOrder = props.order === '-ComissionOffices.createdAt' ? 'ComissionOffices.createdAt' : '-ComissionOffices.createdAt'
+  const newOrder = props.order === '-FinalReports.createdAt' ? 'FinalReports.createdAt' : '-FinalReports.createdAt'
   emit('update:order', newOrder)
 }
 
@@ -282,39 +284,39 @@ const handleRowClick = (id: number, event: MouseEvent) => {
 
 const handleApproveClick = (id: number, event: MouseEvent) => {
   event.stopPropagation()
-  selectedComissionOfficeId.value = id
+  selectedFinalReportId.value = id
   approveModal.value = true
 }
 
 const handleRejectClick = (id: number, event: MouseEvent) => {
   event.stopPropagation()
-  selectedComissionOfficeId.value = id
+  selectedFinalReportId.value = id
   rejectModal.value = true
 }
 
 const cancelApprove = () => {
   approveModal.value = false
-  selectedComissionOfficeId.value = null
+  selectedFinalReportId.value = null
 }
 
 const confirmApprove = () => {
-  if (selectedComissionOfficeId.value !== null) {
-    emit('row-approve', selectedComissionOfficeId.value)
+  if (selectedFinalReportId.value !== null) {
+    emit('row-approve', selectedFinalReportId.value)
     approveModal.value = false
-    selectedComissionOfficeId.value = null
+    selectedFinalReportId.value = null
   }
 }
 
 const cancelReject = () => {
   rejectModal.value = false
-  selectedComissionOfficeId.value = null
+  selectedFinalReportId.value = null
 }
 
 const confirmReject = () => {
-  if (selectedComissionOfficeId.value !== null) {
-    emit('row-reject', selectedComissionOfficeId.value)
+  if (selectedFinalReportId.value !== null) {
+    emit('row-reject', selectedFinalReportId.value)
     rejectModal.value = false
-    selectedComissionOfficeId.value = null
+    selectedFinalReportId.value = null
   }
 }
 

@@ -16,7 +16,7 @@
               label="Tipo de usuario"
               :options="[
                 { value: 'user', label: 'Administrativo' },
-                { value: 'student', label: 'Estudiante' }
+                { value: 'student', label: 'Alumno' }
               ]"
               placeholder="Escoge un tipo"
               required

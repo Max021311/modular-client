@@ -106,14 +106,6 @@
                     <AtomsIconOutlinedInfo />
                     Editar
                   </button>
-                  <button
-                    type="button"
-                    class="btn btn-outline btn-error btn-md btn-wide lg:btn-md"
-                    disabled
-                  >
-                    <AtomsIconOutlinedError />
-                    Eliminar
-                  </button>
                 </div>
               </div>
             </div>
@@ -243,7 +235,7 @@
       modal-class="w-fit"
     >
       <OrganismsDepartmentForm
-        v-model="editForm as any"
+        v-model="editForm"
         :pending="editPending"
         title="Editar departamento"
         submit-text="Guardar cambios"

@@ -7,6 +7,7 @@ export interface Student {
   careerId: number
   email: string
   telephone: string
+  deletedAt: string | null
   createdAt: string // ISO string
   updatedAt: string // ISO string
 }
