@@ -2,6 +2,34 @@
   <div class="navbar bg-base-300">
     <!-- Inicio de la barra (Responsive dropdown) -->
     <div class="navbar-start">
+      <div class="dropdown">
+        <div
+          tabindex="0"
+          role="button"
+          class="btn btn-ghost lg:hidden"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h8m-8 6h16"
+            />
+          </svg>
+        </div>
+        <ul
+          tabindex="0"
+          class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+        >
+          <NavBarLinks />
+        </ul>
+      </div>
       <NuxtLink
         to="/"
         class="btn btn-ghost text-xl text font-bold"
@@ -14,83 +42,9 @@
         SSP+
       </NuxtLink>
     </div>
-
-    <!-- Opciones del menú para pantallas grandes -->
     <div class="navbar-center hidden lg:flex">
       <ul class="menu menu-horizontal space-x-1">
-        <!-- Links for user scope (administrativo) -->
-        <template v-if="scope === 'user'">
-          <!-- <li>
-            <NuxtLink
-              to="/administrativo"
-              class="btn-ghost"
-            >
-              Administrativo
-            </NuxtLink>
-          </li> -->
-          <li>
-            <NuxtLink
-              to="/administrativo/alumnos"
-              class="btn-ghost"
-            >
-              Alumnos
-            </NuxtLink>
-          </li>
-          <li>
-            <NuxtLink
-              to="/administrativo/departamentos"
-              class="btn-ghost"
-            >
-              Departamentos
-            </NuxtLink>
-          </li>
-          <li>
-            <NuxtLink
-              to="/administrativo/plazas"
-              class="btn-ghost"
-            >
-              Plazas
-            </NuxtLink>
-          </li>
-          <li>
-            <NuxtLink
-              to="/administrativo/ciclos"
-              class="btn-ghost"
-            >
-              Ciclos
-            </NuxtLink>
-          </li>
-          <li>
-            <NuxtLink
-              to="/administrativo/carreras"
-              class="btn-ghost"
-            >
-              Carreras
-            </NuxtLink>
-          </li>
-        </template>
-
-        <!-- Links for student scope (alumno) -->
-        <template v-if="scope === 'student'">
-          <li>
-            <NuxtLink
-              to="/alumno"
-              class="btn-ghost"
-            >
-              Alumno
-            </NuxtLink>
-          </li>
-        </template>
-
-        <!-- <li>
-          <NuxtLink
-            to="/about"
-            class="btn-ghost"
-          >
-            Acerca de
-          </NuxtLink>
-        </li> -->
-        <ChatDialogflow />
+        <NavBarLinks />
       </ul>
     </div>
     <!-- Botones finales: cambio de tema y autenticación -->
