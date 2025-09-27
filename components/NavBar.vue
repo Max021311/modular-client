@@ -9,9 +9,9 @@
         <img
           src="/logo-removebg-preview.png"
           alt="Plus Icon"
-          class="w-9 h-9 mr-2"
+          class="w-9 h-9"
         >
-        Social Service System Plus
+        SSP+
       </NuxtLink>
     </div>
 
@@ -20,14 +20,14 @@
       <ul class="menu menu-horizontal space-x-1">
         <!-- Links for user scope (administrativo) -->
         <template v-if="scope === 'user'">
-          <li>
+          <!-- <li>
             <NuxtLink
               to="/administrativo"
               class="btn-ghost"
             >
               Administrativo
             </NuxtLink>
-          </li>
+          </li> -->
           <li>
             <NuxtLink
               to="/administrativo/alumnos"
