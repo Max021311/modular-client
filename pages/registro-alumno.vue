@@ -83,7 +83,7 @@
               class="alert alert-error mt-4"
             >
               <span v-if="'statusCode' in addStudentError && addStudentError.statusCode === 409">Estos datos ya están registrados</span>
-              <span v-else>{{ 'Error al registrar estudiante' }}</span>
+              <span v-else>{{ 'Error al registrar alumno' }}</span>
             </div>
             <div class="mt-6">
               <button
