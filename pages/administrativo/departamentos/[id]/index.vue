@@ -235,7 +235,7 @@
       modal-class="w-fit"
     >
       <OrganismsDepartmentForm
-        v-model="editForm as any"
+        v-model="editForm"
         :pending="editPending"
         title="Editar departamento"
         submit-text="Guardar cambios"
