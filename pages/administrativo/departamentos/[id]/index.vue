@@ -106,14 +106,6 @@
                     <AtomsIconOutlinedInfo />
                     Editar
                   </button>
-                  <button
-                    type="button"
-                    class="btn btn-outline btn-error btn-md btn-wide lg:btn-md"
-                    disabled
-                  >
-                    <AtomsIconOutlinedError />
-                    Eliminar
-                  </button>
                 </div>
               </div>
             </div>
