@@ -60,6 +60,14 @@
               Ciclos
             </NuxtLink>
           </li>
+          <li>
+            <NuxtLink
+              to="/administrativo/carreras"
+              class="btn-ghost"
+            >
+              Carreras
+            </NuxtLink>
+          </li>
         </template>
 
         <!-- Links for student scope (alumno) -->
